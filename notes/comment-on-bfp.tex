@@ -1,0 +1,310 @@
+\documentclass[12pt]{article}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{wrapfig}
+\usepackage[all]{xy}
+
+% Author
+\usepackage[blocks]{authblk}
+\renewcommand\Affilfont{\small}
+\setlength{\affilsep}{0em}
+
+% Document formatting
+\usepackage{fullpage}
+\pagestyle{plain}
+\usepackage{setspace}
+%\usepackage{mathptmx}
+\usepackage{url}
+\usepackage{times}
+
+% Bibliography formatting
+\bibliographystyle{chicago}
+\usepackage{natbib}
+
+% Equation formatting
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{bbm}
+\usepackage{array}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{thm}{Theorem}
+
+% Shortcuts
+\newcommand{\nn}{\nonumber}
+
+% Define new characters
+\def\Var{{\rm Var}\,}
+\def\E{{\rm E}\,}
+\def\arg{{\rm arg}\,}
+\def\Cov{{\rm Cov}\,}
+\def\N{{\rm N}\,}
+%--------------------------------------------------------------------------
+% Math boldface shortcuts, etc. ----------------------------------
+%--------------------------------------------------------------------------
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\I}{{\rm I}}
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\D}{\mathbf{D}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\F}{{\rm F}}
+\renewcommand{\O}{\mathbf{O}}
+\renewcommand{\H}{\mathbf{H}}
+\newcommand{\g}{\mathbf{g}}
+\renewcommand{\r}{\mathbf{r}}
+\newcommand{\s}{\mathbf{s}}
+\newcommand{\uu}{\mathbf{u}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\vv}{\mathbf{v}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\Beta}{\boldsymbol{\beta}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bpi}{\boldsymbol{\pi}}
+\newcommand{\arrowp}{\stackrel{p}{\rightarrow}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\bP}{\mathbf{P}}
+\newcommand{\plim}{{\rm plim}}
+
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\renewcommand\refname{Additional references}
+
+\begin{document}
+
+\sloppy
+
+%\addtolength{\oddsidemargin}{-.075in}
+%\addtolength{\evensidemargin}{-.075in}
+%\addtolength{\textwidth}{.15in}
+\addtolength{\topmargin}{-.025in}
+\addtolength{\textheight}{.05in}
+
+
+
+\author{Peter M. Aronow\thanks{Peter M. Aronow is Assistant Professor, Department of Political Science, Yale University, New Haven, CT (Email: peter.aronow@yale.edu).}}
+
+
+% TITLE
+\title{Comment: Reasoning about Interference Between Units}
+\maketitle
+
+
+%\doublespace
+
+Bowers, Fredrickson and Panagopoulos (BFP) should be commended for an illuminating paper, one that highlights how randomization provides a basis for inference, even when considering models that include interference between units. BFP articulates and convincingly advocates for a principled, Fisherian approach to inference. 
+
+The goal of this comment is to complement BFP by discussing limitations, extensions and an alternative mode of inference. Using a simple running example, 
+this comment makes three points:
+
+\begin{enumerate}
+\item The power of the procedures proposed by BFP depends on the choice of test statistic. The class of ``effect increasing" test statistics used by BFP -- which focuses on distributional differences between the hypothesized potential outcomes for units assigned to treatment and those assigned to control -- may be suboptimal for models that include interference. Although type I error rates are controlled well, type II error rates are not. I suggest alternative test statistics that may utilize the data to a fuller extent. 
+\item The low-dimensional models considered by BFP may yield misleading conclusions about causal effects. In an experiment with heterogeneous treatment effects but no spillover, researchers may nevertheless reject all {\it sharp null} hypotheses that there are no spillover effects (conditional on a given causal model). The proposed method cannot test hypotheses about spillover without also jointly hypothesizing that treatment effect heterogeneity is completely modeled.
+\item Estimation and testing are possible under semiparametric models that do not presuppose low-dimensional models of causal effects. These approaches obviate both of the above concerns but introduce asymptotic approximations to facilitate hypothesis testing. I briefly outline one such approach.%, and refer the reader to readings on the topic.
+\end{enumerate}
+None of these points undermine the primary contribution of BFP -- an %technically correct and 
+insightful piece that opens new avenues of research. Rather, contextualizing the piece permits greater appreciation of its contribution and highlights open areas of inquiry.
+%Rather, contextualizing the piece emphasizes the open areas of inquiry.
+
+\section*{Running example}
+
+Consider the following setting: a randomized experiment is performed on a finite population $U$ consisting of $N$ individuals living in $N/2$ two-person households. Index each individual $ij$, where $i \in 1,...,(N/2)$ households and $j \in \{-1,1\}$, so that individual $i1$ is the first person in household $i$ and individual $i(-1)$ is the second individual in household $i$. Assume simple randomization of individuals to treatment: a fair coin is independently flipped to determine the treatment condition of each individual $ij$. Associated with each individual $ij$ is an outcome $y_{ij}$ and a treatment condition $Z_{ij}$. Further assume the possibility of partial interference (Sobel, 2006)%cite
+, so that treatment effects may spillover within households, but not across households.
+
+% Coinflip randomization
+
+%The randomization proceeds as follows: $m$ of $N$ households are chosen with equal probability to treatment eligibility. If household $i$ is chosen for eligibility, then one individual $i1$ or $i2$ is randomly selected to receive treatment. Denote the treatment assignment vector $\Z = \{Z_{11},...,Z_{N1},{Z_{1(-1)},...,Z_{N(-1)}}\}$, where $Z_{ij} \in \{0,1\}$ indicates if unit $ij$ was assigned to treatment. Thus all individuals have equal probability $p \equiv (\frac{m}{2N})$ of receiving the treatment $Z_{ij}=1$, and no more than one individual in each household receives treatment.
+
+\section*{Test statistic selection}
+
+BFP recommends choosing ``effect increasing" test statistics ``that will be small when the treated and control distributions in the adjusted data ... are similar, and large when the distributions diverge." However, test statistics  that only compare distributional features of hypothesized potential outcomes between individuals assigned to treatment and those assigned to control fail to fully exploit the data at hand. The problem is that these test statistics are  not necessarily increasing in spillover effects. 
+
+Consider the following causal model:
+\begin{equation}\label{causal}
+y_{ij}(\Z) = y_{ij}(\0) + \tau_1 Z_{ij} + \tau_2 Z_{i(-j)},
+\end{equation}
+where $y_{ij}(\Z)$ is unit $ij$'s potential outcome under the treatment vector $\Z$, $Z_{ij} \in \{0,1\}$ indicates if unit $ij$ was assigned to treatment in $\Z$, and $Z_{i(-j)}$ indicates if the housemate of unit $ij$ was assigned to treatment, and $y_{ij}(\0)$ is the potential outcome for individual $ij$ when no one is assigned to treatment (known as a ``uniformity trial").  Before proceeding, it is helpful to establish some additional notation. Denote $\Z \equiv (Z_{11}, ..., Z_{(N/2){(-1)}})^T$, $\Z^I \equiv (Z_{1(-1)},...,Z_{(N/2)1})^T$ (reversing the within-household indices), $\0 \equiv (0,...,0)^T$, and $\one \equiv (1,...,1)^T$. Define the hypothesized $y_{ij}(\0)$ that would be obtained under $\Z$, $\widetilde y_{ij}(\0,\Z) = y_{ij}(\Z) -  \widetilde \tau_1 Z_{ij} + \widetilde \tau_2 Z_{i(-j)}$, where $\widetilde \tau_1$ and $\widetilde \tau_2$ are the hypothesized values of $\tau_1$ and $\tau_2$. Finally, define the mean of some feature $X_{ij}$ over all units $ij$ such that $Z_{ij} = t$, $\mu_t(X_{ij},\Z) \equiv  {\sum_{ij \in U} \I[Z_{ij} = t] X_{ij}} / {\sum_{ij \in U} \I[Z_{ij} = t]}$. %Finally, define a test statistic $\T(\widetilde y_{ij}(\0,\Z), \Z')$. 
+
+%A simple intuition for this result follows. Under a radically incorrect hypothesis, such a test amounts to a test of the difference in proportions of treated roommates for treated and control individuals. Given simple randomization, there is no difference in the expected proportions of treated roommates. Furthermore, as $N$ grows large, the randomization variance of the difference in proportions converges at the same rate as does the hypothesized randomization variance. It follows that a test based on an effect increasing statistic will fail to reject the radically incorrect hypothesis at proper rates.
+
+%In fact, this second result does not depend on example in the setting.
+% I will show that a test based on the absolute difference-in-means, coupled with a linear model of the form \eqref{causal}, may not be able to rule any hypothesized value of $\tau_2$ at any significance level $\alpha < 1$.  Second, I will show that, given the running example, a test based on any effect increasing statistic will be inconsistent against a radically incorrect hypothesis about $\tau_2$.
+%(In fact, this first result does not depend on the running example, but is only relevant for the difference-in-means as a test statistic.)
+
+\subsection*{Results for effect increasing test statistics}
+
+I demonstrate two results, each showing how effect increasing test statistics, as defined by BFP, may provide little to no information about the spillover parameter $\tau_2$. 
+Let us first consider the case when the test statistic is the absolute mean difference between hypothesized uniformity trial outcomes for treated and control individuals: 
+$\T(\widetilde y_{ij}(\0,\Z), \Z') = 
+\left\vert \mu_1 ( \widetilde y_{ij}(\0,\Z), \Z' ) - \mu_0 ( \widetilde y_{ij}(\0,\Z), \Z' )
+\right\vert.
+$
+Fix a realization of $\Z = \z$, and further assume noncollinearity: $ \z \notin \{\z^I, (1-\z^I)\}$. We can see that, for any hypothesized $\widetilde\tau_2$, there always exists a $\widetilde\tau_1$ such that the $p$-value is 1. Expanding the test statistic, 
+$\T(\widetilde y_{ij}(\0,\z), \z) = 
+\left\vert \mu_1 (y_{ij}(\z) - \widetilde\tau_1 - \tau_2 z_{i(-j)}, \z) - \mu_0(\widetilde y_{ij}(\z) - \widetilde\tau_2 z_{i(-j)} , \z)
+\right\vert
+=
+\left\vert \mu_1 (y_{ij}(\z) - \widetilde\tau_2 z_{i(-j)}, \z)- \mu_0 (\widetilde y_{ij}(\z) - \widetilde\tau_2 z_{i(-j)}, \z)- \widetilde\tau_1 
+\right\vert.
+$ 
+Thus, regardless of the value of $\widetilde\tau_2$, we can always find a $\widetilde\tau_1$ that sets $\T(\widetilde y_{ij}(\0,\z), \z) = 0$. Given that $\T(\widetilde y_{ij}(\0,\z), \Z')$ can only take values in $\mathbb{R}^+$, then $p=1$, as any other possible randomization $\Z'$ will yield a value of $\T(\widetilde y_{ij}(\0,\z), \Z') \geq 0$. It follows that, given this test, we cannot rule out any value of $\tau_2$ as being implausible.\footnote{In fact, this result does not depend on example in the setting, and holds for any randomization scheme coupled with a linear causal model of the form \eqref{causal}.}
+
+Second, I show that, given the running example, a test based on any effect increasing statistic is inconsistent against a radically incorrect hypothesis about $\tau_2$. Let us assume that $\tau_1$ is properly hypothesized at its true value, and that the hypothesized value of $\tau_2$ ($\widetilde \tau_2$) is radically incorrect: 
+$\vert \widetilde\tau_2 - \tau_2 \vert \gg  \max(y_{ij}(\0)) - \min(y_{ij}(\0))$. Denote $\beta \equiv \tau_2 - \widetilde\tau_2$, and assume $\vert \beta \vert < \infty$.
+Under the assumption that $\tau_2 = \widetilde \tau_2$:
+$\widetilde y_{ij}(\0,\Z) = y_{ij}(\0) + \beta Z_{i(-j)}$. 
+Assume a sequence of nested finite populations $\{U_k\} = U_1, U_2,...$, growing in $k$ households, so that $U_k$ consists of $N_k = 2k$ individuals, each with an associated random assignment $\Z_k$ \citep{isakifuller}. (For notational parsimony, I drop explicit dependence on the subscript $k$.)  Given an incorrect hypothesis, a necessary, but not sufficient, condition for a test's consistency is that $\lim_{k \rightarrow \infty} \Pr(p > \alpha) < \epsilon$, for any $\alpha,\epsilon > 0$. 
+
+Let an effect increasing test statistic $\T(\widetilde y_{ij}(\0,\Z),\Z')$ be some measure of the absolute divergence in empirical distributions of $\widetilde y_{ij}(\0,\Z)$ for treated and control individuals under the treatment vector $\Z'$. 
+Since distributional differences in $y_{ij}(\0)$ are small relative to shifts induced by differences in proportions of treated housemates,  $\T(\widetilde y_{ij}(\0,\Z),\Z')$ will be increasing in 
+ $ \left\vert \mu_1(Z_{i(-j)},\Z') -   \mu_0(Z_{i(-j)},\Z') \right\vert$. %, 
+For a realization $\Z = \z$, 
+the hypothesized randomization distribution of
+ $\mu_1(z_{i(-j)},\Z') - \mu_0(z_{i(-j)},\Z')$ is asymptotically normal with mean $0$ and variance $V_{x(\z)} = 4 x(\z) \left[1-x(\z)\right] / N$, where $x(\z) \equiv \sum_{ij\in U}z _{ij} /N$,
+if $0 < x(\z) <  1$. % (by the Lindeberg CLT, Taylor linearization and Slutsky's theorem). 
+ Thus the $p$-value associated with randomization $\z$, $p = 2 \Phi(-|\mu_1(z_{i(-j)},\z) - \mu_0(z_{i(-j)},\z)|/V_{x(\z)}^{1/2})$. It follows that  
+ $|\mu_1(z_{i(-j)},\z) - \mu_0(z_{i(-j)},\z)\vert < -\Phi^{-1}(\alpha/2) V_{x(\z)}^{1/2} \Leftrightarrow p > \alpha$. 
+By similar calculations at the household level, the %(actual, not hypothesized) 
+randomization distribution of 
+$\mu_1(Z_{i(-j)},\Z) - \mu_0(Z_{i(-j)},\Z)$ is asymptotically mean $0$ with variance $2 V_{1/2} =  2/N$.\footnote{This result follows from reframing the problem as randomly assigning households into 4 conditions \{00,01,10,11\} with equal probability, then linearizing $\mu_1(Z_{i(-j)},\Z) - \mu_0(Z_{i(-j)},\Z)$.} By the LLN %,  $\plim_{k \rightarrow \infty} x = 1/2$,
+%and so, by 
+%the 
+and continuous mapping theorem, $\lim_{k \rightarrow \infty} \Pr(\vert NV_{x(\Z)} - NV_{1/2}\vert > \epsilon_3) = 0$.
+  Then, by Chebyshev's inequality, $\lim_{k \rightarrow \infty}  \Pr(p > \alpha) > 1- 2\left[\Phi^{-1}(\alpha/2)\right]^{-2}$, 
+  %$\epsilon = 1- 2\left[\Phi^{-1}(\alpha/2)\right]^{-2}$ proportion of possible $\Z \in \Omega$ have $p > \alpha$, 
+  for any $0 < \alpha < 2\Phi(-\sqrt{2})$.  Tests based on effect increasing statistics are therefore not generally consistent.
+
+\subsection*{Alternative test statistics}
+
+There are usually better ways to evaluate the fit of a model than comparing two marginal distributions. One simple test statistic would be the sum-of-squared-residuals (SSR) from a least squares regression of $\widetilde y_{ij}(\0,\Z)$ on $Z_{ij}$ and $Z_{i(-j)}$. Since the model in \eqref{causal} is linear, $\T(\widetilde y_{ij}(\0,\Z), \Z) = \sum_{ij \in U} \left[ \widetilde \Y(\0) - (\X^T\X)^{-1}\X^T \widetilde \Y(\0) \right]^2$, where 
+$$
+\widetilde \Y(\0) \equiv \left( \begin{array}{c} \widetilde y_{11}(0) \\ \vdots \\ y_{(N/2)(-1)}(0) \end{array} \right), 
+\X \equiv  \left( \begin{array}{ccc} 1 & Z_{11} & Z_{1(-1)} \\ \vdots & \vdots & \vdots  \\ 1 & Z_{(N/2)(-1)} & Z_{(N/2)1} \end{array} \right) = ({\bf 1} \; \Z \; \Z^I).
+$$   
+Assume now that either the hypothesized $\tau_1$ or $\tau_2$ is radically incorrect: i.e., $\vert \widetilde\tau_1 - \tau_1 \vert$ or $\vert \widetilde\tau_2 - \tau_2 \vert \gg \max(y_{ij}(\0)) - \min(y_{ij}(\0))$.
+%When either $\tau_1$ or $\tau_2$ is radically incorrect (), 
+%
+ %$\tau_1$ is correctly hypothesized and $\tau_2$ is radically incorrect, 
+Fixing $\Z = \z$, for any randomization $\Z' \notin \{\z, (1-\z), \z^I, (1-\z^I),
+ \0, \one \}$,
+$\T(\widetilde y_{ij}(\0,\z),\Z') > \T(\widetilde y_{ij}(\0,\z),\z)$. Assuming noncollinearity,
+%$\Z \notin \{\Z^I, (1-\Z^I)\}$,
+%, (0,...,0), (1,...,1)\}$)
+  $p \leq 6  \left( 2^{-N} \right)$, rejecting the hypothesis with $\alpha = 0.05$ for any $N \geq 8$. %Consistency follows straightforwardly.
+
+In the example above, use of SSR as a test statistic has maximal power to reject radically incorrect hypotheses, whereas the test statistics proposed by BFP are inconsistent. But SSR from an ordinary least squares regression is not always appropriate: for example, when the probability of exposure to spillover is heterogeneous across individuals, we may wish to apply inverse probability weights so as to ensure representative samples of potential outcomes. %This suggests a conjecture: that the $SSR$ from an {\it inverse-probability-weighted} least squares regression is more generally a sensible test statistic for models that include interference.
+(The nature of these weights will be discussed when discussing alternative modes of inference.)
+Additionally, when nonlinear deviations from model predictions are of concern, a weighted variant of the Brownian distance covariance \citep{rizzo} or other {\it E}-statistic may be more sensible than SSR. 
+
+Test statistic selection is not trivial and BFP's contribution has effectively opened a new line of research. Via counterexample, we can see that effect increasing test statistics are not always appropriate for assessing hypotheses about interference. BFP is correct in the assertion that, regardless of the choice of test statistic selection, a set of implausible hypotheses is identified by the procedure. But we should not be led to believe that, for any given test statistic, that some hypotheses are more plausible than others. Such inferences -- comparing hypotheses -- may depend on the test statistic used, and not necessarily reflect the plausibility of the model at hand. This point will gain importance as we now consider the limitations of sharp null hypotheses.
+
+\section*{Sharp null hypotheses}
+
+The Fisherian mode of inference presented here is useful for testing sharp null hypotheses, wherein all potential outcomes -- or at a minimum those under a uniformity trial -- can be exactly hypothesized. 
+%The most common sharp null hypothesis is one of no effect whatsoever: $H_0: y_i(t) = y_i(t'), \forall i \in 1,...,N; t \in \Omega$. 
+Note what this implies though: we cannot ``reason about interference" without also reasoning about the exact form of the individualistic effects of the treatment. 
+
+Consider the following causal model:
+$
+y_i(\Z) =  y_{ij}(\0) + \tau_{1ij} Z_{ij} + \tau_2 Z_{i(-j)},
+$
+such that $\exists ij, ij'$ where $\tau_{1ij} \neq \tau_{1ij'}$.
+The only difference between this causal model and the one in \eqref{causal} is that now treatment effects are heterogeneous. As a result, though, the hypothesis $H_0: y_i(\Z) =  y_{ij}(\0) + \tau_{1} Z_{ij} + \tau_2 Z_{i(-j)}$ is false for  any values of $\tau_{1}, \tau_{2}$. An consistent test against $H_0$ would therefore always reject with large $N$. We could entertain any number of sharp null hypotheses: including modeled heterogeneity or dilated effects. But unless these models were exactly correct, a consistent test would reject all hypotheses of the form $H_0$. In many ways, this is a {\it feature} of BFP's analytic framework: entire classes of causal models may be rejected as implausible, regardless of the values of the hypothesized parameters. But it can also be a limitation. BFP's method cannot test any hypothesis about the spillover effects of a treatment without also jointly hypothesizing that all sources of treatment effect heterogeneity are modeled.
+
+These issues are compounded when our tests are not consistent against incorrect hypotheses. For example, given modest regularity conditions, when $\T(\widetilde y_{ij}(\0,\Z), \Z') = 
+\left\vert \mu_1 ( \widetilde y_{ij}(\0,\Z), \Z' ) - \mu_0 ( \widetilde y_{ij}(\0,\Z), \Z' )
+\right\vert
+$, we can always find a set of hypotheses are are prima facie plausible and we can reject other hypotheses at some level $\alpha$. It is then imperative for the researcher to carefully interpret what rejection of a sharp null hypothesis implies. BFP is careful to distinguish between the failure to reject and  the acceptance of a null hypothesis. This point should not be neglected by researchers. Although some hypotheses can be rejected as implausible, this does not speak to the plausibility of the remaining hypotheses. 
+
+\section*{An alternative mode of inference}
+
+An alternative to the Fisherian mode of inference finds its origins in Neyman (1923 [1990]).  Here, causal effects are defined individualistically but the researcher remains agnostic as to their exact distribution. Instead, the inferential target is average differences between potential outcomes and therefore average causal effects.
+
+To see how this might proceed in the running example, assume that each individual $ij$ has four potential outcomes for each possible exposure to the treatment:
+\begin{align*}
+y_{ij}(00) &= y_{ij}(Z_{ij} = 0, Z_{i(-j)} = 0), \\
+y_{ij}(10) &= y_{ij}(Z_{ij} = 1, Z_{i(-j)} = 0), \\
+y_{ij}(01) &= y_{ij}(Z_{ij} = 0, Z_{i(-j)} = 1), \\
+y_{ij}(11) &= y_{ij}(Z_{ij} = 1, Z_{i(-j)} = 1).
+\end{align*}
+This {\it exposure mapping} (Aronow and Samii, 2012a) includes the causal model \eqref{causal} as a special case, and is a fully general representation of the partial interference setup. 
+
+The average potential outcome associated with each exposure $t \in \{00,10,01,11\}$, $\mu(t) \equiv  \sum_{ij \in U} y_{ij}(t)/N$. Average causal effects are then defined as $\tau(t,t') \equiv \mu(t) - \mu(t') =
+  \sum_{ij \in U} \left[y_{ij}(t') -  y_{ij}(t)\right]/N$, for some $t \neq t'$.  Define a variable $D_{ij}$ that takes on the value $(10 Z_{ij} + Z_{i(-j)})$, so that the observed outcome $y_{ij} = y_{ij}(D_{ij})$ and $\I \left[D_i = 01\right] \Leftrightarrow \I \left[Z_{ij} = 0 \cap Z_{i(-j)} = 1\right]$. Since labels $ij$ are exchangeable, each sample mean
+$$
+\widehat\mu(t) =\frac{\sum_{ij \in U} \I \left[D_{ij} = t\right] y_{ij} }{\sum_{ij \in U} \I \left[D_{ij} = t\right]}
+$$
+is unbiased for $\mu(t)$ (conditional on at least one unit being observed in the condition $t$). Then as a linear combination of two unbiased estimators, $\widehat\tau(t,t') = \widehat\mu(t) - \widehat\mu(t')$ is unbiased for $\tau(t,t')$. %Although BFP claims that this approach requires ``a decomposition of average treatment effects into parts due to interference and parts not due to interference," we can see that this is not the case: average causal effects are simply defined as differences in potential outcomes.
+
+Under suitable regularity conditions (e.g., bounded potential outcomes), $\widehat\tau(t,t')$ is consistent and asymptotically normal by the LLN, Slutsky's Theorem and the CLT. Aronow and Samii (2012a, 2012c) %cite
+demonstrate that a conservative variance estimator exists and is convergent, thus providing a basis for confidence intervals that asymptotically cover $\tau(t,t')$ with at least proper coverage.  Tests of {\it weak} null hypotheses are therefore possible. For example, if the confidence interval for $\tau(10,00)$ does not include $0$, we can reject the null hypothesis that the average effect of the treatment, given a housemate assigned to control, is zero. Importantly, rejection of the weak null hypothesis that $\tau(10,00) = 0$ implies rejection of the sharp null hypothesis $H_0: y_{ij}(10) - y_{ij}(00) = 0, \forall ij \in U$. Or, put simply, if the average effect is nonzero, it must be the case that at least one individual has been affected. This inferential framework thus provides valid tests of many of the same hypotheses that are entertained by BFP.
+
+There are two important caveats to this approach. First, given a nonuniform network structure (such as those entertained by BFP), simple differences in means are rarely unbiased for $\tau(t,t')$. When the probability of receiving a given level of exposure is heterogeneous, statistical adjustments are required to derive an unbiased or consistent estimator of $\tau(t,t')$. For example, when estimating the spillover effect of having a neighbor treated, those with more neighbors are more likely to have treated neighbors. With simultaneous knowledge of the randomization scheme and the exposure model, it is possible to back out the implied probabilities of exposure for each unit. Unbiased or consistent estimation then proceeds using some form of an inverse-probability-weighted estimator \citep{horvitz52}, with the probabilities for each unit $ij$ being $\Pr(D_{ij} = t)$. Second, testing in this framework requires asymptotic approximations, the validity of which depends on the channels through which spillover occurs.
+ Aronow and Samii (2012a) %(2012a \citet{aronowsamii}
+ demonstrates that confidence intervals are justified when the scope of interference tends to be small relative to the size of the entire dataset (analogous to $m$-dependence). In small datasets, particularly ones where interference is highly nonlocalized, BFP's procedures may be more sensible for testing hypotheses about causal effects.
+
+\section*{Concluding remarks}
+
+BFP has introduced a set of tools for testing sharp null hypotheses that include interference between units. These tools will undoubtedly prove useful to researchers across the social sciences. However, it is important to understand the limitations of such an approach, and to place its contributions into a broader context. 
+
+Sensible test statistic selection remains an open field of inquiry. Until progress is made in this domain, it will be difficult to assess whether it is a model that is plausible, or if a test is simply ill-equipped to detect deviations from model predictions. Nevertheless, randomization guarantees that rejection of sharp null hypotheses remains valid. BFP's elucidation of this fact should not be ignored. 
+In addition, political scientists should be aware that it is possible to estimate causal effects (and test hypotheses) under weaker assumptions than are presented in BFP. Rejection of a sharp null hypothesis may yield little information on either the direct effects of a treatment or its spillover effects. Where the recent movement in causal inference has been focused on unmodeled treatment effect heterogeneity \citep[e.g.,][]{angristpischke}, a semiparametric approach that does not require that causal effects have been completely modeled may be preferable. That being said, when dealing with data where asymptotic approximations are unlikely to hold (e.g, small experiments with wide-ranging network effects), BFP's approach may prove to be a more reliable basis for inference.
+
+\begin{thebibliography}{}
+%\bibitem[\protect\citeauthoryear{Angrist et~al.}{1996}]{air96} Angrist, Joshua D., Guido W. Imbens and Donald B. Rubin. 1996. Identification of Causal Effects Using Instrumental Variables. {\it Journal of the American Statistical Association}. 91: 444--55.
+\bibitem[\protect\citeauthoryear{Angrist and Pischke}{2009}]{angristpischke} Angrist, J. D. and J.-S. Pischke. 2009.  {\it Mostly Harmless Econometrics: An Empiricist's Companion.}  Princeton, NJ: Princeton University Press.
+\bibitem[\protect\citeauthoryear{Aronow and Samii}{2012}]{aronowsamii} Aronow, P. M. and C. Samii. 2012c. Conservative variance estimation for sampling designs with zero pairwise inclusion probabilities. {\it Survey Methodology}. In press.
+%\bibitem[\protect\citeauthoryear{Hoeffding and Robbins}{1948}]{hoeffding48} Hoeffding, W. and H. Robbins (1948). The central limit theorem for dependent random variables. Duke Mathematical Journal 15(3), 773--780.
+\bibitem[\protect\citeauthoryear{Horvitz and Thompson}{1952}]{horvitz52} Horvitz, D. G. and D. J. Thompson. 1952. A generalization of sampling without replacement from a finite universe. {\it J. Amer. Statist. Assoc.} 47, 663--684.
+\bibitem[\protect\citeauthoryear{Isaki and Fuller}{1982}]{isakifuller} Isaki, C. T. and W. A. Fuller. 1982. Survey design under the regression superpopulation model. {\it J. Amer. Statist. Assoc.}  77, 89--96.
+\bibitem[\protect\citeauthoryear{Szekely and Rizzo}{2009}]{rizzo}  Szekely, G. J. and M. L. Rizzo. 2009. Brownian distance covariance. {\it Ann. Appl. Stat.} 3, 1236--1265.
+%%\bibitem[\protect\citeauthoryear{Green et~al.}{2012}]{reviewessay} Green, Donald P., Peter M. Aronow and Mary C. McGrath. 2012. Field Experiments and the Study of Voter Turnout. Forthcoming at {\it Journal of Elections, Public Opinion and Parties}.
+%\bibitem[\protect\citeauthoryear{Imbens and Rubin}{1997}]{imbensrubin} Imbens, Guido W. and Donald B. Rubin. 1997. Estimating Outcome Distributions for Compliers in Instrumental Variables Models. {\it Review of Economic Studies} (4): 555--574.
+%\bibitem[\protect\citeauthoryear{Mullainathan et~al.}{2010}]{Mullainathan} Mullainathan, Sendhil, Ebonya Washington and Julia R. Azari. 2010. The Impact of Electoral Debate on Public Opinions: An Experimental Investigation of the 2005 New York City Mayoral Election. In {\it Political Representation}, eds. Ian Shapiro, Susan Stokes, Elizabeth Wood and Alexander S. Kirshner. New York: Cambridge University Press.
+\end{thebibliography}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
