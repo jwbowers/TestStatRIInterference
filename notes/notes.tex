@@ -1,0 +1,84 @@
+\documentclass[12pt]{article}
+\usepackage{parskip}
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+
+\title{Test statistic selection for randomization inference under interference}
+\author{Peter Aronow and Jake Bowers}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+%% 4 pages
+
+ \citep{bowers2013sutva} followed Rosenbaum by recommending effect increasing
+ statistic.
+
+ controls Type I error, but power can be very poor for these types of models.
+ We explain why and propose a refinement. Multivariate dependence of
+ parameters and outcome space. A weighted E-statistic. 
+
+Fisher's sharp null hypothesis of no effects combined with his
+randomization-based hypothesis testing framework provided a very clear and
+clean vision of what it means to do statistical inference \citep[Chap
+2]{fisher:1935}. In recent years, a number of scholars have realized that this
+clarity also implied great flexibility in regard to the scientific questions
+that one might engage: for example, one could use the sharp null itself to
+detect interference among units \citep{aronow-general}, and sharp hypotheses
+about effects (in contrast to hypotheses about no effects) have been developed
+to assess models of interference \citep{bowers2013sutva}, [ include Rosenbaum
+2007, Bowers and Hansen 2009, and a bunch of other stuff by Rosenbaum ].
+
+One problem that has become apparent, as scholars have extended Fisher's basic
+ideas, is that as the models of effects have become more complex, the power of
+the testing procedure itself has become more important. A simple test of the
+sharp null can be executed with power that varies as a function of the design
+of the study (proportion treated, blocking structure, etc..), characteristics
+of the outcome, and the way that a test statistic summarizes the outcome. Yet,
+when the models are complex,  \citet{bowers2013sutva} showed that sometimes a
+test will have (1) no power to address the model at all (a function, in part
+of the model itself --- for example ...) such that all hypothesized parameters
+would receive the same implausibility assessment; (2) or might reject all such
+hypothesized parameters. Thus, although in theory one may assess sharp
+hypotheses about multiparameter settings, in practice one may not learn much
+from such tests --- or, in the absence of simulation studies assessing the
+model and test statistic, one may be mislead.  
+
+In this paper we use a very simple causal model and a simple test statistic to
+first show how the combination of model and test statistic is a crucial choice
+--- and how more attention ought to be paid to both the model and the test
+statistic.
+
+Then we suggest one test statistic that we think should have good properties
+when the number of parameters in a model is low (i.e. $k << n$). And we should
+this to be the case --- that the robust F-stat from a linear model is a better
+way to go than the KS-test and certainly better than any single measure of
+distributional difference.
+
+Finally, we highlight the similarities between testing the sharp hypothesis
+and the weak hypothesis --- which in turn allows even more flexibility and
+perhaps better performing testing procedures.
+
+
+Then we suggest a few alternative avenues to pursue.
+
+Some models are well powered for some designs and not other designs.
+
+Using same simulation study using same data from PA study. Better than KS
+test. 
+
+The F-test is model consistent. By design it controls Type I error, but if the
+model is correct, it has some optimality criterion. If you had control
+variables, for example, then it would be consistent against mean differences.
+
+Under the model, model consistent.
+
+
+
+
+\bibliographystyle{apsr}
+\bibliography{/Users/jwbowers/Documents/PROJECTS/BIB/big}
+
+\end{document}
+
