@@ -1,0 +1,6 @@
+[submodule "pkgs/RItools"]
+	path = pkgs/RItools
+	url = git@github.com:markmfredrickson/RItools.git
+[submodule "BIB"]
+	path = BIB
+	url = git@github.com:bowers-illinois-edu/Research-Group-Bibliography.git
