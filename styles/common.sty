@@ -1,0 +1,73 @@
+%%% Common Definitions to be used by both paper and presentation %%%
+
+%%% Title, dates, other metadata
+%%% Author is set in the paper.tex and presentation.tex because one uses
+%%% \thanks and the other uses \institute
+
+\title{Reasoning about Interference Between Units: A General Framework} 
+\date{\today}
+
+%%% Packages %%%
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{listings}
+%\usepackage[norelsize]{algorithm2e} %for nice typesetting of algorithms
+\usepackage{../styles/notation} 
+\usepackage{../styles/Sweave}
+
+%%% Figures and Tables %%%
+\graphicspath{{../figures/}} % again, path relative to paper/ and pres/
+\usepackage[font=small]{caption}
+\usepackage{subcaption}
+
+%%% Fonts
+%\usepackage[T1]{fontenc}
+%\usepackage{qtxmath}
+%\usepackage{tgtermes}
+%\renewcommand{\sfdefault}{qhv}
+
+\let\myitsybitsyfontsize\footnotesize
+%\let\footnotesize\normalsize
+\let\footnotesize\small
+\renewcommand{\footnotesize}{\normalsize}
+
+
+%\def\Sweavesize{\footnotesize} 
+
+
+
+%%% Reviewer comments: 
+%%% following http://tex.stackexchange.com/questions/45725/redefining-quote-environment-with-tiny-font-and-double-quote-signs
+%%% http://www.latex-community.org/forum/viewtopic.php?f=47&t=7992&start=0
+%%% Original definition from article
+%\newenvironment{quote}
+%               {\list{}{\rightmargin\leftmargin}%
+%                \item\relax}
+%               {\endlist}
+
+\newenvironment{revquote}
+               {\list{}{\rightmargin\leftmargin}%
+                \item\relax\small\sffamily}
+               {\endlist}
+
+%%% Saving Space
+%%These next lines tell latex that it is ok to have a single graphic
+%%taking up most of a page, and they also decrease the space around
+%%figures and tables.
+\renewcommand\floatpagefraction{.9}
+\renewcommand\topfraction{.9}
+\renewcommand\bottomfraction{.9}
+\renewcommand\textfraction{.1}   
+\setcounter{totalnumber}{50}
+\setcounter{topnumber}{50}
+\setcounter{bottomnumber}{50}
+\setlength{\intextsep}{1ex}
+\setlength{\floatsep}{1ex}
+\setlength{\textfloatsep}{1ex}
+
+% Possessive citation
+% (http://www.economics.utoronto.ca/osborne/latex/BIBTEX.HTM):
+\def\citeapos#1{\citeauthor{#1}'s (\citeyear{#1})}
+
