@@ -13,6 +13,6 @@ git submodule init
 git submodule update
 ```
 
-Then use the Makefile to build the paper. 
+Then use the Makefile to build the paper.
 
-Some of the simulations take a very long time (more than 24 hours) on a cluster with 36 cores.
+Some of the simulations take a very long time (more than 24 hours) on a cluster with 36 cores. We save the products of these runs in a Dropbox directory.
