@@ -23,22 +23,22 @@ themodel <- interference.model.maker(uniformityData$S)
 ssrTestStat<-SSRTmaker(uniformityData$S)
 
 dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
-     force(model);force(y0);force(truth);force(TZ);force(thegrid);force(simsamples)
-     function(z){
-          y <- invertModel(model, y0, z, truth$beta, truth$tau)
-          rit<-RItest(y,z, TZ, model, thegrid,samples=simsamples)
-	  ## cbind(rit@params, p = rit[-1, "p.value"])
-	 return(rit[-1, "p.value"])
-     }
+	force(model);force(y0);force(truth);force(TZ);force(thegrid);force(simsamples)
+	function(z){
+		y <- invertModel(model, y0, z, truth$beta, truth$tau)
+		rit<-RItest(y,z, TZ, model, thegrid,samples=simsamples)
+		## cbind(rit@params, p = rit[-1, "p.value"])
+		return(rit[-1, "p.value"])
+	}
 }
 
 
 dotest<-dotestMaker(model=themodel,
-                    y0=uniformityData$data$y0,
-                    truth=TRUTH,
-                    TZ=ssrTestStat,
-                    thegrid=SEARCH,
-                    simsamples=simsamples)
+		    y0=uniformityData$data$y0,
+		    truth=TRUTH,
+		    TZ=ssrTestStat,
+		    thegrid=SEARCH,
+		    simsamples=simsamples)
 
 source("code/setup-clusters.R")
 ##library(parallel)
@@ -64,26 +64,25 @@ clusterExport(cl,"growthCurve")
 ##clusterEvalQ(cl,if(length(grep("FisherSUTVA$",getwd()))==0){setwd("$HOME/Documents/PROJECTS/FisherSUTVA")})
 ##res<
 testStats <- list( "ssrTestStat" = ssrTestStat,
-                  "Mean Diff" = mean.difference,
-                  "KS Test" = ksTestStatistic,
-                  "Mann-Whitney U" = mann.whitney.u)
+		  "Mean Diff" = mean.difference,
+		  "KS Test" = ksTestStatistic,
+		  "Mann-Whitney U" = mann.whitney.u)
 
 
 system.time(
-            testStatResults <- lapply(testStats, function(TZ) {
-                                         message(".",appendLF=FALSE)
-
-                                         dotest<-dotestMaker(model=themodel,
-                                                             y0=uniformityData$data$y0,
-                                                             truth=TRUTH,
-                                                             TZ=TZ,
-                                                             thegrid=SEARCH,
-                                                             simsamples=simsamples)
-                                         clusterExport(cl,"dotest")
-                                         parCapply(cl,Zs,function(z){ dotest(as.vector(z))})
+	    testStatResults <- lapply(testStats, function(TZ) {
+				      message(".",appendLF=FALSE)
+				      dotest<-dotestMaker(model=themodel,
+							  y0=uniformityData$data$y0,
+							  truth=TRUTH,
+							  TZ=TZ,
+							  thegrid=SEARCH,
+							  simsamples=simsamples)
+				      clusterExport(cl,"dotest")
+				      parCapply(cl,Zs,function(z){ dotest(as.vector(z))})
 
 })
-            )
+	    )
 
 
 save(testStatResults,file="simulation/teststat-parallel.rda")
