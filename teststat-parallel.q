@@ -1,8 +1,8 @@
 #!/bin/bash
  
 #SBATCH --job-name=teststat-parallel
-#SBATCH -n 36
-#SBATCH --time=72:00:00
+#SBATCH -n 48
+#SBATCH --time=144:00:00
 #SBATCH --mem-per-cpu=8048
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-type=END

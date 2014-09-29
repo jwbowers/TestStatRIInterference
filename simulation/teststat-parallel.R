@@ -59,30 +59,60 @@ clusterExport(cl,"growthCurve")
 
 ##clusterEvalQ(cl,if(length(grep("FisherSUTVA$",getwd()))==0){setwd("$HOME/Documents/PROJECTS/FisherSUTVA")})
 ##res<
-testStats <- list( "ssrTestStat" = ssrTestStat,
+testStats <- list("ssrTestStat" = ssrTestStat,
 		  "Mean Diff" = mean.difference,
 		  "KS Test" = ksTestStatistic,
 		  "Mann-Whitney U" = mann.whitney.u)
 
 
-system.time(
-	    testStatResults <- lapply(testStats, function(TZ) {
-				      message(".",appendLF=FALSE)
-				      dotest<-dotestMaker(model=themodel,
-							  y0=uniformityData$data$y0,
-							  truth=TRUTH,
-							  TZ=TZ,
-							  thegrid=SEARCH,
-							  simsamples=simsamples)
-				      clusterExport(cl,"dotest")
-				      parCapply(cl,Zs,function(z){ dotest(as.vector(z))})
+## dotestSSR<-dotestMaker(model=themodel,
+##  		    y0=uniformityData$data$y0,
+##  		    truth=TRUTH,
+##  		    TZ=ssrTestStat,
+##  		    thegrid=SEARCH,
+##  		    simsamples=simsamples)
+## clusterExport(cl,"dotestSSR")
+## 
+## ssrResults<-parCapply(cl,Zs,function(z){ dotestSSR(z) })
+## 
+## save(ssrResults,file="simulation/ssrResults.rda")
+## 
 
-})
-	    )
+##system.time(
 
-
+## For debugging on the keeling cluster
+##simsamples<-100
+##Zs<-Zs[,1:48]
+testStatResults<-vector("list",length=length(testStats)) 
+names(testStatResults)<-names(testStats)
+for(i in 1:length(testStats)){
+	TZ<-testStats[[i]]
+	dotest<-dotestMaker(model=themodel,
+			    y0=uniformityData$data$y0,
+			    truth=TRUTH,
+			    TZ=TZ,
+			    thegrid=SEARCH,
+			    simsamples=simsamples)
+	clusterExport(cl,"dotest")
+	testStatResults[[i]]<-parCapply(cl,Zs,function(z){ dotest(z)})
+}
+##	    testStatResults <- lapply(testStats, function(TZ) {
+##				      message(".",appendLF=FALSE)
+##				      dotest<-dotestMaker(model=themodel,
+##							  y0=uniformityData$data$y0,
+##							  truth=TRUTH,
+##							  TZ=TZ,
+##							  thegrid=SEARCH,
+##							  simsamples=simsamples)
+##				      clusterExport(cl,"dotest")
+##				      parCapply(cl,Zs,function(z){ dotest(as.vector(z))})
+##
+##})
+##	    )
+##
+##
 save(testStatResults,file="simulation/teststat-parallel.rda")
-
+##
 stopCluster(cl)
 
 ##testStatTauPower <- simulationPower(testStatTauResults)
