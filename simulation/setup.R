@@ -101,3 +101,10 @@ simulationPower <- function(x) {
 }
 
 
+# A simulation using different uniformity trials
+n <- 256
+e <- n * DENSITY
+simsamples<-10000
+##REPTITIONS<-100
+
+

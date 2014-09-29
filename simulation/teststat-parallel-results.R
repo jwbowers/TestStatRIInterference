@@ -12,11 +12,15 @@ simPow2<-function(lst){
 		   rowMeans(m)
 }
 
-powResults<-lapply(testStatResults,function(obj){ simPow2(obj) })
+## powResults<-lapply(testStatResults,function(obj){ simPow2(obj) })
+
+
 
 searchParams<-expand.grid(SEARCH)
-searchParams2<-testStatResults[[1]][[1]]@params
-stopifnot(all.equal(searchParams,searchParams2))
+
+
+##searchParams2<-testStatResults[[1]][[1]]@params
+##stopifnot(all.equal(searchParams,searchParams2))
 
 save(powResults,file="simulation/teststat-parallel-results.rda")
 

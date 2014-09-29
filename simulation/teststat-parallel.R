@@ -7,11 +7,7 @@ options("RItools-sapply"=sapply)
 
 source("simulation/setup.R")
 
-# A simulation using different uniformity trials
-n <- 256
-e <- n * DENSITY
-simsamples<-10000
-##REPTITIONS<-100
+## for each of REPETITIONS draws from the randomization distribution, do simsamples tests.
 
 sampler <- simpleRandomSampler(total = n, treated = n/2)
 Zs <- sampler(REPETITIONS)$samples # discard the weight element
@@ -27,18 +23,18 @@ dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 	function(z){
 		y <- invertModel(model, y0, z, truth$beta, truth$tau)
 		rit<-RItest(y,z, TZ, model, thegrid,samples=simsamples)
-		## cbind(rit@params, p = rit[-1, "p.value"])
-		return(rit[-1, "p.value"])
+		return(cbind(rit@params, p = rit[-1, "p.value"])) ## inefficient but avoids errors later
+		##return(rit[-1, "p.value"]) ## efficient but depends on RItools not changing
 	}
 }
 
 
-dotest<-dotestMaker(model=themodel,
-		    y0=uniformityData$data$y0,
-		    truth=TRUTH,
-		    TZ=ssrTestStat,
-		    thegrid=SEARCH,
-		    simsamples=simsamples)
+## dotest<-dotestMaker(model=themodel,
+## 		    y0=uniformityData$data$y0,
+## 		    truth=TRUTH,
+## 		    TZ=ssrTestStat,
+## 		    thegrid=SEARCH,
+## 		    simsamples=simsamples)
 
 source("code/setup-clusters.R")
 ##library(parallel)
@@ -57,7 +53,7 @@ clusterEvalQ(cl,.libPaths(".libraries"))
 clusterEvalQ(cl,library(RItools)) ##,lib.loc=".libraries"))
 clusterEvalQ(cl,options("RItools-lapply"=lapply))
 clusterEvalQ(cl,options("RItools-sapply"=sapply))
-clusterExport(cl,"dotest")
+## clusterExport(cl,"dotest")
 clusterExport(cl,"growthCurve")
 
 
