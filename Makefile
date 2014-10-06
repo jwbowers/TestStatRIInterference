@@ -1,28 +1,33 @@
 # Standard Makefile boilerplate
 SHELL = /bin/sh
+
 .SUFFIXES:
+
 RCMD = R --vanilla
+
 # Sweave is always run in a subdir
+
 Sweave = R_LIBS=../.libraries $(RCMD) CMD Sweave
+
 TEX2PDF = latexmk -pdf
 
 INSTALLLIB = $(RCMD) CMD INSTALL --no-multiarch --no-docs --library=.libraries
 installpkg = mkdir -p .libraries ; R_LIBS=.libraries R --vanilla -e "install.packages('$(1)', repos = 'http://streaming.stat.iastate.edu/CRAN/')" ; date > .libraries/$(1)/INSTALLED
-LIBRARIES = .libraries/.d .libraries/RItools/INSTALLED .libraries/packages.txt
+	LIBRARIES = .libraries/.d .libraries/RItools/INSTALLED .libraries/packages.txt
 
 MAKEFIG = cd figures && $(Sweave)
 
-all: paper.pdf rejoinder.pdf
+all: paper.pdf 
 
 ### Paper Targets
 # note: the figures only included at the latex step, so the individual
 # sections do not need to be rebuilt when the figures change, but we notate
 # the logical flow by tabbing in for the figures that used in each section
 paper.pdf: BIB/big.bib \
-					 styles/common.sty \
-					 styles/notation.sty \
-					 paper/paper.tex \
-					 paper/titlepage.tex
+  styles/common.sty \
+  styles/notation.sty \
+  paper/paper.tex \
+  paper/titlepage.tex
 	cd paper && $(TEX2PDF) paper.tex
 	cp paper/paper.pdf .
 
@@ -50,7 +55,7 @@ pkgs/RItools:
 	git submodule init && git submodule update
 
 .libraries/RItools/INSTALLED: pkgs/RItools/R/* \
-	.libraries/SparseM/INSTALLED .libraries/xtable/INSTALLED .libraries/svd/INSTALLED .libraries/abind/INSTALLED .libraries/hexbin/INSTALLED .libraries/brew/INSTALLED
+  .libraries/SparseM/INSTALLED .libraries/xtable/INSTALLED .libraries/svd/INSTALLED .libraries/abind/INSTALLED .libraries/hexbin/INSTALLED .libraries/brew/INSTALLED
 	mkdir -p .libraries
 	cd pkgs/RItools && make package
 	$(INSTALLLIB) pkgs/RItools/$(shell cd pkgs/RItools && make current)
@@ -80,8 +85,8 @@ pkgs/RItools:
 ### Tables and Figures
 
 figures/teststat2dfigs.txt: figures/teststat-parallel-summary.R \
-	simulation/teststat-parallel-results.rda \
-	code/plotting.R
+  simulation/teststat-parallel-results.rda \
+  code/plotting.R
 	R_LIBS=".libraries" $(RCMD) --file=figures/teststat-parallel-summary.R
 
 figures/simulation-network-graph.tex: $(LIBRARIES) code/plotting.R simulation/setup.R figures/simulation-network-graph.Rnw
@@ -118,7 +123,7 @@ $(ARCHIVENAME).tar.gz: Makefile README.md filestodelete.txt paper/* simulation/*
 	rm -rf $(ARCHIVENAME)
 	mkdir $(ARCHIVENAME)
 	rsync -a --exclude-from=.gitignore --exclude=.git* \
-           . $(ARCHIVENAME)
+	  . $(ARCHIVENAME)
 	tar -cz $(ARCHIVENAME) > $(ARCHIVENAME).tar.gz
 
 archive: $(ARCHIVENAME).tar.gz
