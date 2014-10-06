@@ -20,7 +20,9 @@ uniformityData <- simulationData(n,e)
 ##num1hopPeers<-colSums(uniformityData$S)
 themodel <- interference.model.maker(uniformityData$S)
 ssrTestStat<-SSRTmaker(uniformityData$S)
-ksResidTestStat<-ksNetResidTestStatisticMaker(uniformityData$S)
+ksNetResidTestStat<-ksNetResidTestStatisticMaker(uniformityData$S)
+ksNetTestStatistic<-ksNetTestStatisticMaker(uniformityData$S)
+
 
 dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 	force(model);force(y0);force(truth);force(TZ);force(thegrid);force(simsamples)
@@ -41,6 +43,7 @@ dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 ## 		    simsamples=simsamples)
 
 source("code/setup-clusters.R")
+require(snow)
 ##library(parallel)
 ##thecluster<-rep("localhost",8) ##rep(c("localhost","jwbowers.pol.illinois.edu"),c(8,8))
 ##thecluster<-rep(c("localhost","jwbowers.pol.illinois.edu"),c(12,8))
@@ -69,7 +72,7 @@ clusterExport(cl,"growthCurve")
 testStats <- list("SSR Test Net Full" = ssrTestStat, ## test stat including a bit of the true model
 				  "SSR Test Net Degree" = ssrNetTestStatistic, ## test stat including only network degree
 				  "SSR Test" = ssrSimpleTestStatistic, ## test stat ignoring network
-				  "KS Test Net Full" = ksResidTestStat, ## test stat including some of the true model
+				  "KS Test Net Full" = ksNetResidTestStat, ## test stat including some of the true model
 				  "KS Test Net Degree" = ksNetTestStatistic, ## test stat including only network degree
 				  "KS Test" = ksTestStatistic  ## test stat ignoring network
 				  )
