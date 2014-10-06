@@ -1,11 +1,14 @@
 #.libPaths("../.libraries")
 masterdir<-getwd()
+require(compiler)
+enableJIT(3)
 
 library(RItools,lib.loc=".libraries")
 options("RItools-lapply"=lapply)
 options("RItools-sapply"=sapply)
 
 source("simulation/setup.R")
+source("code/teststatistics.R")
 
 ## for each of REPETITIONS draws from the randomization distribution, do simsamples tests.
 
@@ -17,6 +20,7 @@ uniformityData <- simulationData(n,e)
 ##num1hopPeers<-colSums(uniformityData$S)
 themodel <- interference.model.maker(uniformityData$S)
 ssrTestStat<-SSRTmaker(uniformityData$S)
+ksResidTestStat<-ksNetResidTestStatisticMaker(uniformityData$S)
 
 dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 	force(model);force(y0);force(truth);force(TZ);force(thegrid);force(simsamples)
@@ -51,6 +55,9 @@ source("code/setup-clusters.R")
 ##clusterEvalQ(cl,setwd("/Users/jwbowers/Documents/PROJECTS/FisherSUTVA/"))
 clusterEvalQ(cl,.libPaths(".libraries"))
 clusterEvalQ(cl,library(RItools)) ##,lib.loc=".libraries"))
+clusterEvalQ(cl,library(compiler))
+clusterEvalQ(cl,enableJIT(3))
+clusterEvalQ(cl,source("code/teststatistics.R"))
 clusterEvalQ(cl,options("RItools-lapply"=lapply))
 clusterEvalQ(cl,options("RItools-sapply"=sapply))
 ## clusterExport(cl,"dotest")
@@ -58,61 +65,37 @@ clusterExport(cl,"growthCurve")
 
 
 ##clusterEvalQ(cl,if(length(grep("FisherSUTVA$",getwd()))==0){setwd("$HOME/Documents/PROJECTS/FisherSUTVA")})
-##res<
-testStats <- list("ssrTestStat" = ssrTestStat,
-		  "Mean Diff" = mean.difference,
-		  "KS Test" = ksTestStatistic,
-		  "Mann-Whitney U" = mann.whitney.u)
 
+testStats <- list("SSR Test Net Full" = ssrTestStat, ## test stat including a bit of the true model
+				  "SSR Test Net Degree" = ssrNetTestStatistic, ## test stat including only network degree
+				  "SSR Test" = ssrSimpleTestStatistic, ## test stat ignoring network
+				  "KS Test Net Full" = ksResidTestStat, ## test stat including some of the true model
+				  "KS Test Net Degree" = ksNetTestStatistic, ## test stat including only network degree
+				  "KS Test" = ksTestStatistic  ## test stat ignoring network
+				  )
+##		  "Mann-Whitney U" = mann.whitney.u)
+##		  "Mean Diff" = mean.difference,
 
-## dotestSSR<-dotestMaker(model=themodel,
-##  		    y0=uniformityData$data$y0,
-##  		    truth=TRUTH,
-##  		    TZ=ssrTestStat,
-##  		    thegrid=SEARCH,
-##  		    simsamples=simsamples)
-## clusterExport(cl,"dotestSSR")
-## 
-## ssrResults<-parCapply(cl,Zs,function(z){ dotestSSR(z) })
-## 
-## save(ssrResults,file="simulation/ssrResults.rda")
-## 
-
-##system.time(
 
 ## For debugging on the keeling cluster
 ##simsamples<-100
 ##Zs<-Zs[,1:48]
-testStatResults<-vector("list",length=length(testStats)) 
+testStatResults<-vector("list",length=length(testStats))
 names(testStatResults)<-names(testStats)
 for(i in 1:length(testStats)){
 	TZ<-testStats[[i]]
 	dotest<-dotestMaker(model=themodel,
-			    y0=uniformityData$data$y0,
-			    truth=TRUTH,
-			    TZ=TZ,
-			    thegrid=SEARCH,
-			    simsamples=simsamples)
+						y0=uniformityData$data$y0,
+						truth=TRUTH,
+						TZ=TZ,
+						thegrid=SEARCH,
+						simsamples=simsamples)
 	clusterExport(cl,"dotest")
+	clusterSetupRNG(cl,seed=rep(1,6)) ## use same stream of randomness for each test statistic
 	testStatResults[[i]]<-parCapply(cl,Zs,function(z){ dotest(z)})
 }
-##	    testStatResults <- lapply(testStats, function(TZ) {
-##				      message(".",appendLF=FALSE)
-##				      dotest<-dotestMaker(model=themodel,
-##							  y0=uniformityData$data$y0,
-##							  truth=TRUTH,
-##							  TZ=TZ,
-##							  thegrid=SEARCH,
-##							  simsamples=simsamples)
-##				      clusterExport(cl,"dotest")
-##				      parCapply(cl,Zs,function(z){ dotest(as.vector(z))})
-##
-##})
-##	    )
-##
-##
+
 save(testStatResults,file="simulation/teststat-parallel.rda")
-##
 stopCluster(cl)
 
 ##testStatTauPower <- simulationPower(testStatTauResults)
