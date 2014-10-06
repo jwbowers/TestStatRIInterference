@@ -6,13 +6,17 @@ source("simulation/setup.R")
 
 load("simulation/teststat-parallel.rda")
 
+library(abind)
+tzResultsArrSSR<-abind(testStatResults[["ssrTestStat"]],along=-1)
+
+
 simPow2<-function(lst){
-		   m <- sapply(lst,function(l){ l[-1,"p.value"]})
-           m <- m <= ALPHA
-		   rowMeans(m)
+	m <- sapply(lst,function(l){ l$p})
+	m <- m <= ALPHA
+	rowMeans(m)
 }
 
-## powResults<-lapply(testStatResults,function(obj){ simPow2(obj) })
+powResults<-lapply(testStatResults,function(obj){ simPow2(obj) })
 
 
 
