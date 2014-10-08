@@ -1,5 +1,6 @@
 #.libPaths("../.libraries")
-masterdir<-getwd()
+##masterdir<-getwd()
+if(length(grep("TestStatRIInterference$",getwd()))==0){setwd("..")}
 require(compiler)
 enableJIT(3)
 
@@ -20,6 +21,7 @@ uniformityData <- simulationData(n,e)
 ##num1hopPeers<-colSums(uniformityData$S)
 themodel <- interference.model.maker(uniformityData$S)
 ssrTestStat<-SSRTmaker(uniformityData$S)
+ssrNetTestStatistic<-ssrNetTestStatisticMaker(uniformityData$S)
 ksNetResidTestStat<-ksNetResidTestStatisticMaker(uniformityData$S)
 ksNetTestStatistic<-ksNetTestStatisticMaker(uniformityData$S)
 
@@ -43,7 +45,7 @@ dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 ## 		    simsamples=simsamples)
 
 source("code/setup-clusters.R")
-require(snow)
+##require(snow)
 ##library(parallel)
 ##thecluster<-rep("localhost",8) ##rep(c("localhost","jwbowers.pol.illinois.edu"),c(8,8))
 ##thecluster<-rep(c("localhost","jwbowers.pol.illinois.edu"),c(12,8))
@@ -81,21 +83,24 @@ testStats <- list("SSR Test Net Full" = ssrTestStat, ## test stat including a bi
 
 
 ## For debugging on the keeling cluster
-##simsamples<-100
-##Zs<-Zs[,1:48]
+##simsamples<-10
+##Zs<-Zs[,1:10]
 testStatResults<-vector("list",length=length(testStats))
 names(testStatResults)<-names(testStats)
 for(i in 1:length(testStats)){
 	TZ<-testStats[[i]]
+	message(names(testStats)[i])
 	dotest<-dotestMaker(model=themodel,
 			    y0=uniformityData$data$y0,
 			    truth=TRUTH,
 			    TZ=TZ,
 			    thegrid=SEARCH,
 			    simsamples=simsamples)
+	##dotestcmp<-cmpfun(dotest,options=list(optimize=3))
 	clusterExport(cl,"dotest")
-	clusterSetupRNG(cl,seed=rep(1,6)) ## use same stream of randomness for each test statistic
+	clusterSetRNGStream(cl,iseed=rep(1,7)) ## use same stream of randomness for each test statistic
 	testStatResults[[i]]<-parCapply(cl,Zs,function(z){ dotest(z)})
+	##testStatResults[[i]]<-apply(Zs,2,function(z){ dotestcmp(z)})
 }
 
 save(testStatResults,file="simulation/teststat-parallel.rda")

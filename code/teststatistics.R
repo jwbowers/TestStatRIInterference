@@ -55,7 +55,7 @@ ssrSimpleTestStatistic<- function(y,z){
 
 
 
-ssrNetTestStatistic<-function(S){
+ssrNetTestStatisticMaker<-function(S){
 	## This statistic only takes into account the degree of the nodes.
 	force(S)
 	total1HopPeers<-colSums(S) ## degree, S is undirected and symmetric so colSums=rowSums
