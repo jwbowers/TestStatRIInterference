@@ -70,12 +70,12 @@ clusterExport(cl,"growthCurve")
 ##clusterEvalQ(cl,if(length(grep("FisherSUTVA$",getwd()))==0){setwd("$HOME/Documents/PROJECTS/FisherSUTVA")})
 
 testStats <- list("SSR Test Net Full" = ssrTestStat, ## test stat including a bit of the true model
-				  "SSR Test Net Degree" = ssrNetTestStatistic, ## test stat including only network degree
-				  "SSR Test" = ssrSimpleTestStatistic, ## test stat ignoring network
-				  "KS Test Net Full" = ksNetResidTestStat, ## test stat including some of the true model
-				  "KS Test Net Degree" = ksNetTestStatistic, ## test stat including only network degree
-				  "KS Test" = ksTestStatistic  ## test stat ignoring network
-				  )
+		  "SSR Test Net Degree" = ssrNetTestStatistic, ## test stat including only network degree
+		  "SSR Test" = ssrSimpleTestStatistic, ## test stat ignoring network
+		  "KS Test Net Full" = ksNetResidTestStat, ## test stat including some of the true model
+		  "KS Test Net Degree" = ksNetTestStatistic, ## test stat including only network degree
+		  "KS Test" = ksTestStatistic  ## test stat ignoring network
+		  )
 ##		  "Mann-Whitney U" = mann.whitney.u)
 ##		  "Mean Diff" = mean.difference,
 
@@ -88,11 +88,11 @@ names(testStatResults)<-names(testStats)
 for(i in 1:length(testStats)){
 	TZ<-testStats[[i]]
 	dotest<-dotestMaker(model=themodel,
-						y0=uniformityData$data$y0,
-						truth=TRUTH,
-						TZ=TZ,
-						thegrid=SEARCH,
-						simsamples=simsamples)
+			    y0=uniformityData$data$y0,
+			    truth=TRUTH,
+			    TZ=TZ,
+			    thegrid=SEARCH,
+			    simsamples=simsamples)
 	clusterExport(cl,"dotest")
 	clusterSetupRNG(cl,seed=rep(1,6)) ## use same stream of randomness for each test statistic
 	testStatResults[[i]]<-parCapply(cl,Zs,function(z){ dotest(z)})
