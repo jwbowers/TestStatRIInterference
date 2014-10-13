@@ -87,6 +87,7 @@ testStats <- list("SSR Test Net Full" = ssrTestStat, ## test stat including a bi
 ##Zs<-Zs[,1:10]
 testStatResults<-vector("list",length=length(testStats))
 names(testStatResults)<-names(testStats)
+system.time(
 for(i in 1:length(testStats)){
 	TZ<-testStats[[i]]
 	message(names(testStats)[i])
@@ -105,6 +106,7 @@ for(i in 1:length(testStats)){
 
 save(testStatResults,file="simulation/teststat-parallel.rda")
 stopCluster(cl)
+)
 
 ##testStatTauPower <- simulationPower(testStatTauResults)
 
