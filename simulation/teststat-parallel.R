@@ -86,8 +86,8 @@ testStats <- list("SSR Test Net Full" = ssrTestStat, ## test stat including a bi
 ##simsamples<-10
 ##Zs<-Zs[,1:10]
 testStatResults<-vector("list",length=length(testStats))
-names(testStatResults)<-names(testStats)
-system.time(
+##names(testStatResults)<-names(testStats)
+##system.time(
 for(i in 1:length(testStats)){
 	TZ<-testStats[[i]]
 	message(names(testStats)[i])
@@ -103,10 +103,9 @@ for(i in 1:length(testStats)){
 	testStatResults[[i]]<-parCapply(cl,Zs,function(z){ dotest(z)})
 	##testStatResults[[i]]<-apply(Zs,2,function(z){ dotestcmp(z)})
 }
-
 save(testStatResults,file="simulation/teststat-parallel.rda")
 stopCluster(cl)
-)
+##)
 
 ##testStatTauPower <- simulationPower(testStatTauResults)
 
