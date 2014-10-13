@@ -31,7 +31,7 @@ ksNetResidTestStatisticMaker <- function(S){
 	force(S)
 	total1HopPeers<-colSums(S) ## S is undirected and symmetric
 	function(y, z) {
-		e<-lm.fit(cbind(1,z,as.vector(z %*% S),total1HopPeers),y)$residuals
+		e<-lm.fit(cbind(1,as.vector(z %*% S),total1HopPeers),y)$residuals
 		baseKSTest(y=e,z=z)
 	}
 }
@@ -42,7 +42,7 @@ ksNetTestStatisticMaker <- function(S){
 	force(S)
 	total1HopPeers<-colSums(S) ## S is undirected and symmetric
 	function(y, z) {
-		e<-lm.fit(cbind(1,z,total1HopPeers),y)$residuals
+		e<-lm.fit(cbind(1,total1HopPeers),y)$residuals
 		baseKSTest(y=e,z=z)
 	}
 }
