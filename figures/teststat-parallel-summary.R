@@ -11,15 +11,16 @@ res<-cbind(data.frame(powResults),searchParams)
 ## Good Type I error for all tests
 res[res$beta==TRUTH$beta & res$tau==TRUTH$tau,]
 
+teststats<-names(res)[1:(ncol(res)-2)]
+
 oneDplot<-function(x,f,...){
 	## f is a vector of TRUE/FALSE selecting rows of res to plot
 	## x is the name of the variable defining the x-axis
 	plot(range(res[[x]]),c(0,1),type="n",ylab="Proportion p<.05",...)
 	with(res[f,],{
-		 lines(eval(parse(text=x)),ssrTestStat,col="red")
-		 lines(eval(parse(text=x)),Mean.Diff,col="blue")
-		 lines(eval(parse(text=x)),KS.Test,col="black")
-		 lines(eval(parse(text=x)),Mann.Whitney.U,col="green") })
+	     for(i in 1:length(teststats)){
+		 lines(eval(parse(text=x)),eval(parse(text=teststats[i])),col=i)
+	     }})
 	ll<-TRUTH[[x]]-.1*diff(range(res[[x]]))
 	ul<-TRUTH[[x]]+.1*diff(range(res[[x]]))
 	segments(rep(ll,3),
@@ -28,8 +29,8 @@ oneDplot<-function(x,f,...){
 			 .05+c(0,c(-2,2)*sim.se(REPETITIONS)),col="gray",lwd=.5,lty=2)
 	points(TRUTH[[x]],.05,pch=19,cex=2)
 	legend("bottomright",
-		   col=c("red","blue","black","green"),
-		   legend=names(res)[1:4],
+		   col=1:length(teststats),
+		   legend=teststats,
 		   lwd=2,
 		   bty="n")
 }
@@ -53,28 +54,20 @@ oneDplot(x="tau",f=res$beta==max(SEARCH$beta),xlab="Tau")
 
 
 ## Two-D power
-matlist<-lapply(res[,1:4],function(x){
+matlist<-lapply(res[,1:(ncol(res)-2)],function(x){
 				array(x,
 			dim=sapply(SEARCH, length),
 			dimnames=SEARCH)
 		   })
-names(matlist)<-names(res)[1:4]
+names(matlist)<-names(res)[1:(ncol(res)-2)]
 
-pdf(file="figures/ssr2d.pdf")
-plot2DPower(matlist[[1]],TRUTH,main=names(matlist)[1])
-dev.off()
-
-pdf(file="figures/meandiff2d.pdf")
-plot2DPower(matlist[[2]],TRUTH,main=names(matlist)[2])
-dev.off()
-
-pdf(file="figures/kstest2d.pdf")
-plot2DPower(matlist[[3]],TRUTH,main=names(matlist)[3])
-dev.off()
-
-pdf(file="figures/mannwhitneyu2d.pdf")
-plot2DPower(matlist[[4]],TRUTH,main=names(matlist)[4])
-dev.off()
+for(i in 1:length(matlist)){
+   pdf(file=paste("figures/",names(matlist)[[i]],".pdf",sep=""))
+   plot2DPower(matlist[[i]],TRUTH,main=names(matlist)[i])
+   dev.off()
+}
 
 system("touch figures/teststat2dfigs.txt")
+
+
 
