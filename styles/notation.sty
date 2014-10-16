@@ -1,7 +1,7 @@
 %%% Functions
 \newcommand{\given}{\, | \,}
 \newcommand{\pos}{\text{Pos}}
-\newcommand{\I}{\text{I}} % indicator function
+%\newcommand{\I}{\text{I}} % indicator function
 
 %%% Vectors 
 \newcommand{\by}{\mathbf{y}}
@@ -19,7 +19,6 @@
 \newcommand{\bE}{\mathbf{E}}
 \newcommand{\bM}{\mathbf{M}}
 \newcommand{\bB}{\mathbf{B}}
-
 \newcommand{\bzero}{\mathbf{0}}
 \newcommand{\bOne}{\mathbf{1}}
 
@@ -31,7 +30,7 @@
 \newcommand{\HH}{\mathcal{H}} % "Causal model"
 \newcommand{\M}{\mathcal{M}} % "Adjustment model"
 \newcommand{\defmodel}{\yu = \M(\by,\bz)}
-\newcommand{\sharpnull}{\yu = \by}
+\newcommand{\sharpnull}{\yu q= \by}
 \newcommand{\addmodel}{\yu = \by - \tau \cdot \z}
 \newcommand{\multmodel}{\yu = \beta^{-\bZ} \bY}
 \newcommand{\sharpnulli}{\y_\unif = \y}
@@ -50,4 +49,47 @@
 \newcommand{\bzeta}{\boldsymbol{\zeta}}
 \newcommand{\btheta}{\boldsymbol{\theta}}
 
+%% Other Stuff
+% Define new characters
+\def\Var{{\rm Var}\,}
+\def\E{{\rm E}\,}
+\def\arg{{\rm arg}\,}
+\def\Cov{{\rm Cov}\,}
+\def\N{{\rm N}\,}
+%--------------------------------------------------------------------------
+% Math boldface shortcuts, etc. ----------------------------------
+%--------------------------------------------------------------------------
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\Z}{\mathbf{Z}}
+%\newcommand{\I}{{\rm I}}
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\D}{\mathbf{D}}
+%\newcommand{\T}{\mathcal{T}}
+\newcommand{\F}{{\rm F}}
+\renewcommand{\O}{\mathbf{O}}
+\renewcommand{\H}{\mathbf{H}}
+\newcommand{\g}{\mathbf{g}}
+\renewcommand{\r}{\mathbf{r}}
+\newcommand{\s}{\mathbf{s}}
+\newcommand{\uu}{\mathbf{u}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\vv}{\mathbf{v}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\Beta}{\boldsymbol{\beta}}
+%\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bpi}{\boldsymbol{\pi}}
+\newcommand{\arrowp}{\stackrel{p}{\rightarrow}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\bP}{\mathbf{P}}
+\newcommand{\plim}{{\rm plim}}
 
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
