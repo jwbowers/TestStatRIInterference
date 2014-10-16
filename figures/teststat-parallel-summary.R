@@ -37,19 +37,19 @@ oneDplot<-function(x,f,...){
 
 
 ## Power comparison holding tau fixed
-par(mfrow=c(1,3),oma=rep(0,4),mgp=c(1.5,.5,0),pty="s")
+par(mfrow=c(1,2),oma=rep(0,4),mgp=c(1.5,.5,0),pty="s")
 
 oneDplot(x="beta",f=res$tau==TRUTH$tau,xlab="Beta")
-oneDplot(x="beta",f=res$tau==min(SEARCH$tau),xlab="Beta")
-oneDplot(x="beta",f=res$tau==max(SEARCH$tau),xlab="Beta")
+##oneDplot(x="beta",f=res$tau==min(SEARCH$tau),xlab="Beta")
+##oneDplot(x="beta",f=res$tau==max(SEARCH$tau),xlab="Beta")
 
 
 ## Power comparison holding beta fixed
-par(mfrow=c(1,3),oma=rep(0,4),mgp=c(1.5,.5,0),pty="s")
+##par(mfrow=c(1,3),oma=rep(0,4),mgp=c(1.5,.5,0),pty="s")
 
 oneDplot(x="tau",f=res$beta==TRUTH$beta,xlab="Tau")
-oneDplot(x="tau",f=res$beta==min(SEARCH$beta),xlab="Tau")
-oneDplot(x="tau",f=res$beta==max(SEARCH$beta),xlab="Tau")
+##oneDplot(x="tau",f=res$beta==min(SEARCH$beta),xlab="Tau")
+##oneDplot(x="tau",f=res$beta==max(SEARCH$beta),xlab="Tau")
 
 
 
@@ -62,7 +62,7 @@ matlist<-lapply(res[,1:(ncol(res)-2)],function(x){
 names(matlist)<-names(res)[1:(ncol(res)-2)]
 
 for(i in 1:length(matlist)){
-   pdf(file=paste("figures/",names(matlist)[[i]],".pdf",sep=""))
+   pdf(file=paste("figures/",names(matlist)[i],".pdf",sep=""))
    plot2DPower(matlist[[i]],TRUTH,main=names(matlist)[i])
    dev.off()
 }
