@@ -1,90 +1,225 @@
 
- \citet{bowers2013sutva} showed that one could use Fisher's
- randomization-based hypothesis testing framework to assess models of
- treatment propagation and spillover across social networks. Working in a
- frequentist framework, they showed that one could make statements such as:
- "Our design provides strong evidence against the idea that the treatment
- spilled over by more than 5 points given this model of treatment
- propagation." This research note shows that the test statistic that they used
- --- the Kolmogorov-Smirnov test statistic  \citep[\S
- 5.4]{MylesHollander1999a} --- could be improved substantially. We replicate
- their analyses to demonstrate that the sum of squared residuals from a linear
- model in which aspects of the network itself play a role. 
+\citet{bowers2013sutva} showed that one could use Fisher's
+randomization-based hypothesis testing framework to assess counterfactual
+causal models of treatment propagation and spillover across social networks.
+That is, they showed that one could make
+statements such as: ``Our design provides strong evidence against the idea
+that the treatment spilled over by more than 5 points given this model of
+treatment propagation.'' This research note shows that the test statistic that
+they used --- the Kolmogorov-Smirnov test statistic  \citep[\S
+5.4]{MylesHollander1999a} --- could be improved substantially. We demonstrate that the sum of squared residuals from a linear
+model in which aspects of the network play a role is a preferable test
+statistic for the model and network and design analyzed by
+\citet{bowers2013sutva} (henceforth BFP). The point of this short article is to improve the
+use of the ``reasoning about interference'' approach and also to highlight
+the methodological and statistical questions raised by that article. We do
+not aim for general answers to those questions here and now, but we do hope
+that this piece stimulates further, and  deeper, work on test statistics and
+sharp hypotheses.
 
- 
+\section{Background}
 
- They also showed that the strength of evidence against the
- specific hypotheses implied by a given model varied with different features
- of the design as well as the extent to which the true process by which
- treatment given to one unit changed the outcomes of another unit diverged
- from the model. Throughout their paper they used the  Kolmogorov-Smirnov (KS)
- test statistic so that their tests would be sensitive differences in the
- treatment and control distributions implied by different hypotheses and not
- merely sensitive to differences in one aspect of those distributions (such as
- the differences in the mean).\footnote{If the empirical cumulative distribution function (ECDF) of
-   the treated units is $F_1$ and the ECDF of the control units is $F_0$ then
-   the KS test statistic is
-   $\T(\yu,\bz) = \underset{i = 1,\ldots,n}{\text{max}}\left[F_1(y_{i,\bzero})
-     - F_0(y_{i,\bzero})\right]$, where $F(x)=(1/n)\sum_{i=1}^n I(x_i \le x)$
-   records the proportion of the distribution of $x$ at or below $x_i$
-   \citep[\S 5.4]{MylesHollander1999a}.} 
- 
- provides both clarity for
- non-parametric statistical inference  also implied great flexibility in regard to the scientific questions
-that one might engage: for example, one could use the sharp null itself to
-detect spillover  among units \citep{aronow-general} or to characterize the
-benefits from treatment on treated units even if  and sharp hypotheses
-about effects (in contrast to hypotheses about no effects) have been developed
-to assess models of interference \citep{bowers2013sutva}, [ include Rosenbaum
-2007, Bowers and Hansen 2009, and a bunch of other stuff by Rosenbaum ].
+We can define a counterfactual causal effect for a person $i$ as a difference
+between the outcome, $y_i$, person $i$ would have expressed
+after a set of treatments, collected in the vector $\bz$, had been assigned to some subset of a social network,
+$y_{i,\bz}$ compared to the outcome that person $i$ would have expressed
+under a different treatment vector. If the experiment had an effect on person
+$i$, then her outcome would differ under different realizations of the
+experimental treatment $y_{i,\bz} \ne y_{i,\bz'}$. The fundamental problem of
+causal inference (a phrase famously coined in \cite{holland:1986a}) reminds
+us that we can never see both states of the world: we only observe the
+outcome from person $i$ under one treatment assignment, either $\bz$ or
+$\bz'$ not both.
 
+R.A. Fisher's approach to design-based statistical inference  \citep[Chap
+2]{fisher:1935} begins with the idea that we do not learn directly about the
+unobserved counterfactuals. Rather, he suggests, we can learn about models of
+unobserved counterfactuals --- we can learn how much information we have to
+dispel certain claims about those counterfactuals as implausible. This
+conceptual move --- sidestepping the fundamental problem of causal inference
+via learning about claims made by scientists --- drives hypothesis testing in
+general.  BFP build on this insight as developed and
+linked to counterfactual causal inference by Paul Rosenbaum
+\citep{rosenbaum2010design}. They also say: we do not know how the
+counterfactual conditions might have turned out, they are unobserved, but we
+can make claims about how treatment might have come to have an effect and we
+can assess those claims. For example, the claim used by
+BFP is a model in which the effects of treatment
+propagating from one person to another die off as the network distance between
+nodes increases.\footnote{See the paper itself for details of the example
+  model.} They further showed that the strength of evidence against the
+specific hypotheses implied by a given model varied with different features of
+the design as well as the extent to which the true process by which treatment
+given to one unit changed the outcomes of another unit diverged from the
+model. Throughout their paper they used the Kolmogorov-Smirnov (KS) test
+statistic so that their tests would be sensitive differences in the treatment
+and control distributions implied by different hypotheses and not merely
+sensitive to differences in one aspect of those distributions (such as the
+differences in the mean).\footnote{If the empirical cumulative distribution
+  function (ECDF) of the treated units is $F_1$ and the ECDF of the control
+  units is $F_0$ then the KS test statistic is $\T(\yu,\bz) = \underset{i =
+    1,\ldots,n}{\text{max}}\left[F_1(y_{i,\bzero}) -
+    F_0(y_{i,\bzero})\right]$, where $F(x)=(1/n)\sum_{i=1}^n I(x_i \le x)$
+  records the proportion of the distribution of $x$ at or below $x_i$
+  \citep[\S 5.4]{MylesHollander1999a}.}
 
-Fisher's sharp null hypothesis of no effects combined with his
-randomization-based hypothesis testing framework provides a very clear and
-clean vision of what it means to test a hypothesis \citep[Chap
-2]{fisher:1935} and \citep{rosenbaum2010design}.
-One problem that has become apparent, as scholars have extended Fisher's basic
-ideas, is that as the models of effects have become more complex, the power of
-the testing procedure itself has become more important. A simple test of the
+Notice that the test statistic choice matters: the engine of statistical
+inference involves summarizing information against the hypothesized claim, yet
+different ways to summarize information might be more or less sensitive to
+substantively meaningful differences. A simple test of the
 sharp null can be executed with power that varies as a function of the design
 of the study (proportion treated, blocking structure, etc..), characteristics
 of the outcome, and the way that a test statistic summarizes the outcome. Yet,
-when the models are complex,  \citet{bowers2013sutva} showed that sometimes a
-test will have (1) no power to address the model at all (a function, in part
-of the model itself --- for example ...) such that all hypothesized parameters
+when the models are complex,  BFP showed that sometimes a
+test will have (1) no power to address the model at all such that all hypothesized parameters
 would receive the same implausibility assessment; (2) or might reject all such
 hypothesized parameters. Thus, although in theory one may assess sharp
 hypotheses about multiparameter settings, in practice one may not learn much
 from such tests --- or, in the absence of simulation studies assessing the
-model and test statistic, one may be mislead.  
-
-In this paper we use a very simple causal model and a simple test statistic to
-first show how the combination of model and test statistic is a crucial choice
---- and how more attention ought to be paid to both the model and the test
-statistic.
-
-Then we suggest one test statistic that we think should have good properties
-when the number of parameters in a model is low (i.e. $k << n$). And we should
-this to be the case --- that the robust F-stat from a linear model is a better
-way to go than the KS-test and certainly better than any single measure of
-distributional difference.
-
-Finally, we highlight the similarities between testing the sharp hypothesis
-and the weak hypothesis --- which in turn allows even more flexibility and
-perhaps better performing testing procedures.
+model and test statistic, one may be mislead.
 
 
-Then we suggest a few alternative avenues to pursue.
+BFP recommends choosing ``effect increasing" test statistics ``that will be
+small when the treated and control distributions in the adjusted data ... are
+similar, and large when the distributions diverge." However, test statistics
+that only compare distributional features of hypothesized potential outcomes
+between individuals assigned to treatment and those assigned to control fail
+to fully exploit the data at hand. The problem is that these test statistics
+are  not necessarily increasing in spillover effects.
 
-Some models are well powered for some designs and not other designs.
 
-Using same simulation study using same data from PA study. Better than KS
-test. 
+I demonstrate two results, each showing how effect increasing test statistics,
+as defined by BFP, may provide little to no information about the spillover
+parameter $\tau_2$.  Let us first consider the case when the test statistic is
+the absolute mean difference between hypothesized uniformity trial outcomes
+for treated and control individuals: $\T(\widetilde y_{ij}(\0,\Z), \Z') =
+\left\vert \mu_1 ( \widetilde y_{ij}(\0,\Z), \Z' ) - \mu_0 ( \widetilde
+  y_{ij}(\0,\Z), \Z' ) \right\vert.  $ Fix a realization of $\Z = \z$, and
+further assume noncollinearity: $ \z \notin \{\z^I, (1-\z^I)\}$. We can see
+that, for any hypothesized $\widetilde\tau_2$, there always exists a
+$\widetilde\tau_1$ such that the $p$-value is 1. Expanding the test statistic,
+$\T(\widetilde y_{ij}(\0,\z), \z) = \left\vert \mu_1 (y_{ij}(\z) -
+  \widetilde\tau_1 - \tau_2 z_{i(-j)}, \z) - \mu_0(\widetilde y_{ij}(\z) -
+  \widetilde\tau_2 z_{i(-j)} , \z) \right\vert = \left\vert \mu_1 (y_{ij}(\z)
+  - \widetilde\tau_2 z_{i(-j)}, \z)- \mu_0 (\widetilde y_{ij}(\z) -
+  \widetilde\tau_2 z_{i(-j)}, \z)- \widetilde\tau_1 \right\vert.  $ Thus,
+regardless of the value of $\widetilde\tau_2$, we can always find a
+$\widetilde\tau_1$ that sets $\T(\widetilde y_{ij}(\0,\z), \z) = 0$. Given
+that $\T(\widetilde y_{ij}(\0,\z), \Z')$ can only take values in
+$\mathbb{R}^+$, then $p=1$, as any other possible randomization $\Z'$ will
+yield a value of $\T(\widetilde y_{ij}(\0,\z), \Z') \geq 0$. It follows that,
+given this test, we cannot rule out any value of $\tau_2$ as being
+implausible.\footnote{In fact, this result does not depend on example in the
+  setting, and holds for any randomization scheme coupled with a linear causal
+  model of the form \eqref{causal}.}
 
-The F-test is model consistent. By design it controls Type I error, but if the
-model is correct, it has some optimality criterion. If you had control
-variables, for example, then it would be consistent against mean differences.
+Second, I show that, given the running example, a test based on any effect
+increasing statistic is inconsistent against a radically incorrect hypothesis
+about $\tau_2$. Let us assume that $\tau_1$ is properly hypothesized at its
+true value, and that the hypothesized value of $\tau_2$ ($\widetilde \tau_2$)
+is radically incorrect: $\vert \widetilde\tau_2 - \tau_2 \vert \gg
+\max(y_{ij}(\0)) - \min(y_{ij}(\0))$. Denote $\beta \equiv \tau_2 -
+\widetilde\tau_2$, and assume $\vert \beta \vert < \infty$.  Under the
+assumption that $\tau_2 = \widetilde \tau_2$: $\widetilde y_{ij}(\0,\Z) =
+y_{ij}(\0) + \beta Z_{i(-j)}$.  Assume a sequence of nested finite populations
+$\{U_k\} = U_1, U_2,...$, growing in $k$ households, so that $U_k$ consists of
+$N_k = 2k$ individuals, each with an associated random assignment $\Z_k$
+\citep{isaki1982survey}. (For notational parsimony, I drop explicit dependence
+on the subscript $k$.)  Given an incorrect hypothesis, a necessary, but not
+sufficient, condition for a test's consistency is that $\lim_{k \rightarrow
+\infty} \Pr(p > \alpha) < \epsilon$, for any $\alpha,\epsilon > 0$.
 
-Under the model, model consistent.
+Let an effect increasing test statistic $\T(\widetilde y_{ij}(\0,\Z),\Z')$ be
+some measure of the absolute divergence in empirical distributions of
+$\widetilde y_{ij}(\0,\Z)$ for treated and control individuals under the
+treatment vector $\Z'$.  Since distributional differences in $y_{ij}(\0)$ are
+small relative to shifts induced by differences in proportions of treated
+housemates,  $\T(\widetilde y_{ij}(\0,\Z),\Z')$ will be increasing in $
+\left\vert \mu_1(Z_{i(-j)},\Z') -   \mu_0(Z_{i(-j)},\Z') \right\vert$. , For
+a realization $\Z = \z$, the hypothesized randomization distribution of
+$\mu_1(z_{i(-j)},\Z') - \mu_0(z_{i(-j)},\Z')$ is asymptotically normal with
+mean $0$ and variance $V_{x(\z)} = 4 x(\z) \left[1-x(\z)\right] / N$, where
+$x(\z) \equiv \sum_{ij\in U}z _{ij} /N$, if $0 < x(\z) <  1$.  (by the
+Lindeberg CLT, Taylor linearization and Slutsky's theorem).  Thus the
+$p$-value associated with randomization $\z$, $p = 2
+\Phi(-|\mu_1(z_{i(-j)},\z) - \mu_0(z_{i(-j)},\z)|/V_{x(\z)}^{1/2})$. It
+follows that $|\mu_1(z_{i(-j)},\z) - \mu_0(z_{i(-j)},\z)\vert <
+-\Phi^{-1}(\alpha/2) V_{x(\z)}^{1/2} \Leftrightarrow p > \alpha$.  By similar
+calculations at the household level, the (actual, not hypothesized)
+randomization distribution of $\mu_1(Z_{i(-j)},\Z) - \mu_0(Z_{i(-j)},\Z)$ is
+asymptotically mean $0$ with variance $2 V_{1/2} =  2/N$.\footnote{This result
+  follows from reframing the problem as randomly assigning households into 4
+  conditions \{00,01,10,11\} with equal probability, then linearizing
+  $\mu_1(Z_{i(-j)},\Z) - \mu_0(Z_{i(-j)},\Z)$.} By the LLN ,  $\plim_{k
+\rightarrow \infty} x = 1/2$, and so, by the and continuous mapping theorem,
+$\lim_{k \rightarrow \infty} \Pr(\vert NV_{x(\Z)} - NV_{1/2}\vert >
+\epsilon_3) = 0$.  Then, by Chebyshev's inequality, $\lim_{k \rightarrow
+\infty}  \Pr(p > \alpha) > 1- 2\left[\Phi^{-1}(\alpha/2)\right]^{-2}$,
+$\epsilon = 1- 2\left[\Phi^{-1}(\alpha/2)\right]^{-2}$ proportion of possible
+$\Z \in \Omega$ have $p > \alpha$,
+for any $0 < \alpha < 2\Phi(-\sqrt{2})$.  Tests based on effect increasing
+statistics are therefore not generally consistent.
+
+\subsection*{Alternative test statistics}
+
+There are usually better ways to evaluate the fit of a model than comparing
+two marginal distributions. One simple test statistic would be the
+sum-of-squared-residuals (SSR) from a least squares regression of $\widetilde
+y_{ij}(\0,\Z)$ on $Z_{ij}$ and $Z_{i(-j)}$. Since the model in \eqref{causal}
+is linear, $\T(\widetilde y_{ij}(\0,\Z), \Z) = \sum_{ij \in U} \left[
+  \widetilde \Y(\0) - (\X^T\X)^{-1}\X^T \widetilde \Y(\0) \right]^2$, where $$
+\widetilde \Y(\0) \equiv \left( \begin{array}{c} \widetilde y_{11}(0) \\
+    \vdots \\ y_{(N/2)(-1)}(0) \end{array} \right), \X \equiv  \left(
+  \begin{array}{ccc} 1 & Z_{11} & Z_{1(-1)} \\ \vdots & \vdots & \vdots  \\ 1
+    & Z_{(N/2)(-1)} & Z_{(N/2)1} \end{array} \right) = ({\bf 1} \; \Z \;
+\Z^I).  $$ Assume now that either the hypothesized $\tau_1$ or $\tau_2$ is
+radically incorrect: i.e., $\vert \widetilde\tau_1 - \tau_1 \vert$ or $\vert
+\widetilde\tau_2 - \tau_2 \vert \gg \max(y_{ij}(\0)) - \min(y_{ij}(\0))$.
+Fixing $\Z = \z$, for any randomization $\Z' \notin \{\z, (1-\z), \z^I,
+(1-\z^I), \0, \one \}$, $\T(\widetilde y_{ij}(\0,\z),\Z') > \T(\widetilde
+y_{ij}(\0,\z),\z)$. Assuming noncollinearity,
+%$\Z \notin \{\Z^I, (1-\Z^I)\}$, , (0,...,0), (1,...,1)\}$)
+$p \leq 6  \left( 2^{-N} \right)$, rejecting the hypothesis with $\alpha =
+0.05$ for any $N \geq 8$. %Consistency follows straightforwardly.
+
+In the example above, use of SSR as a test statistic has maximal power to
+reject radically incorrect hypotheses, whereas the test statistics proposed by
+BFP are inconsistent. But SSR from an ordinary least squares regression is not
+always appropriate: for example, when the probability of exposure to spillover
+is heterogeneous across individuals, we may wish to apply inverse probability
+weights so as to ensure representative samples of potential outcomes. This
+suggests a conjecture: that the $SSR$ from an {\it
+  inverse-probability-weighted} least squares regression is more generally a
+sensible test statistic for models that include interference.  (The nature of
+these weights will be discussed when discussing alternative modes of
+inference.) Additionally, when nonlinear deviations from model predictions are
+of concern, a weighted variant of the Brownian distance covariance
+\cite{szekely2009brownian} or other {\it E}-statistic may be more sensible
+than SSR.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.9\textwidth]{twoDplots.pdf}
+\caption{Proportion of $p$-values less than .05 for tests of joint hypotheses
+about $\tau$ and $\beta$. Darker values mean rare rejection. White means
+rejection always. Truth is shown at the intersection of the straight
+lines  $\tau=.5, \beta=2$. Each panel shows a different test statistic. The
+SSR Tests refer to eq, the KS tests refer to eq.  }\label{fig:ks}
+\end{figure}
+
+
+Test statistic selection is not trivial and BFP's contribution has effectively
+opened a new line of research. Via counterexample, we can see that effect
+increasing test statistics are not always appropriate for assessing hypotheses
+about interference. BFP is correct in the assertion that, regardless of the
+choice of test statistic selection, a set of implausible hypotheses is
+identified by the procedure. But we should not be led to believe that, for any
+given test statistic, that some hypotheses are more plausible than others.
+Such inferences -- comparing hypotheses -- may depend on the test statistic
+used, and not necessarily reflect the plausibility of the model at hand. This
+point will gain importance as we now consider the limitations of sharp null
+hypotheses.
+
 
 

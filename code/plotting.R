@@ -7,13 +7,13 @@ library(igraph)
 library(colorspace)
 
 plotexperiment <- function(s, z, mode = "undirected",
-       vertex.shape = ifelse(z, "circle", "square"),
-       layout = layout.fruchterman.reingold,
-       vertex.size = 6,
-       vertex.color = ifelse(z, "#252525", "#A0A0A0"),
-       vertex.label = NA,
-       edge.color = "black",
-       ...) {
+                           vertex.shape = ifelse(z, "circle", "square"),
+                           layout = layout.fruchterman.reingold,
+                           vertex.size = 6,
+                           vertex.color = ifelse(z, "#252525", "#A0A0A0"),
+                           vertex.label = NA,
+                           edge.color = "black",
+                           ...) {
 
   tmp <- graph.adjacency(s, mode = mode)
 
@@ -42,8 +42,8 @@ make.filled.contour.plot<-function(mat,main,levs=10,col=rev(terrain_hcl(levs)),
                  nrow=length(unique(mat[,params[1]])),
                  ncol=length(unique(mat[,params[2]])),
                  dimnames=list(sort(unique(mat[,params[1]])),
-                   sort(unique(mat[,params[2]]))
-                   )
+                               sort(unique(mat[,params[2]]))
+                               )
                  )
   theps<-sort(unique(as.numeric(mat.p)))
   p.line.levels<-quantile(theps,seq(0,1,length=levs) )
@@ -76,16 +76,16 @@ make.filled.contour.plot<-function(mat,main,levs=10,col=rev(terrain_hcl(levs)),
         #expression(paste(main,"( Type I Error Rate=",round(p.truth,3), " for ", alpha = (1/20))),
         col=col,...)
   if(length(theps)>1){
-  contour(list(x=parm1.values,y=parm2.values,z=mat.p),
-          ##nlevels=levs,
-          levels=thelevels,
-          labels=thelabels,
-          col="gray",
-          method="flattest",
-          labcex=.7,
-          vfont=c("sans serif","bold"),
-          add=TRUE)
-}
+    contour(list(x=parm1.values,y=parm2.values,z=mat.p),
+            ##nlevels=levs,
+            levels=thelevels,
+            labels=thelabels,
+            col="gray",
+            method="flattest",
+            labcex=.7,
+            vfont=c("sans serif","bold"),
+            add=TRUE)
+  }
   if(addTruth) {points(true.params[1],true.params[2],pch=19,cex=2)}
 
   ##clines<-contourLines(x=tau1.values,y=tau2.values,z=mat.p,levels=p.truth)
@@ -212,8 +212,8 @@ plotCompareModels <- function(uniformity, # a vector of outcomes from unif trial
   data <- make.data(uniformity, Z)
 
   adjusted.data <- as.vector(sapply(models, function(m) {
-    m(data, Z)
-  }))
+                                    m(data, Z)
+                               }))
 
   ### do the plotting!
   ### the "groups" are uniformity, model1-control, model1-treatment, ...
@@ -226,34 +226,34 @@ plotCompareModels <- function(uniformity, # a vector of outcomes from unif trial
 
   # this is an ordered factor
   groups <- ordered(c(rep("Uniformity", n), as.vector(sapply(modelNames, function(m) {
-    paste(m, c("-C", "-T")[Z + 1], sep = "")
-  }))), c("Uniformity", as.vector(sapply(modelNames, function(m) {
-    paste(m, c("-C", "-T"), sep = "")
-  }))))
+                                                             paste(m, c("-C", "-T")[Z + 1], sep = "")
+}))), c("Uniformity", as.vector(sapply(modelNames, function(m) {
+  paste(m, c("-C", "-T"), sep = "")
+}))))
 
   data.grouped <-  data.frame(y = c(uniformity, adjusted.data), grp = groups)
 
   boxwidth = 0.25
 
-    # TODO: In RItools version, the addtion of a strip should be an option
+  # TODO: In RItools version, the addtion of a strip should be an option
   # outline in the previous plot should be !strip
   stripchart(y ~ grp,
-    data = data.grouped,
-    vertical = T,
-    method = "jitter",
-    col = "#999999",
-    #group.names = c("Unif.", rep(c("0", "1"), k)))
-    group.names = NA,
-    ylab = "Outcome",
-    cex = 1/3, ...)
+             data = data.grouped,
+             vertical = T,
+             method = "jitter",
+             col = "#999999",
+             #group.names = c("Unif.", rep(c("0", "1"), k)))
+             group.names = NA,
+             ylab = "Outcome",
+             cex = 1/3, ...)
 
   boxplot(y ~ grp, data = data.grouped,
-    names = c("Unif.", rep(c("0", "1"), k)),
-    ylab = NULL,
-    boxwex = 2 * boxwidth,
-    lwd = 0.75,
-    outline = F,
-    add = T)
+          names = c("Unif.", rep(c("0", "1"), k)),
+          ylab = NULL,
+          boxwex = 2 * boxwidth,
+          lwd = 0.75,
+          outline = F,
+          add = T)
 
   # put the model name under the assignment labels
   mtext(modelNames, at = 0.5 + 2 * 1:k, side = 1, line = 1.75)
@@ -289,12 +289,12 @@ plotModelDistance <- function(m1, parameters1, m2, parameters2,
   param.space.2 <- expand.grid(parameters2)
 
   adj.data.1 <- apply(param.space.1, 1, function(params) {
-    do.call(m1, c(list(observed.data, Z, blocks), params))
-  })
+                      do.call(m1, c(list(observed.data, Z, blocks), params))
+                              })
 
   adj.data.2 <- apply(param.space.2, 1, function(params) {
-    do.call(m2, c(list(observed.data, Z, blocks), params))
-  })
+                      do.call(m2, c(list(observed.data, Z, blocks), params))
+                              })
   ## Each row in adj.data are the adjusted outcomes for all units given a model (m1 or m2) and hypotheses (params).
 
   cartesian.product <- expand.grid(1:(dim(param.space.1)[1]),
@@ -305,11 +305,11 @@ plotModelDistance <- function(m1, parameters1, m2, parameters2,
   names(parameters2) <- paste("m2", names(parameters2), sep = ".")
 
   D <- array(apply(cartesian.product, 1, function(pair) {
-                distance(adj.data.1[, pair[[1]]], adj.data.2[, pair[[2]]])
-              }),
-              dim = c(sapply(parameters1, length),
-                      sapply(parameters2, length)),
-              dimnames = c(parameters1, parameters2))
+                   distance(adj.data.1[, pair[[1]]], adj.data.2[, pair[[2]]])
+  }),
+             dim = c(sapply(parameters1, length),
+                     sapply(parameters2, length)),
+             dimnames = c(parameters1, parameters2))
 
   # this is cool: there is an array method for levelplot. it gets the names
   # right except for 2-d arrays (i.e. matrices)
@@ -360,8 +360,8 @@ sim.se <- function(nsim, p = .5){
 yaxislabel <- expression(paste("Prop. Rejected at ",alpha,"=.05"))
 simulationPowerPlot <- function(sim, param) {
   plot(NULL,
-    xlab = c("beta" = expression(beta), "tau" = expression(tau))[param], ylab = yaxislabel,
-    xlim = range(SEARCH[param]), ylim = c(0,1), main = "Power")
+       xlab = c("beta" = expression(beta), "tau" = expression(tau))[param], ylab = yaxislabel,
+       xlim = range(SEARCH[param]), ylim = c(0,1), main = "Power")
 
   abline(v = TRUTH[param], col = "#AAAAAA")
 
@@ -376,17 +376,17 @@ simulationSizePlot <- function(sim, param) {
 
   idx <- which(SEARCH[[param]] == TRUTH[[param]])
   pvs <- sapply(sim, function(x) {
-    sapply(x, function(y) {
-      y[idx + 1, "p.value"] # first row is the sharp null
-    })
-  })
+                sapply(x, function(y) {
+                       y[idx + 1, "p.value"] # first row is the sharp null
+                     })
+       })
 
   plot(NULL,
-    xlab = expression(paste(alpha,"(level)")),
-    ylab = "Prop. Rejected (size)", ##yaxislabel,
-    xlim = c(0,1),
-    ylim = c(0,1),
-    main = "Size")
+       xlab = expression(paste(alpha,"(level)")),
+       ylab = "Prop. Rejected (size)", ##yaxislabel,
+       xlim = c(0,1),
+       ylim = c(0,1),
+       main = "Size")
 
   greycolor <- "#AAAAAA"
 
@@ -428,24 +428,34 @@ simSummaryPlots <- function(betapower, taupower, tauresults) {
 }
 
 plot2DPower <- function(power, truth = NULL, search = SEARCH, xlab =
-                        expression(beta), ylab = expression(tau),...) {
+                        expression(beta), ylab = expression(tau),
+                        xlim = range(x, finite = TRUE),
+                        ylim = range(y, finite = TRUE),main="",...) {
   params <- names(truth)
   pa <- function() { axis(1); axis(2)
-          if (!is.null(truth)) {
-            abline(v = truth[[1]])
-            abline(h = truth[[2]])
-          }
-        }
-  filled.contour(
-    list(y = as.numeric(search[[2]]), # as.numeric _shouldn't_ be needed
-         x = as.numeric(search[[1]]), # but it doesn't work otherwise
-         z = power),
-    col = grey.colors(20, 0, 1),
-    levels = seq(0, 1, by = 0.05),
-    xlab = xlab,
-    ylab = ylab,
-    plot.axes = pa(),
-    ... 
-    ##, key.axes=axis(4, at=range(as.numeric(SEARCH$tau)))
-    )
+  if (!is.null(truth)) {
+    abline(v = truth[[1]])
+    abline(h = truth[[2]])
+  }
+  }
+
+  plot.new()
+  y = as.numeric(search[[2]])
+  x = as.numeric(search[[1]])
+  z = power
+
+  plot.window(xlim, ylim, "", xaxs = "i", yaxs = "i", asp = NA)
+  .filled.contour( y=y,
+                  x = x,
+                  z = z,
+                  col = grey.colors(20, 0, 1),
+                  levels = seq(0, 1, by = 0.05))
+
+  title(main = main, xlab = xlab, ylab = ylab,...)
+  Axis(x, side = 1)
+  Axis(y, side = 2)
+  box()
+
+  pa()
+
 }

@@ -61,11 +61,28 @@ matlist<-lapply(res[,1:(ncol(res)-2)],function(x){
 		   })
 names(matlist)<-names(res)[1:(ncol(res)-2)]
 
+thetitles<-c("SSR Test w/ Treated Neighbors and Degree",
+	     "SSR Test w/ Degree",
+	     "SSR Test w/o Network Information",
+	     "KS Test w/ Treated Neighbors and Degree",
+	     "KS Test w/ Degree",
+	     "KS Test w/o Network Information")
+names(thetitles)<-names(matlist)
+
 for(i in 1:length(matlist)){
    pdf(file=paste("figures/",names(matlist)[i],".pdf",sep=""))
-   plot2DPower(matlist[[i]],TRUTH,main=names(matlist)[i])
+   par(mfrow=c(1,1),mgp=c(1.5,.5,0),oma=rep(0,4))
+   plot2DPower(matlist[[i]],TRUTH,main=thetitles[names(matlist)[i]])
    dev.off()
 }
+
+
+pdf(file="figures/twoDplots.pdf",width=8,height=6)
+par(mfrow=c(2,3),mgp=c(1.5,.5,0),oma=rep(0,4),pty="s",mar=c(3,3,1,.5))
+for(i in 1:length(matlist)){
+   plot2DPower(matlist[[i]],TRUTH,main=thetitles[names(matlist)[i]],cex.lab=1,cex.main=.9)
+}
+dev.off()
 
 system("touch figures/teststat2dfigs.txt")
 

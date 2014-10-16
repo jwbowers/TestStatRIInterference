@@ -23,10 +23,12 @@ all: paper.pdf
 # note: the figures only included at the latex step, so the individual
 # sections do not need to be rebuilt when the figures change, but we notate
 # the logical flow by tabbing in for the figures that used in each section
-paper.pdf: BIB/big.bib \
+paper.pdf: figures/twoDplots.pdf \
+	BIB/big.bib \
   styles/common.sty \
   styles/notation.sty \
   paper/paper.tex \
+  paper/introduction.tex \
   paper/titlepage.tex
 	cd paper && $(TEX2PDF) paper.tex
 	cp paper/paper.pdf .
@@ -88,6 +90,8 @@ figures/teststat2dfigs.txt: figures/teststat-parallel-summary.R \
   simulation/teststat-parallel-results.rda \
   code/plotting.R
 	R_LIBS=".libraries" $(RCMD) --file=figures/teststat-parallel-summary.R
+
+figures/twoDplots.pdf: figures/teststat2dfigs.txt
 
 figures/simulation-network-graph.tex: $(LIBRARIES) code/plotting.R simulation/setup.R figures/simulation-network-graph.Rnw
 	$(MAKEFIG) simulation-network-graph.Rnw
