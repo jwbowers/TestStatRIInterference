@@ -78,17 +78,23 @@ hypotheses about multiparameter settings, in practice one may not learn much
 from such tests --- or, in the absence of simulation studies assessing the
 model and test statistic, one may be mislead.
 
+How should one choose a test statistic to assess relationships between complex
+models of treatment propagation and data? General advice for test statistics
+is that they should be powerful against relevant alternatives (find canonical
+cite). \citet[\S 2.4.4]{rosenbaum:2002} provides more specific advice about
+large sample performance of certain classes of test statistics and BFP repeat
+his general advice: `` Select a test statistic T that will be small when the
+treated and control distributions in the adjusted data \ldots are
+similar, and large when the distributions diverge.'' \citep[p.
+107]{bowers2013sutva}. They should have noted, instead, that when models
+involve more than one parameter, such as the models of treatment propagation across
+networks, test statistics should be increasing in \emph{all} of the parameters
+(for example, in both parameters capturing spillover and parameters capturing
+direct experience with the treatment). Here, we also show a benefit from
+taking into account the network structure in the test statistic as well as in
+the model. 
 
-BFP recommends choosing ``effect increasing" test statistics ``that will be
-small when the treated and control distributions in the adjusted data ... are
-similar, and large when the distributions diverge." However, test statistics
-that only compare distributional features of hypothesized potential outcomes
-between individuals assigned to treatment and those assigned to control fail
-to fully exploit the data at hand. The problem is that these test statistics
-are  not necessarily increasing in spillover effects.
-
-
-I demonstrate two results, each showing how effect increasing test statistics,
+We demonstrate two results, each showing how effect increasing test statistics,
 as defined by BFP, may provide little to no information about the spillover
 parameter $\tau_2$.  Let us first consider the case when the test statistic is
 the absolute mean difference between hypothesized uniformity trial outcomes
@@ -98,11 +104,16 @@ for treated and control individuals: $\T(\widetilde y_{ij}(\0,\Z), \Z') =
 further assume noncollinearity: $ \z \notin \{\z^I, (1-\z^I)\}$. We can see
 that, for any hypothesized $\widetilde\tau_2$, there always exists a
 $\widetilde\tau_1$ such that the $p$-value is 1. Expanding the test statistic,
-$\T(\widetilde y_{ij}(\0,\z), \z) = \left\vert \mu_1 (y_{ij}(\z) -
-  \widetilde\tau_1 - \tau_2 z_{i(-j)}, \z) - \mu_0(\widetilde y_{ij}(\z) -
-  \widetilde\tau_2 z_{i(-j)} , \z) \right\vert = \left\vert \mu_1 (y_{ij}(\z)
+
+\begin{flalign}
+  \T(\widetilde y_{ij}(\0,\z), \z) = & \left\vert \mu_1 (y_{ij}(\z) - \widetilde\tau_1 - \tau_2 z_{i(-j)}, \z) - \mu_0(\widetilde y_{ij}(\z) -
+  \widetilde\tau_2 z_{i(-j)} , \z) \right\vert \\
+= & \left\vert \mu_1 (y_{ij}(\z)
   - \widetilde\tau_2 z_{i(-j)}, \z)- \mu_0 (\widetilde y_{ij}(\z) -
-  \widetilde\tau_2 z_{i(-j)}, \z)- \widetilde\tau_1 \right\vert.  $ Thus,
+  \widetilde\tau_2 z_{i(-j)}, \z)- \widetilde\tau_1 \right\vert.
+\end{flalign}
+
+Thus,
 regardless of the value of $\widetilde\tau_2$, we can always find a
 $\widetilde\tau_1$ that sets $\T(\widetilde y_{ij}(\0,\z), \z) = 0$. Given
 that $\T(\widetilde y_{ij}(\0,\z), \Z')$ can only take values in
@@ -197,29 +208,87 @@ of concern, a weighted variant of the Brownian distance covariance
 \cite{szekely2009brownian} or other {\it E}-statistic may be more sensible
 than SSR.
 
+As an example of the performance of these new statistics, we re-analyze the
+model and design from BFP. Recall that their model of treatment propagation
+was:
+
+\begin{equation}
+\HH(\by_\bz, \bw, \beta, \tau) =
+ \frac{\beta + (1 - w_i) (1 - \beta) \exp(- \tau^2 \bw^{T} \bS)}
+      {\beta + (1 - z_i) (1 - \beta) \exp(- \tau^2 \bz^{T} \bS)} \by_\bz
+\label{eq:spillovermodelA}
+\end{equation}
+
+Briefly, the model posits that treatment effects can depend on either direct
+assignment to treatment ($\bz$) governed by $\beta$ or spillover as an
+increasing (but flattening) function of the number of directly connected
+treated neighbors ($\bz^{T} \bS$) and is governed by $\tau$. So, we have a
+model with two parameters. The network used by BFP involves 256 nodes
+connected in an undirected, random graph with node degree ranging from 0 to 10
+(mean degree 4, 95\% of nodes with degree between 1 and 8, five nodes with
+degree 0 [i.e. unconnected]).  Treatment is assigned to 50\% of the nodes at
+completely at random in the BFP example.
+
+The top row of figure~\ref{fig:twoD} compares the power of the SSR+Design test
+statistic (upper left panel) to versions of this statistic that either only
+include fixed node degree (SSR+Degree) , or no information about the network
+at all (SSR). For each test statistic, we tested the hypothesis
+$\tau=\tau_0,\beta=\tau_0$ by using a simulated permutation test (i.e. we used
+1000 permutations instead of all of them). We executed that test 10,000 times
+for each pair of parameters.  The proportion of $p$-values from that test less
+than .05 is plotted in Figure~\ref{fig:twoD}: darker values are fewer
+rejections, lighter values record more rejections.  All of these test
+statistics are valid --- they reject the true null of $\tau=.5,\beta=2$ no
+more than 5\% of the time at $\alpha=.05$ --- the plots are darkest in the
+area where the two lines showing the true parameters intersect. All of the
+plots have some power to reject non-true alternatives --- as we can see with
+the large white areas in all of the plots. However, only when we add
+information about the number of treated neighbors to the SSR+Degree
+statistic, do we see high power against all alternatives in the plane.
+
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=.9\textwidth]{twoDplots.pdf}
+\includegraphics[width=.99\textwidth]{twoDplots.pdf}
 \caption{Proportion of $p$-values less than .05 for tests of joint hypotheses
 about $\tau$ and $\beta$. Darker values mean rare rejection. White means
 rejection always. Truth is shown at the intersection of the straight
 lines  $\tau=.5, \beta=2$. Each panel shows a different test statistic. The
-SSR Tests refer to eq, the KS tests refer to eq.  }\label{fig:ks}
+SSR Tests refer to eq, the KS tests refer to eq.  }\label{fig:twoD}
 \end{figure}
 
+The bottom row of Figure~\ref{fig:twoD} demonstrates the power of the KS test.
+The bottom right hand panel shows the test used in BFP. Again all of the tests
+are valid in the sense of rejecting the truth no more than 5\% of the time
+when $\alpha=.05$ although all of these tests are conservative: the SSR based
+tests rejected the truth roughly 4\% of the 10,000 simulations but the KS
+tests rejected the truth roughly 2\% of the time.  The KS+Design and
+KS+Degree panels show the power of applying the KS test to residuals from linear
+models including network degree only (the +Degree version) or degree and also
+the number of treated neighbors (a quantity that changes for each simulation
+of the experiment). That is, where as the SSR panels used the sum of squared
+residuals after accounting for network degree and/or number of treated
+neighbors, the KS+Design and KS+Degree panels apply the KS test to the raw
+residuals. These panels show (1) that inclusion of a quantity from the true
+model (number of treated neighbors) is not enough to increase power against
+all alternatives to the level shown by the SSR+Design test statistic and (2)
+that the KS tests and the SSR tests have different patterns of power --- the
+KS tests might be less powerful in general (more darker areas on the plots),
+but our general sense from the analysis accords with the general sense about
+the KS test in the scholarly literature --- that it is relatively low powered
+(cites).
 
-Test statistic selection is not trivial and BFP's contribution has effectively
-opened a new line of research. Via counterexample, we can see that effect
+We cannot say here whether the SSR+Design test will provide the best power
+against relevant alternatives for all possible models of treatment effect
+propagation and designs. However, we hope that this research note both
+improves the application of the BFP approach and raises new questions for
+research.  Via counterexample, we can see that effect
 increasing test statistics are not always appropriate for assessing hypotheses
 about interference. BFP is correct in the assertion that, regardless of the
 choice of test statistic selection, a set of implausible hypotheses is
 identified by the procedure. But we should not be led to believe that, for any
 given test statistic, that some hypotheses are more plausible than others.
 Such inferences -- comparing hypotheses -- may depend on the test statistic
-used, and not necessarily reflect the plausibility of the model at hand. This
-point will gain importance as we now consider the limitations of sharp null
-hypotheses.
-
+used, and not necessarily reflect the plausibility of the model at hand.
 
 
