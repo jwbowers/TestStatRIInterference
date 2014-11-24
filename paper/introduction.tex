@@ -1,57 +1,58 @@
 
-\citet{bowers2013sutva} showed that one could use Fisher's
-randomization-based hypothesis testing framework to assess counterfactual
-causal models of treatment propagation and spillover across social networks.
-That is, they showed that one could make
-statements such as: ``Our design provides strong evidence against the idea
-that the treatment spilled over by more than 5 points given this model of
-treatment propagation.'' This research note shows that the test statistic that
-they used --- the Kolmogorov-Smirnov test statistic  \citep[\S
-5.4]{MylesHollander1999a} --- could be improved substantially. We demonstrate that the sum of squared residuals from a linear
-model in which aspects of the network play a role is a preferable test
-statistic for the model and network and design analyzed by
-\citet{bowers2013sutva} (henceforth BFP). The point of this short article is to improve the
-use of the ``reasoning about interference'' approach and also to highlight
-the methodological and statistical questions raised by that article. We do
-not aim for general answers to those questions here and now, but we do hope
-that this piece stimulates further, and  deeper, work on test statistics and
-sharp hypotheses.
+\citet{bowers2013sutva} showed that one could use Fisher's randomization-based
+hypothesis testing framework to assess counterfactual causal models of
+treatment propagation and spillover across social networks.  This research
+note improves the statistical infernce presented in \citet{bowers2013sutva}
+(henceforth BFP) by substituting a test statistic based on a sum of squared
+residuals and incorporating information about the fixed network for the simple
+the Kolmogorov-Smirnov test statistic  \citep[\S 5.4]{MylesHollander1999a}
+that they used. The point of this short article is to incrementally improve
+the use of BFP's ``reasoning about interference'' approach. We do not offer
+results about test statistics for multi-parameter causal models on social
+networks here, but instead hope that this research note stimulates further,
+and deeper, work on test statistics and sharp hypotheses.
 
-\section{Background}
+\section{Background on randomization based statistical inference for questions
+about causal effects from social network experiments}
 
-We can define a counterfactual causal effect for a person $i$ as a difference
-between the outcome, $y_i$, person $i$ would have expressed
-after a set of treatments, collected in the vector $\bz$, had been assigned to some subset of a social network,
-$y_{i,\bz}$ compared to the outcome that person $i$ would have expressed
-under a different treatment vector. If the experiment had an effect on person
-$i$, then her outcome would differ under different realizations of the
-experimental treatment $y_{i,\bz} \ne y_{i,\bz'}$. The fundamental problem of
-causal inference (a phrase famously coined in \cite{holland:1986a}) reminds
-us that we can never see both states of the world: we only observe the
-outcome from person $i$ under one treatment assignment, either $\bz$ or
-$\bz'$ not both.
+In a randomized experiment with $n=4$ subjects connected via a fixed network,
+subject $i=1$ might respond differently to different ways that treatment is
+assigned to the whole network. When the treatment assignment vector provides
+treatment to persons 2 and 3, $\bz=\{0,1,1,0\}$ she might act one way,
+$y_{i=1,\bz=\{0,1,1,0\}}$ and when treatment is assigned to persons 3 and 4,
+$\bz=\{0,0,1,1\}$ she might act another way, $y_{i=1,\bz=\{0,0,1,1\}}$ That
+is, if the experiment had a causal effect on person $i$, then her outcome
+would differ under different realizations of the experimental treatment
+$y_{i,\bz} \ne y_{i,\bz'}$. The fundamental problem of causal inference
+reminds us that we can never see both states of the world: we only observe the
+outcome from person $i$ under one treatment assignment vector, either $\bz$ or
+some $\bz'$ not both  \cite{holland:1986a}.
 
 R.A. Fisher's approach to design-based statistical inference  \citep[Chap
-2]{fisher:1935} begins with the idea that we do not learn directly about the
-unobserved counterfactuals. Rather, he suggests, we can learn about models of
-unobserved counterfactuals --- we can learn how much information we have to
-dispel certain claims about those counterfactuals as implausible. This
-conceptual move --- sidestepping the fundamental problem of causal inference
-via learning about claims made by scientists --- drives hypothesis testing in
-general.  BFP build on this insight as developed and
-linked to counterfactual causal inference by Paul Rosenbaum
-\citep{rosenbaum2010design}. They also say: we do not know how the
-counterfactual conditions might have turned out, they are unobserved, but we
-can make claims about how treatment might have come to have an effect and we
-can assess those claims. For example, the claim used by
-BFP is a model in which the effects of treatment
-propagating from one person to another die off as the network distance between
-nodes increases.\footnote{See the paper itself for details of the example
-  model.} They further showed that the strength of evidence against the
-specific hypotheses implied by a given model varied with different features of
-the design as well as the extent to which the true process by which treatment
-given to one unit changed the outcomes of another unit diverged from the
-model. Throughout their paper they used the Kolmogorov-Smirnov (KS) test
+2]{fisher:1935} as developed by Paul Rosenbaum  \citep{rosenbaum2010design}
+begins with the premise of the fundamental problem of causal inference. Rather
+than imagine that we could learn directly about the unobservable
+counterfactual comparisons of outcomes under different treatment vectors,
+Fisher would suggest that we focus on learning about how \emph{models} of
+those counterfactual outcomes relate to what we observe. Although we do not
+know how person $i$ would have acted under all possible experimental
+scenarios, we can learn how much information we have to dispel certain claims
+or hypotheses.  This conceptual move --- sidestepping the fundamental problem
+of causal inference via learning about claims made by scientists --- drives
+hypothesis testing in general.  BFP build on this insight by showing that
+models of counterfactual effects can involve statements about how treatment
+given to one node in a social network can come to have an effect on other
+nodes. Their example model allows the effects of treatment to die off as the
+network distance between nodes increases.\footnote{See the paper itself for
+  details of the example model.} They further showed that the strength of
+evidence against the specific hypotheses implied by a given model varied with
+different features of the research design as well as the extent to which the
+true causal process diverged from the model. Since their simulated experiment
+involved only two treatments, the only observations available to evaluate the
+model were comparisons of the assigned to treatment group and the assigned to
+control group. Since their model could imply not only shifts in the mean of
+the observed treatment versus control outcome distributions, but changes in
+shape of those distributions, they used the Kolmogorov-Smirnov (KS) test
 statistic so that their tests would be sensitive differences in the treatment
 and control distributions implied by different hypotheses and not merely
 sensitive to differences in one aspect of those distributions (such as the
@@ -61,115 +62,47 @@ differences in the mean).\footnote{If the empirical cumulative distribution
     1,\ldots,n}{\text{max}}\left[F_1(y_{i,\bzero}) -
     F_0(y_{i,\bzero})\right]$, where $F(x)=(1/n)\sum_{i=1}^n I(x_i \le x)$
   records the proportion of the distribution of $x$ at or below $x_i$
-  \citep[\S 5.4]{MylesHollander1999a}.}
+  \citep[\S 5.4]{MylesHollander1999a}.} So, in broad outline, the BFP approach
+involves (1) the articulation of a model for how a treatment assignment vector
+can change outcomes for all subjects in the experiment (holding the network
+fixed) and (2) using function of comparing actually treated and control
+observations to tell us whether such a model is implausible (codified as a low
+$p$-value)  or whether we have too little information available from the data
+and design about a the model (codified as a high $p$-value). This is classic
+hypothesis testing.
 
-Notice that the test statistic choice matters: the engine of statistical
-inference involves summarizing information against the hypothesized claim, yet
-different ways to summarize information might be more or less sensitive to
-substantively meaningful differences. A simple test of the
-sharp null can be executed with power that varies as a function of the design
-of the study (proportion treated, blocking structure, etc..), characteristics
-of the outcome, and the way that a test statistic summarizes the outcome. Yet,
-when the models are complex,  BFP showed that sometimes a
-test will have (1) no power to address the model at all such that all hypothesized parameters
-would receive the same implausibility assessment; (2) or might reject all such
-hypothesized parameters. Thus, although in theory one may assess sharp
-hypotheses about multiparameter settings, in practice one may not learn much
-from such tests --- or, in the absence of simulation studies assessing the
-model and test statistic, one may be mislead.
-
-How should one choose a test statistic to assess relationships between complex
-models of treatment propagation and data? General advice for test statistics
-is that they should be powerful against relevant alternatives (find canonical
-cite). \citet[\S 2.4.4]{rosenbaum:2002} provides more specific advice about
-large sample performance of certain classes of test statistics and BFP repeat
-his general advice: `` Select a test statistic T that will be small when the
-treated and control distributions in the adjusted data \ldots are
-similar, and large when the distributions diverge.'' \citep[p.
-107]{bowers2013sutva}. They should have noted, instead, that when models
-involve more than one parameter, such as the models of treatment propagation across
-networks, test statistics should be increasing in \emph{all} of the parameters
-(for example, in both parameters capturing spillover and parameters capturing
-direct experience with the treatment). Here, we also show a benefit from
-taking into account the network structure in the test statistic as well as in
-the model. 
-
-We demonstrate two results, each showing how effect increasing test statistics,
-as defined by BFP, may provide little to no information about the spillover
-parameter $\tau_2$.  Let us first consider the case when the test statistic is
-the absolute mean difference between hypothesized uniformity trial outcomes
-for treated and control individuals: $\T(\widetilde y_{ij}(\0,\Z), \Z') =
-\left\vert \mu_1 ( \widetilde y_{ij}(\0,\Z), \Z' ) - \mu_0 ( \widetilde
-  y_{ij}(\0,\Z), \Z' ) \right\vert.  $ Fix a realization of $\Z = \z$, and
-further assume noncollinearity: $ \z \notin \{\z^I, (1-\z^I)\}$. We can see
-that, for any hypothesized $\widetilde\tau_2$, there always exists a
-$\widetilde\tau_1$ such that the $p$-value is 1. Expanding the test statistic,
-
-\begin{flalign}
-  \T(\widetilde y_{ij}(\0,\z), \z) = & \left\vert \mu_1 (y_{ij}(\z) - \widetilde\tau_1 - \tau_2 z_{i(-j)}, \z) - \mu_0(\widetilde y_{ij}(\z) -
-  \widetilde\tau_2 z_{i(-j)} , \z) \right\vert \\
-= & \left\vert \mu_1 (y_{ij}(\z)
-  - \widetilde\tau_2 z_{i(-j)}, \z)- \mu_0 (\widetilde y_{ij}(\z) -
-  \widetilde\tau_2 z_{i(-j)}, \z)- \widetilde\tau_1 \right\vert.
-\end{flalign}
-
-Thus,
-regardless of the value of $\widetilde\tau_2$, we can always find a
-$\widetilde\tau_1$ that sets $\T(\widetilde y_{ij}(\0,\z), \z) = 0$. Given
-that $\T(\widetilde y_{ij}(\0,\z), \Z')$ can only take values in
-$\mathbb{R}^+$, then $p=1$, as any other possible randomization $\Z'$ will
-yield a value of $\T(\widetilde y_{ij}(\0,\z), \Z') \geq 0$. It follows that,
-given this test, we cannot rule out any value of $\tau_2$ as being
-implausible.\footnote{In fact, this result does not depend on example in the
-  setting, and holds for any randomization scheme coupled with a linear causal
-  model of the form \eqref{causal}.}
-
-Second, I show that, given the running example, a test based on any effect
-increasing statistic is inconsistent against a radically incorrect hypothesis
-about $\tau_2$. Let us assume that $\tau_1$ is properly hypothesized at its
-true value, and that the hypothesized value of $\tau_2$ ($\widetilde \tau_2$)
-is radically incorrect: $\vert \widetilde\tau_2 - \tau_2 \vert \gg
-\max(y_{ij}(\0)) - \min(y_{ij}(\0))$. Denote $\beta \equiv \tau_2 -
-\widetilde\tau_2$, and assume $\vert \beta \vert < \infty$.  Under the
-assumption that $\tau_2 = \widetilde \tau_2$: $\widetilde y_{ij}(\0,\Z) =
-y_{ij}(\0) + \beta Z_{i(-j)}$.  Assume a sequence of nested finite populations
-$\{U_k\} = U_1, U_2,...$, growing in $k$ households, so that $U_k$ consists of
-$N_k = 2k$ individuals, each with an associated random assignment $\Z_k$
-\citep{isaki1982survey}. (For notational parsimony, I drop explicit dependence
-on the subscript $k$.)  Given an incorrect hypothesis, a necessary, but not
-sufficient, condition for a test's consistency is that $\lim_{k \rightarrow
-\infty} \Pr(p > \alpha) < \epsilon$, for any $\alpha,\epsilon > 0$.
-
-Let an effect increasing test statistic $\T(\widetilde y_{ij}(\0,\Z),\Z')$ be
-some measure of the absolute divergence in empirical distributions of
-$\widetilde y_{ij}(\0,\Z)$ for treated and control individuals under the
-treatment vector $\Z'$.  Since distributional differences in $y_{ij}(\0)$ are
-small relative to shifts induced by differences in proportions of treated
-housemates,  $\T(\widetilde y_{ij}(\0,\Z),\Z')$ will be increasing in $
-\left\vert \mu_1(Z_{i(-j)},\Z') -   \mu_0(Z_{i(-j)},\Z') \right\vert$. , For
-a realization $\Z = \z$, the hypothesized randomization distribution of
-$\mu_1(z_{i(-j)},\Z') - \mu_0(z_{i(-j)},\Z')$ is asymptotically normal with
-mean $0$ and variance $V_{x(\z)} = 4 x(\z) \left[1-x(\z)\right] / N$, where
-$x(\z) \equiv \sum_{ij\in U}z _{ij} /N$, if $0 < x(\z) <  1$.  (by the
-Lindeberg CLT, Taylor linearization and Slutsky's theorem).  Thus the
-$p$-value associated with randomization $\z$, $p = 2
-\Phi(-|\mu_1(z_{i(-j)},\z) - \mu_0(z_{i(-j)},\z)|/V_{x(\z)}^{1/2})$. It
-follows that $|\mu_1(z_{i(-j)},\z) - \mu_0(z_{i(-j)},\z)\vert <
--\Phi^{-1}(\alpha/2) V_{x(\z)}^{1/2} \Leftrightarrow p > \alpha$.  By similar
-calculations at the household level, the (actual, not hypothesized)
-randomization distribution of $\mu_1(Z_{i(-j)},\Z) - \mu_0(Z_{i(-j)},\Z)$ is
-asymptotically mean $0$ with variance $2 V_{1/2} =  2/N$.\footnote{This result
-  follows from reframing the problem as randomly assigning households into 4
-  conditions \{00,01,10,11\} with equal probability, then linearizing
-  $\mu_1(Z_{i(-j)},\Z) - \mu_0(Z_{i(-j)},\Z)$.} By the LLN ,  $\plim_{k
-\rightarrow \infty} x = 1/2$, and so, by the and continuous mapping theorem,
-$\lim_{k \rightarrow \infty} \Pr(\vert NV_{x(\Z)} - NV_{1/2}\vert >
-\epsilon_3) = 0$.  Then, by Chebyshev's inequality, $\lim_{k \rightarrow
-\infty}  \Pr(p > \alpha) > 1- 2\left[\Phi^{-1}(\alpha/2)\right]^{-2}$,
-$\epsilon = 1- 2\left[\Phi^{-1}(\alpha/2)\right]^{-2}$ proportion of possible
-$\Z \in \Omega$ have $p > \alpha$,
-for any $0 < \alpha < 2\Phi(-\sqrt{2})$.  Tests based on effect increasing
-statistics are therefore not generally consistent.
+Notice that the test statistic choice matters in this process: the engine of
+statistical inference involves summarizing information against the
+hypothesized claim, yet different ways to summarize information might be more
+or less sensitive to substantively meaningful differences. The statistical
+power of a simple test of the sharp null hypothesis of no effects will vary as
+a function of the design of the study (proportion treated, blocking structure,
+etc.), characteristics of the outcome (continuous, binary, skewed, extreme
+points, etc.), and the way that a test statistic summarizes the outcome (does
+it compare means, standard deviations, medians, qqplots, etc.). In general,
+test statistics should be powerful against relevant alternatives (find
+canonical cite). \citet[\S 2.4.4]{rosenbaum:2002} provides more specific
+advice about large sample performance of certain classes of test statistics
+and BFP repeat his general advice: `` Select a test statistic T that will be
+small when the treated and control distributions in the adjusted data \ldots
+are similar, and large when the distributions diverge.'' \citet[Proposition 4
+and 5, \S 2.9]{rosenbaum:2002} presents results proving that test statistics
+with this property (``effect increasing'' test statistics), produces an
+unbiased test of the hypothesis of no effects or positive effects when the
+positive effects involve one parameter.  Yet, when the models are complex and
+may involve increasing effects in the direction of one parameter and
+non-linear effects in the direction of another parameter, BFP showed that
+sometimes a KS-test will have (1) no power to address the model at all such
+that all hypothesized parameters would receive the same implausibility
+assessment; (2) or might reject all such hypothesized parameters. Thus,
+although in theory one may assess sharp hypotheses about multiparameter
+settings, in practice one may not learn much from such tests --- or, in the
+absence of simulation studies assessing the model and test statistic, one may
+be misled. BFP thus recommended simulation studies of the operating
+characteristics of tests as a piece of their workflow --- because  the theory
+justifying simple one-dimensional effect increasing test statistics clearly
+did not cover multi-parameter situations like those easily arising from social
+network experiments.
 
 \subsection*{Alternative test statistics}
 
