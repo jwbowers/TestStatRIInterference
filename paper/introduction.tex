@@ -1,16 +1,4 @@
 
-\citet{bowers2013sutva} showed that one could use Fisher's randomization-based
-hypothesis testing framework to assess counterfactual causal models of
-treatment propagation and spillover across social networks.  This research
-note improves the statistical infernce presented in \citet{bowers2013sutva}
-(henceforth BFP) by substituting a test statistic based on a sum of squared
-residuals and incorporating information about the fixed network for the simple
-the Kolmogorov-Smirnov test statistic  \citep[\S 5.4]{MylesHollander1999a}
-that they used. The point of this short article is to incrementally improve
-the use of BFP's ``reasoning about interference'' approach. We do not offer
-results about test statistics for multi-parameter causal models on social
-networks here, but instead hope that this research note stimulates further,
-and deeper, work on test statistics and sharp hypotheses.
 
 \section{Background on randomization based statistical inference for questions
 about causal effects from social network experiments}
@@ -115,9 +103,7 @@ sometimes a KS-test will have (1) no power to address the model at all such
 that all hypothesized parameters would receive the same implausibility
 assessment; (2) or might reject all such hypothesized parameters. Thus,
 although in theory one may assess sharp hypotheses about multiparameter
-settings, in practice one may not learn much from such tests --- or, in the
-absence of simulation studies assessing the model and test statistic, one may
-be misled. BFP thus recommended simulation studies of the operating
+settings, in practice one may not learn much from such tests. BFP thus recommended simulation studies of the operating
 characteristics of tests as a piece of their workflow --- because  the theory
 justifying simple one-dimensional effect increasing test statistics clearly
 did not cover multi-parameter situations like those easily arising from social
@@ -176,7 +162,7 @@ the KS test statistic. The first, describe above, we call the SSR+Design test
 statistic because it represents information about how treatment is assigned to
 the nodes (in $\bz^T \bS$). The second version of the SSR test statistic only
 includes network degree and excludes information about the treatment status of
-other nodes (only includes $\b1^T \bS$). And the third version includes only
+other nodes (only includes $\bOne^T \bS$). And the third version includes only
 treatment assignment $\bz$. The top row of figure~\ref{fig:twoD} compares the
 power of the SSR+Design test statistic (upper left panel) to versions of this
 statistic that either only include fixed node degree (SSR+Degree), or no
@@ -223,11 +209,7 @@ inclusion of a quantity from the true model (number of treated neighbors) is
 not enough to increase power against all alternatives to the level shown by
 the SSR+Design test statistic and (2) that the KS tests and the SSR tests have
 different patterns of power --- the KS tests might be less powerful in general
-(more darker areas on the plots), but our general sense from the analysis
-accords with the general sense about the KS test in the scholarly literature
---- that it is relatively low powered.\footnote{For a short description and a
-few citations to the well-known low-power of the KS-test, see
-\url{https://asaip.psu.edu/Articles/beware-the-kolmogorov-smirnov-test}}
+(more darker areas on the plots).
 
 \section{Discussion and Speculations}
 
