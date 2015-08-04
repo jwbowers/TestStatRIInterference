@@ -1,20 +1,15 @@
-
 \documentclass[12pt]{article}
 \RequirePackage{snapshot}
-
-\author{Peter Aronow \thanks{Assistant Professor, Dept of Political Science,
-    Yale University \textit{Acknowledgements:} } \and Jake Bowers \thanks{Associate Professor, Dept of Political
-    Science and Statistics, University of Illinois @ Urbana-Champaign
-    (\texttt{jwbowers@illinois.edu}).} \and Mark Fredrickson \thanks{Ph.D. Student in Statistics and Political Science, University of Illinois @ Urbana-Champaign.}}
-
-  \date{\today}
-
 \usepackage{../styles/common}
+
+\author{Jake Bowers \thanks{Associate Professor, Dept of Political Science and Statistics, University of Illinois @ Urbana-Champaign (\texttt{jwbowers@illinois.edu}).} \and Mark Fredrickson \thanks{Ph.D. Student in Statistics and Political Science, University of Illinois @ Urbana-Champaign.} \and Peter M. Aronow \thanks{Assistant Professor, Dept of Political Science and Biostatistics, Yale University}}
+
 
 %%% Paper specific packages
 \usepackage{setspace}
 \usepackage[letterpaper,bottom=1in,top=1in,right=1in,left=1in,includemp=FALSE]{geometry}
 \usepackage{microtype} %only useful with pdflatex
+\usepackage{fancyvrb} % for verbatim text in footnotes
 
 %%% Document Structure Formatting
 \usepackage[compact,bottomtitles]{titlesec}
@@ -35,21 +30,43 @@
 % \footnote{We are awesome!}
 % \else
 % \fi
-
+%% \abovedisplayshortskip=0pt
+%% \belowdisplayshortskip=0pt
+%% \abovedisplayskip=0pt
+%% \belowdisplayskip=0pt
+%% 
 \begin{document}
 \VerbatimFootnotes
-\input{titlepage}
+
+
+\begin{titlepage}
+
+\maketitle
+
+\begin{abstract} 
+\citet{bowers2013sutva} showed that one could use Fisher's randomization-based
+hypothesis testing framework to assess counterfactual causal models of
+treatment propagation and spillover across social networks.  This research
+note improves the statistical infernce presented in \citet{bowers2013sutva}
+(henceforth BFP) by substituting a test statistic based on a sum of squared
+residuals and incorporating information about the fixed network for the simple
+the Kolmogorov-Smirnov test statistic  \citep[\S 5.4]{MylesHollander1999a}
+that they used. The point of this short article is to incrementally improve
+the use of BFP's ``reasoning about interference'' approach. We do not offer
+results about test statistics for multi-parameter causal models on social
+networks here, but instead hope that this research note stimulates further,
+and deeper, work on test statistics and sharp hypotheses.
+\end{abstract}
+
+Key Words: Causal effect; Interference; Randomized experiment;
+Randomization inference; Fisher's Sharp Null Hypothesis; SUTVA
+
+
+\end{titlepage}
+
+%\input{titlepage.tex}
 %\setstretch{1.6} %1.6 or 1.37 which I think is "true double spacing"
 %\onehalfspacing
-%%I don't think I need to double space footnotes for AJPS. Check this.
-\abovedisplayshortskip=0pt
-\belowdisplayshortskip=0pt
-\abovedisplayskip=0pt
-\belowdisplayskip=0pt
-%\tableofcontents
-
-% include stuff here!
-% include stuff here!
 
 \input{introduction.tex}
 
@@ -93,5 +110,5 @@
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "main"
+%%% TeX-master: "paper"
 %%% End:
