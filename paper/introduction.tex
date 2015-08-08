@@ -27,41 +27,43 @@ This conceptual move --- sidestepping the fundamental problem of causal
 inference via learning about claims made by scientists --- drives hypothesis
 testing in general.  BFP build on this insight by showing that models of
 counterfactual effects can involve statements about how treatment given to one
-node in a social network can influence other nodes. Their
-example model allows the effects of treatment to die off as the network
-distance between nodes increases.\footnote{See the paper itself for details of
-  the example model.} They further show that the strength of evidence
+node in a social network can influence other nodes. For example, they present
+a model that allows the effects of treatment to die off as the network
+distance between nodes increases.\footnote{We present this model later in this
+  paper in equation~\ref{eq:spillovermodelA}. See the original paper itself for more
+  details of the example model.} They also show that the strength of evidence
 against the specific hypotheses implied by a given model varies with different
 features of the research design as well as the extent to which the true causal
-process diverged from the model. Since their simulated experiment involved
-two treatments, the only observations available to evaluate the model
-were comparisons of the assigned to treatment group and the assigned to
-control group. Since their model could imply not only shifts in the mean of
-the observed treatment versus control outcome distributions, but changes in
-shape of those distributions, they used the Kolmogorov-Smirnov (KS) test
-statistic so that their tests would be sensitive to differences in the treatment
-and control distributions implied by different hypotheses and not merely
-sensitive to differences in one aspect of those distributions (such as the
-differences in the mean).\footnote{If the empirical cumulative distribution
-  function (ECDF) of the treated units is $F_1$ and the ECDF of the control
-  units is $F_0$ then the KS test statistic is $\T(\yu,\bz) = \underset{i =
+process diverged from the model. Since their simulated experiment involved two
+treatments, the only observations available to evaluate the model were
+comparisons of the assigned to treatment group and the assigned to control
+group. Since their model could imply not only shifts in the mean of the
+observed treatment versus control outcome distributions, but changes in shape
+of those distributions, they used the Kolmogorov-Smirnov (KS) test statistic
+so that their tests would be sensitive to differences in the treatment and
+control distributions implied by different hypotheses and not merely sensitive
+to differences in one aspect of those distributions (such as the differences
+in the mean).\footnote{If the empirical cumulative distribution function
+  (ECDF) of the treated units is $F_1$ and the ECDF of the control units is
+  $F_0$ then the KS test statistic is $\T(\yu,\bz)_{\text{KS}} = \underset{i =
     1,\ldots,n}{\text{max}}\left[F_1(y_{i,\bzero}) -
     F_0(y_{i,\bzero})\right]$, where $F(x)=(1/n)\sum_{i=1}^n I(x_i \le x)$
   records the proportion of the distribution of $x$ at or below $x_i$
-  \citep[\S 5.4]{MylesHollander1999a}.} So, in broad outline, the BFP approach
-involves (1) the articulation of a model for how a treatment assignment vector
-can change outcomes for all subjects in the experiment (holding the network
-fixed) and (2) using function of comparing actually treated and control
-observations to tell us whether such a model is implausible (codified as a low
-$p$-value)  or whether we have too little information available from the data
-and design about a the model (codified as a high $p$-value). This is classic
-hypothesis testing.
+  \citep[\S 5.4]{MylesHollander1999a}. \label{fn:kstest}} So, in broad
+outline, the BFP approach involves (1) the articulation of a model for how a
+treatment assignment vector can change outcomes for all subjects in the
+experiment (holding the network fixed) and (2) use a function to comparing
+actually treated and control observations summarize whether such a model is
+implausible (codified as a low $p$-value)  or whether we have too little
+information available from the data and design about the model (codified as a
+high $p$-value). This is classic hypothesis testing applied to an experiment
+on a social network.
 
 So, say $Y_i$ is the observed outcome and we hypothesize that units do not
-interfere with each other and also that $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$, we can
+interfere and also that $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$. We can
 assess which (if any) hypothesized values of $\tau$ appear implausible from
 the perspective of the data by: (1) Mapping the hypothesis about unobserved
-quantities using the identity $Y_i=Z_i y_{i,Z_i=1} + (1-Z_i) y_{i,Z_i=0}$ ---
+quantities to observed data using the identity $Y_i=Z_i y_{i,Z_i=1} + (1-Z_i) y_{i,Z_i=0}$ ---
 noticing that if $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ then $y_{i,Z_i=0}=Y_i - Z_i
 \tau$ (by substituting from the hypothesized relationship into the observed
 data identity); (2) Using this result to adjust the observed outcome to
@@ -73,7 +75,7 @@ $\mathcal T(\widetilde y_{i,Z_i=0},Z_i)$ and the distribution of values for
 this test statistic arising from repetitions of treatment assignment (new
 draws of $\bz$ from all of the ways that such treatment assignment vectors
 could have been produced); and finally (4) a $p$-value arises by comparing the
-observed test statistic, $T(Y_i,Z_i)$ against the distribution of that test
+observed test statistic, $\mathcal T(Y_i,Z_i)$ against the distribution of that test
 statistic that characterizes the hypothesis.
 
 Notice that the test statistic choice matters in this process: the engine of
@@ -82,15 +84,14 @@ hypothesized claim, yet different ways to summarize information might be more
 or less sensitive to substantively meaningful differences. The statistical
 power of a simple test of the sharp null hypothesis of no effects will vary as
 a function of the design of the study (proportion treated, blocking structure,
-etc.), characteristics of the outcome (continuous, binary, skewed, extreme
-points, etc.), and the way that a test statistic summarizes the outcome (does
-it compare means, standard deviations, medians, qqplots, etc.). In general,
-test statistics should be powerful against relevant alternatives (find
-canonical cite). \citet[\S 2.4.4]{rosenbaum:2002} provides more specific
-advice about large sample performance of certain classes of test statistics
-and BFP repeat his general advice: `` Select a test statistic T that will be
+etc), characteristics of the outcome (continuous, binary, skewed, extreme
+points, etc), and the way that a test statistic summarizes the outcome (does
+it compare means, standard deviations, medians, qqplots, etc). In general,
+test statistics should be powerful against relevant alternatives. \citet[\S 2.4.4]{rosenbaum:2002} provides more specific
+advice about the large sample performance of certain classes of test statistics
+and BFP repeat his general advice: ``Select a test statistic [$\mathcal{T}$] that will be
 small when the treated and control distributions in the adjusted data \ldots
-are similar, and large when the distributions diverge.'' \citet[Proposition 4
+are similar, and large when the distributions diverge.'' \cite[Proposition 4
 and 5, \S 2.9]{rosenbaum:2002} presents results proving that test statistics
 with this property (``effect increasing'' test statistics), produces an
 unbiased test of the hypothesis of no effects or positive effects when the
@@ -113,7 +114,7 @@ Rosenbaum style randomization inference tends to use test statistics that
 compare two distributions. Simple models imply that the distribution of the
 outcome in the control remains fixed. For example, $\widetilde
 y_{i,Z_i=0}=Y_i-Z_i \tau$ only changes the distribution of outcomes for units
-in the treated condition. Comparing the mean of $\widetilde y_{i,Z_i=0}|Z_i=0$
+in the treated condition. Comparing the mean of $\widetilde y_{i,Z_i=1}|Z_i=1$
 to the mean of $\widetilde y_{i,Z_i=0}|Z_i=0$ makes intuitive sense in this
 case, and, if $Y_i$ is Normal or at least unimodal without major outliers,
 then this test might have optimal power. The complex model used as an example
@@ -121,18 +122,27 @@ by BFP involved adjustments to both control and treated outcomes --- some
 hypothesized parameters would cause shifts in variance, others in location.
 So, BFP proposed to use the KS-test statistic to assess the relationship
 between $\widetilde y_{i,Z_i=0,Z_{-i}=0}$ and $Z_i$ (where $Z_{-i}=0$ means
-"when all units other than $i$ are also not treated".
+``when all units other than $i$ are also not treated".)
 
 Yet, one can also think about the process of hypothesis testing as a process
 of assessing model fit, and there are usually better ways to evaluate the fit
-of a model than comparing two marginal distributions. In the case were we know
+of a model than comparing two marginal distributions. In the case where we know
 the fixed adjacency matrix of the network, $\bS$, and where we imagine that
 network attributes (like degree) of a node play a role in the mechanism by
 which treatment propagates, the idea of assessing model fit rather than
-distribution comparison leads naturally to the the sum-of-squared-residuals
-(SSR) from a least squares regression of $ y_{i,Z_i=0}$ on $Z_{i}$ and
-$\bz^{T} \bS$ (i.e. the number of directly connected nodes assigned treatment)
-as well as the $\mathbf{1}^{T} \bS$ (i.e. the degree of the node). 
+closeness of distributions leads naturally to the the sum-of-squared-residuals
+(SSR) from a least squares regression of $ \widetilde y_{i,Z_i=0}$ on $Z_{i}$ and
+$\bz^{T} \bS$ (i.e.\ the number of directly connected nodes assigned treatment)
+as well as the $\mathbf{1}^{T} \bS$ (i.e.\ the degree of the node). If we
+collected $Z_{i}$,$\bz^{T} \bS$, and $\mathbf{1}^{T} \bS$ into a matrix $\bX$,
+and fit the $\widetilde y_{i,Z_i=0}$ as a linear function of $\bX$ with
+coefficients $\bbeta$ when we could define the test statistic as:
+
+
+\begin{equation}
+ \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} -
+ \bX\hat{\bbeta}) ^2 \label{eq:ssr}
+\end{equation}
 
 As an example of the performance of these new statistics, we re-analyze the
 model and design from BFP. Their model of treatment propagation
@@ -152,46 +162,47 @@ treated neighbors ($\bz^{T} \bS$) and is governed by $\tau$. So, we have a
 model with two parameters. The network used by BFP involves 256 nodes
 connected in an undirected, random graph with node degree ranging from 0 to 10
 (mean degree 4, 95\% of nodes with degree between 1 and 8, five nodes with
-degree 0 [i.e. unconnected]).  Treatment is assigned to 50\% of the nodes at
+degree 0 [i.e.\ unconnected]).  Treatment is assigned to 50\% of the nodes 
 completely at random in the BFP example.
 
 We assess three versions of the SSR test statistic versus three versions of
-the KS test statistic. The first, describe above, we call the SSR+Design test
+the KS test statistic. The first, described above, we call the SSR+Design test
 statistic because it represents information about how treatment is assigned to
-the nodes (in $\bz^T \bS$). The second version of the SSR test statistic only
-includes network degree and excludes information about the treatment status of
-other nodes (only includes $\bOne^T \bS$). And the third version includes only
-treatment assignment $\bz$. The top row of figure~\ref{fig:twoD} compares the
-power of the SSR+Design test statistic (upper left panel) to versions of this
-statistic that either only include fixed node degree (SSR+Degree), or no
-information about the network at all (SSR). For each test statistic, we tested
-the hypothesis $\tau=\tau_0,\beta=\tau_0$ by using a simulated permutation
-test (i.e. we sampled 1000 permutations instead of all of them). We executed that
-test 10,000 times for each pair of parameters.  The proportion of $p$-values
-from that test less than .05 is plotted in Figure~\ref{fig:twoD}: darker
-values show fewer rejections, lighter values record more rejections.  All of
-these test statistics are valid --- they reject the true null of
-$\tau=.5,\beta=2$ no more than 5\% of the time at $\alpha=.05$ --- the plots
-are darkest in the area where the two lines showing the true parameters
-intersect. All of the plots have some power to reject non-true alternatives
---- as we can see with the large white areas in all of the plots. However,
-only when we add information about the number of treated neighbors to the
-SSR+Degree statistic, do we see high power against all alternatives in the
-plane.
+the nodes, $\bz^T \bS$. The second version of
+the SSR test statistic (SSR+Degree) only includes network degree,  $\bOne^T \bS$, and
+excludes information about the treatment status of other nodes. And the
+third version (SSR) includes only treatment assignment $\bz$. The top row of
+figure~\ref{fig:twoD} compares the power of the SSR+Design test statistic
+(upper left panel) to versions of this statistic that either only include
+fixed node degree (SSR+Degree), or no information about the network at all
+(SSR). For each test statistic, we tested the hypothesis
+$\tau=\tau_0,\beta=\tau_0$ by using a simulated permutation test: we
+sampled 1000 permutations. We executed that test
+10,000 times for each pair of parameters.  The proportion of $p$-values from
+that test less than .05 is plotted in Figure~\ref{fig:twoD}: darker values
+show fewer rejections, lighter values record more rejections.  All of these
+test statistics are valid --- they reject the true null of $\tau=.5,\beta=2$
+no more than 5\% of the time at $\alpha=.05$ --- the plots are darkest in the
+area where the two lines showing the true parameters intersect. All of the
+plots have some power to reject non-true alternatives --- as we can see with
+the large white areas in all of the plots. However, only when we add
+information about the number of treated neighbors to the SSR+Degree statistic,
+do we see high power against all alternatives in the plane.
 
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=.99\textwidth]{twoDplots.pdf}
-\caption{Proportion of $p$-values less than .05 for tests of joint hypotheses
-about $\tau$ and $\beta$. Darker values mean rare rejection. White means
-rejection always. Truth is shown at the intersection of the straight
-lines  $\tau=.5, \beta=2$. Each panel shows a different test statistic. The
-SSR Tests refer to eq, the KS tests refer to eq.  }\label{fig:twoD}
+\begin{figure}[h!] \centering
+  \includegraphics[width=.99\textwidth]{twoDplots.pdf} \caption{Proportion of
+    $p$-values less than .05 for tests of joint hypotheses about $\tau$ and
+    $\beta$ for the model in equation~\ref{eq:spillovermodelA}. Darker values
+    mean rare rejection. White means rejection always. Truth is shown at the
+    intersection of the straight lines  $\tau=.5, \beta=2$. Each panel shows a
+    different test statistic. The SSR Tests refer to equation~\ref{eq:ssr},
+    the KS tests refer to the expression in
+    footnote~\ref{fn:kstest}.}\label{fig:twoD}
 \end{figure}
 
 The bottom row of Figure~\ref{fig:twoD} demonstrates the power of the KS test.
-The bottom right hand panel shows the test used in BFP. Again all of the tests
+The bottom right hand panel shows the test used in the BFP paper. Again all of the tests
 are valid in the sense of rejecting the truth no more than 5\% of the time
 when $\alpha=.05$ although all of these tests are conservative: the SSR based
 tests rejected the truth roughly 4\% of the 10,000 simulations but the KS
@@ -206,7 +217,7 @@ design and network (or with no adjustment). These panels show (1) that
 inclusion of a quantity from the true model (number of treated neighbors) is
 not enough to increase power against all alternatives to the level shown by
 the SSR+Design test statistic and (2) that the KS tests and the SSR tests have
-different patterns of power --- the KS tests might be less powerful in general
+different patterns of power --- the KS tests appear be less powerful in general
 (more darker areas on the plots).
 
 \section{Discussion and Speculations}
@@ -215,19 +226,19 @@ We cannot say here whether the SSR+Design test will provide the best power
 against relevant alternatives for all possible models of treatment effect
 propagation, network topologies and designs. However, we hope that this
 research note both improves the application of the BFP approach and raises new
-questions for research.  BFP is correct in the assertion that, regardless of
+questions for research.  BFP are correct in the assertion that, regardless of
 the choice of test statistic selection, a set of implausible hypotheses is
 identified by the procedure. But we should not be led to believe that, for any
-given test statistic, that some hypotheses are more plausible than others.
-Such inferences -- comparing hypotheses -- may depend on the test statistic
+given test statistic, that some hypotheses are universally more plausible than others.
+Such inferences --- comparing hypotheses --- may depend on the test statistic
 used, and not necessarily reflect the plausibility of the model at hand. That
 is, the results of any hypothesis test (or confidence interval creation) tell
-us both about the test statistic and about the causal model under scrutiny.
+us \emph{both} about the test statistic \emph{and} about the causal model under scrutiny.
 
 In the example above, the SSR+Design test statistic had much better power than
 any other test statistic. But SSR from an ordinary least squares regression is
 not always appropriate: for example, when the probability of exposure to
-spillover is heterogeneous across individuals and not well captured by the
+spillover is heterogeneous across individuals in a way not well captured by the
 $\bz^T \bS$ term or some other analogous term, we may wish to apply inverse
 probability weights so as to ensure representative samples of potential
 outcomes. This suggests a conjecture: that the $SSR$ from an {\it
