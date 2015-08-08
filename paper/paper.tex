@@ -8,8 +8,8 @@
 %%% Paper specific packages
 \usepackage{setspace}
 \usepackage[letterpaper,bottom=1in,top=1in,right=1in,left=1in,includemp=FALSE]{geometry}
-\usepackage{microtype} %only useful with pdflatex
-\usepackage{fancyvrb} % for verbatim text in footnotes
+%\usepackage{microtype} %only useful with pdflatex
+%\usepackage{fancyvrb} % for verbatim text in footnotes
 
 %%% Document Structure Formatting
 \usepackage[compact,bottomtitles]{titlesec}
@@ -36,7 +36,7 @@
 %% \belowdisplayskip=0pt
 %% 
 \begin{document}
-\VerbatimFootnotes
+%\VerbatimFootnotes
 
 
 \begin{titlepage}
@@ -50,12 +50,12 @@ treatment propagation and spillover across social networks.  This research
 note improves the statistical infernce presented in \citet{bowers2013sutva}
 (henceforth BFP) by substituting a test statistic based on a sum of squared
 residuals and incorporating information about the fixed network for the simple
-the Kolmogorov-Smirnov test statistic  \citep[\S 5.4]{MylesHollander1999a}
-that they used. The point of this short article is to incrementally improve
-the use of BFP's ``reasoning about interference'' approach. We do not offer
-results about test statistics for multi-parameter causal models on social
-networks here, but instead hope that this research note stimulates further,
-and deeper, work on test statistics and sharp hypotheses.
+Kolmogorov-Smirnov test statistic  \citep[\S 5.4]{MylesHollander1999a}
+they used. This note incrementally improves
+the application of BFP's ``reasoning about interference'' approach. We do not
+offer general results about test statistics for multi-parameter causal models on social
+networks here, but instead hope to stimulate further,
+and deeper, work on test statistics and sharp hypothesis testing.
 \end{abstract}
 
 Key Words: Causal effect; Interference; Randomized experiment;
@@ -65,7 +65,7 @@ Randomization inference; Fisher's Sharp Null Hypothesis; SUTVA
 \end{titlepage}
 
 %\input{titlepage.tex}
-%\setstretch{1.6} %1.6 or 1.37 which I think is "true double spacing"
+\setstretch{1.6} %1.6 or 1.37 which I think is "true double spacing"
 %\onehalfspacing
 
 \input{introduction.tex}

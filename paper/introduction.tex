@@ -1,7 +1,6 @@
 
 
-\section{Background on randomization based statistical inference for questions
-about causal effects from social network experiments}
+\section{Background on randomization based statistical inference for causal effects from social network experiments}
 
 In a randomized experiment with $n=4$ subjects connected via a fixed network,
 subject $i=1$ might respond differently to different ways that treatment is
@@ -14,34 +13,33 @@ would differ under different realizations of the experimental treatment
 $y_{i,\bz} \ne y_{i,\bz'}$. The fundamental problem of causal inference
 reminds us that we can never see both states of the world: we only observe the
 outcome from person $i$ under one treatment assignment vector, either $\bz$ or
-some $\bz'$ not both  \cite{holland:1986a}.
+some $\bz'$ not both  \citep{holland:1986a,brady2008cae}.
 
 R.A. Fisher's approach to design-based statistical inference  \citep[Chap
 2]{fisher:1935} as developed by Paul Rosenbaum  \citep{rosenbaum2010design}
-begins with the premise of the fundamental problem of causal inference. Rather
-than imagine that we could learn directly about the unobservable
-counterfactual comparisons of outcomes under different treatment vectors,
-Fisher would suggest that we focus on learning about how \emph{models} of
-those counterfactual outcomes relate to what we observe. Although we do not
-know how person $i$ would have acted under all possible experimental
-scenarios, we can learn how much information we have to dispel certain claims
-or hypotheses.  This conceptual move --- sidestepping the fundamental problem
-of causal inference via learning about claims made by scientists --- drives
-hypothesis testing in general.  BFP build on this insight by showing that
-models of counterfactual effects can involve statements about how treatment
-given to one node in a social network can come to have an effect on other
-nodes. Their example model allows the effects of treatment to die off as the
-network distance between nodes increases.\footnote{See the paper itself for
-  details of the example model.} They further showed that the strength of
-evidence against the specific hypotheses implied by a given model varied with
-different features of the research design as well as the extent to which the
-true causal process diverged from the model. Since their simulated experiment
-involved only two treatments, the only observations available to evaluate the
-model were comparisons of the assigned to treatment group and the assigned to
+begins with the premise of the fundamental problem of causal inference. Given
+the unobservability of potential outcomes, the Fisher and Rosenbaum approach
+suggests that we focus on learning about how \emph{models} of unobservable
+counterfactual outcomes relate to what we can observe. Although we do not know
+how person $i$ would have acted under all possible experimental scenarios, we
+can learn how much information we have to dispel certain claims or hypotheses.
+This conceptual move --- sidestepping the fundamental problem of causal
+inference via learning about claims made by scientists --- drives hypothesis
+testing in general.  BFP build on this insight by showing that models of
+counterfactual effects can involve statements about how treatment given to one
+node in a social network can influence other nodes. Their
+example model allows the effects of treatment to die off as the network
+distance between nodes increases.\footnote{See the paper itself for details of
+  the example model.} They further show that the strength of evidence
+against the specific hypotheses implied by a given model varies with different
+features of the research design as well as the extent to which the true causal
+process diverged from the model. Since their simulated experiment involved
+two treatments, the only observations available to evaluate the model
+were comparisons of the assigned to treatment group and the assigned to
 control group. Since their model could imply not only shifts in the mean of
 the observed treatment versus control outcome distributions, but changes in
 shape of those distributions, they used the Kolmogorov-Smirnov (KS) test
-statistic so that their tests would be sensitive differences in the treatment
+statistic so that their tests would be sensitive to differences in the treatment
 and control distributions implied by different hypotheses and not merely
 sensitive to differences in one aspect of those distributions (such as the
 differences in the mean).\footnote{If the empirical cumulative distribution
