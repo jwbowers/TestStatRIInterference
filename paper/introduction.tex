@@ -93,7 +93,7 @@ and BFP repeat his general advice: ``Select a test statistic [$\mathcal{T}$] tha
 small when the treated and control distributions in the adjusted data \ldots
 are similar, and large when the distributions diverge.'' \cite[Proposition 4
 and 5, \S 2.9]{rosenbaum:2002} presents results proving that test statistics
-with this property (``effect increasing'' test statistics), produces an
+with this property (``effect increasing'' test statistics), produce an
 unbiased test of the hypothesis of no effects or positive effects when the
 positive effects involve one parameter.  Yet, when the models are complex and
 may involve increasing effects in the direction of one parameter and
@@ -185,9 +185,9 @@ test statistics are valid --- they reject the true null of $\tau=.5,\beta=2$
 no more than 5\% of the time at $\alpha=.05$ --- the plots are darkest in the
 area where the two lines showing the true parameters intersect. All of the
 plots have some power to reject non-true alternatives --- as we can see with
-the large white areas in all of the plots. However, only when we add
+the large white areas in all of the plots. Only when we add
 information about the number of treated neighbors to the SSR+Degree statistic,
-do we see high power against all alternatives in the plane.
+does the plot show high power against all alternatives in the plane.
 
 
 \begin{figure}[h!] \centering
@@ -219,6 +219,20 @@ not enough to increase power against all alternatives to the level shown by
 the SSR+Design test statistic and (2) that the KS tests and the SSR tests have
 different patterns of power --- the KS tests appear be less powerful in general
 (more darker areas on the plots).
+
+\section{Application: The Impact of Constituency Opinion on Legislative
+  Preferences}
+
+REWRITE. FIX. 
+
+\citep{coppock2014information} used a version of the SSR+Design test statistic
+to show the effect of constituency opinion on legislators preferences within
+the BFP framework.  We here show how his results would have been different had
+he used the simple KS test.\footnote{In this case we also found that only
+  the SSR+Design test statistic had power in all directions and that the KS
+  statistics (+Design, +Degree, and plain) performed basically as they do in
+  figure~\ref{fig:twoD}.}
+
 
 \section{Discussion and Speculations}
 
