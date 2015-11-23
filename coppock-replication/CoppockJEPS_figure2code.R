@@ -24,39 +24,50 @@ Z.obs <- CoppockJEPS$treatment
 Y.obs <- CoppockJEPS$sb24
 exposure.obs <- CoppockJEPS$s.difs.dw
 
-fit.obs <- lm(Y.obs ~ Z.obs + exposure.obs)
-ssr.obs <- sum(residuals(fit.obs)^2)
-direct.obs <- fit.obs$coefficients[2]
-indirect.obs <- fit.obs$coefficients[3]
-
-exposure.expected.1 <- CoppockJEPS$exposure.expected.1.dw
-exposure.expected.0 <- CoppockJEPS$exposure.expected.0.dw
-
 directs <-seq(from=-.7, to=0.2, by=.025)
 indirects <-seq(from=-.7, to=0.2, by=.025)
 
-sims <- 50
+sims <- 500
 pmat.ssr <- matrix(NA, length(directs), length(indirects))
+
+# write a function to compute exposure as a function of a random treatment variable Z
+exposure <- function(Z) {
+  exposure.observed.dw <- similarity.matrix.dw %*% Z
+  difs.dw <- exposure.observed.dw - (Z * CoppockJEPS$exposure.expected.1.dw + (1 - Z) * CoppockJEPS$exposure.expected.0.dw)
+  (difs.dw - mean(difs.dw)) / sd(difs.dw)
+}
+
+# likewise, here's the test statistic
+test.stat <- function(y, z) {
+  e <- exposure(z)
+  sum(resid(lm(y ~ z + e))^2)
+}
+
 set.seed(343)
 for(j in 1:length(directs)){
   for(k in 1:length(indirects)){
+    # the proper inference algorithm is a loop over each
+    # parameter combination (directs, indirects):
+    # 1. adjust the outcome using the observed Z and the params
+    # 2. compute the test statistic using the observed Z and adjusted data
+    # 3. repeatedly re-draw Z, and compute the test statistic using the adjusted data and the new Zs
+    # 4. compare the observed test stat value to the reshuffled values
+
     direct.sim <- directs[j]
     indirect.sim <- indirects[k]
     
+    pure.Y0 <- Y.obs + (-1*exposure.obs*indirect.sim)
+    pure.Y0[Z.obs==1] <- pure.Y0[Z.obs==1] - direct.sim
+
+    t.obs <- test.stat(pure.Y0, Z.obs)
+
     ssr.sims <- rep(NA,sims)
     for(i in 1:sims){
       Z.sim <- Z_block[,sample(1:10000, 1)]
-      exposure.sim <- (similarity.matrix.dw %*% Z.sim)
-      exposure.sim.corrected <- exposure.sim - (Z.sim * exposure.expected.1 + (1-Z.sim)*exposure.expected.0)
-      s.exposure.sim <- (exposure.sim.corrected - mean(exposure.sim.corrected))/sd(exposure.sim.corrected)
-      pure.Y0 <- Y.obs + (-1*exposure.obs*indirect.sim)
-      pure.Y0[Z.obs==1] <- pure.Y0[Z.obs==1] - direct.sim
-      Y.sim <- pure.Y0 + direct.sim*Z.sim + indirect.sim*s.exposure.sim
-      fit.sim <- lm(Y.sim ~ Z.sim + s.exposure.sim)
-      ssr.sims[i] <- sum(residuals(fit.sim)^2)
+      ssr.sims[i] <- test.stat(pure.Y0, Z.sim)
     }
     
-    pmat.ssr[j,k] <- mean(ssr.obs > ssr.sims)
+    pmat.ssr[j,k] <- mean(t.obs >= ssr.sims)
     
   }
 }
