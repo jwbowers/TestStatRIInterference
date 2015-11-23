@@ -17,7 +17,7 @@ find_breaks <- function(x){
   return(which(breaks))
 }
 
-load("Replication Archive/CoppockJEPS.rdata")
+load("CoppockJEPS.rdata")
 
 ## Pick exposure model -- main analysis uses dw nominate
 Z.obs <- CoppockJEPS$treatment
@@ -35,7 +35,7 @@ exposure.expected.0 <- CoppockJEPS$exposure.expected.0.dw
 directs <-seq(from=-.7, to=0.2, by=.025)
 indirects <-seq(from=-.7, to=0.2, by=.025)
 
-sims <- 500
+sims <- 50
 pmat.ssr <- matrix(NA, length(directs), length(indirects))
 set.seed(343)
 for(j in 1:length(directs)){
@@ -90,7 +90,7 @@ fig2 <- levelplot(z~x*y, graph.frame, cuts=20, col.regions=col.l,
 )
 
 
-pdf("Replication Archive/figures/CoppockJEPS_figure2.pdf")
+pdf("CoppockJEPS_figure2.pdf")
 print(fig2)
 dev.off()
 
@@ -101,7 +101,7 @@ indirects.95.2 <- indirects[indirect_breaks]
 directs.95.2 <- directs[direct_breaks]
 
 pmat.ssr.2 <- pmat.ssr
-save(pmat.ssr.2, indirect.maxpvalue.2, direct.maxpvalue.2, indirects.95.2, directs.95.2, file="Replication Archive/modeloutputs/fig2.rdata")
+save(pmat.ssr.2, indirect.maxpvalue.2, direct.maxpvalue.2, indirects.95.2, directs.95.2, file="fig2.rdata")
 
 
 

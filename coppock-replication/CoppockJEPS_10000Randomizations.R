@@ -5,7 +5,8 @@ rm(list=ls())
 # setwd("")
  
 library(foreign)
-butler <- read.dta("nm.replication.dta")
+# butler <- read.dta("nm.replication.dta")
+butler <- read.table("nm.replication.tab", header = T, sep = "\t", quote =  '"')
 
 ### Random assignment using the matching categories defined by B&N
 
@@ -25,4 +26,4 @@ block.ra <- function(blockvar, m=NULL){
 set.seed(1234567)  
 Z_block <- replicate(10000, block.ra(blockvar=butler$match_category))
 
-save(Z_block,file="CoppockJEPS_10000randomizations.rdata")
+save(Z_block,file="CoppockJEPS_10000Randomizations.rdata")

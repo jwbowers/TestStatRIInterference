@@ -22,7 +22,8 @@ library(wnominate)
 #####################################################
 # 1. Bring in Data from Butler and Nickerson (2012) #
 #####################################################
-butler <- read.dta("nm.replication.dta")
+#butler <- read.dta("nm.replication.dta")
+butler <- read.table("nm.replication.tab", quote = '"', sep = "\t", header = T)
 
 butler <- within(butler,{
 #Generate IDs
@@ -64,7 +65,8 @@ rollcalls <- rollcall(bills_nona)
 nominate_scores <- wnominate(rollcalls, polarity=c(1, 2), minvotes=10)
 dwnom_scores <- nominate_scores$legislators$coord1D
 
-pdf("Replication Archive/figures/CoppockJEPS_appendixfigure1.pdf")
+## MMF: we don't need this figure for our purposes
+# pdf("Replication Archive/figures/CoppockJEPS_appendixfigure1.pdf")
 hist(dwnom_scores, breaks=50, main="", xlab="W-NOMINATE score")
 dev.off()
 
@@ -231,7 +233,7 @@ butler <- within(butler,{
 ### Geographical -- connected if CDs touch
 
 ### Bring in shapefile
-NM_geo <-readShapeSpatial("CoppockJEPSshapefile/hd_court_ordered.shp")
+NM_geo <-readShapeSpatial("hd_court_ordered.shp")
 ### Convert to Adjacency Matrix
 similarity.matrix.geo <- nb2mat(poly2nb(NM_geo), style="B")
 rownames(similarity.matrix.geo) <- NULL
