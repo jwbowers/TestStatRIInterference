@@ -67,7 +67,7 @@ for(j in 1:length(directs)){
       ssr.sims[i] <- test.stat(pure.Y0, Z.sim)
     }
     
-    pmat.ssr[j,k] <- mean(ssr.sims >= t.obs) # probability of seeing a statistic greater than observed
+    pmat.ssr[j,k] <- mean(t.obs >= ssr.sims)
     
   }
 }
