@@ -27,8 +27,9 @@ exposure.obs <- CoppockJEPS$s.difs.dw
 directs <-seq(from=-.7, to=0.2, by=.025)
 indirects <-seq(from=-.7, to=0.2, by=.025)
 
-sims <- 500
+sims <- 50
 pmat.ssr <- matrix(NA, length(directs), length(indirects))
+pmat.ks  <- matrix(NA, length(directs), length(indirects))
 
 # write a function to compute exposure as a function of a random treatment variable Z
 exposure <- function(Z) {
@@ -38,10 +39,13 @@ exposure <- function(Z) {
 }
 
 # likewise, here's the test statistic
-test.stat <- function(y, z) {
+ssr.test.stat <- function(y, z) {
   e <- exposure(z)
   sum(resid(lm(y ~ z + e))^2)
 }
+
+# we get the KS test statistic from the our implemention
+source("../code/teststatistics.R")
 
 set.seed(343)
 for(j in 1:length(directs)){
@@ -59,15 +63,22 @@ for(j in 1:length(directs)){
     pure.Y0 <- Y.obs + (-1*exposure.obs*indirect.sim)
     pure.Y0[Z.obs==1] <- pure.Y0[Z.obs==1] - direct.sim
 
-    t.obs <- test.stat(pure.Y0, Z.obs)
+    t.ssr.obs <- ssr.test.stat(pure.Y0, Z.obs)
+    t.ks.obs  <- baseKSTest(pure.Y0, Z.obs)
+    
+    ssr.sims <- rep(NA, sims)
+    ks.sims  <- rep(NA, sims)
 
-    ssr.sims <- rep(NA,sims)
     for(i in 1:sims){
       Z.sim <- Z_block[,sample(1:10000, 1)]
-      ssr.sims[i] <- test.stat(pure.Y0, Z.sim)
+      ssr.sims[i] <- ssr.test.stat(pure.Y0, Z.sim)
+      ks.sims[i]  <- baseKSTest(pure.Y0, Z.sim)
     }
     
-    pmat.ssr[j,k] <- mean(t.obs >= ssr.sims)
+    # the SSR statistic is *decreasing* in evidence against the null
+    # the KS statistic is *increasing* in evidence against the null 
+    pmat.ssr[j,k] <- mean(t.ssr.obs >= ssr.sims)
+    pmat.ks[j,k]  <- mean(t.ks.obs <= ks.sims)
     
   }
 }
@@ -75,35 +86,41 @@ for(j in 1:length(directs)){
 direct_breaks <- find_breaks(apply(pmat.ssr, MARGIN=1, FUN=max) >.05)
 indirect_breaks <- find_breaks(apply(pmat.ssr, MARGIN=2, FUN=max) >.05)
 
-graph.frame <- expand.grid(x=directs, y=indirects)
-graph.frame$z <- as.vector(pmat.ssr)
-col.l <- colorRampPalette(c('white', 'black'))(1000)
-depth.breaks <- do.breaks(c(0,1), 20)
-fig2 <- levelplot(z~x*y, graph.frame, cuts=20, col.regions=col.l,
-                  colorkey=FALSE,
-                  at=depth.breaks,
-                        ylab = "Hypothesized indirect effect",
-                        xlab = "Hypothesized direct effect",
-                        scales=list(x=list(at=round(seq(-.7, .2, by=.1), digits=1), labels=round(seq(-.7, .2, by=.1), digits=1)),
-                                    y=list(at=round(seq(-.7, .2, by=.1), digits=1), labels=round(seq(-.7, .2, by=.1), digits=1))),
-                        panel = function(...) {
-                          panel.levelplot(...)
-                          panel.abline(h = 0, lty=2)
-                          panel.abline(v = 0, lty=2)
-                          larrows(y0=-.5, y1= -.5, x0=directs[direct_breaks[1]], x1=directs[direct_breaks[2]], angle=90,code=3)
-                          larrows(x0=-.6, x1= -.6, y0=indirects[indirect_breaks[1]], y1=indirects[indirect_breaks[2]], angle=90,code=3)
-                        },
-                  legend = 
-                    list(right = 
-                           list(fun = draw.colorkey,
-                                args = list(key = list(col = col.l, at = depth.breaks),
-                                            draw = FALSE))),
-)
-
+plotPvalues <- function(pmat) {
+  graph.frame <- expand.grid(x=directs, y=indirects)
+  graph.frame$z <- as.vector(pmat)
+  col.l <- colorRampPalette(c('white', 'black'))(1000)
+  depth.breaks <- do.breaks(c(0,1), 20)
+  fig2 <- levelplot(z~x*y, graph.frame, cuts=20, col.regions=col.l,
+                    colorkey=FALSE,
+                    at=depth.breaks,
+                          ylab = "Hypothesized indirect effect",
+                          xlab = "Hypothesized direct effect",
+                          scales=list(x=list(at=round(seq(-.7, .2, by=.1), digits=1), labels=round(seq(-.7, .2, by=.1), digits=1)),
+                                      y=list(at=round(seq(-.7, .2, by=.1), digits=1), labels=round(seq(-.7, .2, by=.1), digits=1))),
+                          panel = function(...) {
+                            panel.levelplot(...)
+                            panel.abline(h = 0, lty=2)
+                            panel.abline(v = 0, lty=2)
+                            larrows(y0=-.5, y1= -.5, x0=directs[direct_breaks[1]], x1=directs[direct_breaks[2]], angle=90,code=3)
+                            larrows(x0=-.6, x1= -.6, y0=indirects[indirect_breaks[1]], y1=indirects[indirect_breaks[2]], angle=90,code=3)
+                          },
+                    legend = 
+                      list(right = 
+                             list(fun = draw.colorkey,
+                                  args = list(key = list(col = col.l, at = depth.breaks),
+                                              draw = FALSE))),
+  )
+    
+  print(fig2)
+}
 
 pdf("CoppockJEPS_figure2.pdf")
-print(fig2)
+par(mfrow = c(2,1))
+plotPvalues(pmat.ssr)
+plotPvalues(pmat.ks)
 dev.off()
+
 
 indirect.maxpvalue.2 <- median(indirects[which(pmat.ssr == max(pmat.ssr), arr.ind = TRUE)[,2]])
 direct.maxpvalue.2 <- median(directs[which(pmat.ssr == max(pmat.ssr), arr.ind = TRUE)[,1]])
