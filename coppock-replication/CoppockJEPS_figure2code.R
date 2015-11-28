@@ -27,7 +27,7 @@ exposure.obs <- CoppockJEPS$s.difs.dw
 directs <-seq(from=-.7, to=0.2, by=.025)
 indirects <-seq(from=-.7, to=0.2, by=.025)
 
-sims <- 500
+sims <- 50
 pmat.ssr <- matrix(NA, length(directs), length(indirects))
 pmat.ks  <- matrix(NA, length(directs), length(indirects))
 
