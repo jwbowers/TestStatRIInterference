@@ -4,9 +4,17 @@ load("fig2.rdata")
 n <- prod(dim(pmat.ssr))
 
 tmp <- expand.grid(x=directs, y=indirects)
-graph.frame <- rbind(tmp, tmp)
-graph.frame$z <- c(as.vector(pmat.ssr), as.vector(pmat.ks))
-graph.frame$t <- factor(c(rep("SSR", n), rep("KS", n)))
+graph.frame <- rbind(tmp, tmp, tmp, tmp)
+
+graph.frame$z <- c(as.vector(pmat.ssr),
+                   as.vector(pmat.ks),
+                   as.vector(pmat.ssr.comp),
+                   as.vector(pmat.ks.comp))
+
+graph.frame$t <- factor(c(rep("SSR (Coppock)", n),
+                          rep("KS (Coppock)", n),
+                          rep("SSR (Computed)", n),
+                          rep("KS (Computed)", n)))
 
 col.l <- colorRampPalette(c('white', 'black'))(1000)
 

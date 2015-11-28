@@ -33,12 +33,25 @@ indirect.obs <- fit.obs$coefficients[3]
 exposure.expected.1 <- CoppockJEPS$exposure.expected.1.dw
 exposure.expected.0 <- CoppockJEPS$exposure.expected.0.dw
 
+exposure <- function(Z) {
+  exposure.sim <- (similarity.matrix.dw %*% Z)
+  exposure.sim.corrected <- exposure.sim - (Z * exposure.expected.1 + (1-Z)*exposure.expected.0)
+  s.exposure.sim <- (exposure.sim.corrected - mean(exposure.sim.corrected))/sd(exposure.sim.corrected)
+}
+
+exposure.computed <- exposure(Z.obs)
+
+t.ssr.comp <- sum(residuals(lm(Y.obs ~ Z.obs + exposure.computed))^2)
+
 directs <-seq(from=-.7, to=0.2, by=.025)
 indirects <-seq(from=-.7, to=0.2, by=.025)
 
 sims <- 50
 pmat.ssr <- matrix(NA, length(directs), length(indirects))
-pmat.ks  <- matrix(1, length(directs), length(indirects))
+pmat.ks  <- matrix(NA, length(directs), length(indirects))
+
+pmat.ssr.comp <- matrix(NA, length(directs), length(indirects))
+pmat.ks.comp  <- matrix(NA, length(directs), length(indirects))
 
 set.seed(343)
 for(j in 1:length(directs)){
@@ -49,27 +62,39 @@ for(j in 1:length(directs)){
     pure.Y0 <- Y.obs - Z.obs * direct.sim - exposure.obs * indirect.sim
     t.ks.obs <- baseKSTest(pure.Y0, Z.obs)
 
+    Y0.comp <- Y.obs - Z.obs * direct.sim - exposure.computed * indirect.sim
+    t.ks.comp  <- baseKSTest(Y0.comp, Z.obs)
+
     ssr.sims <- rep(NA, sims)
     ks.sims  <- rep(NA, sims)
+    ssr.comp.sims <- rep(NA, sims)
+    ks.comp.sims  <- rep(NA, sims)
 
     for(i in 1:sims){
       Z.sim <- Z_block[,sample(1:10000, 1)]
 
-      exposure.sim <- (similarity.matrix.dw %*% Z.sim)
-      exposure.sim.corrected <- exposure.sim - (Z.sim * exposure.expected.1 + (1-Z.sim)*exposure.expected.0)
-      s.exposure.sim <- (exposure.sim.corrected - mean(exposure.sim.corrected))/sd(exposure.sim.corrected)
-
+      s.exposure.sim <- exposure(Z.sim)
       Y.sim <- pure.Y0 + direct.sim*Z.sim + indirect.sim*s.exposure.sim
 
       fit.sim <- lm(Y.sim ~ Z.sim + s.exposure.sim)
       ssr.sims[i] <- sum(residuals(fit.sim)^2)
 
-      ## KS test test
+      # replicate Alex's style SSR test to see what the impact of computing the observed exposure is.
+      Y.sim <- Y0.comp + direct.sim*Z.sim + indirect.sim*s.exposure.sim
+      ssr.comp.sims[i] <- sum(residuals(lm(Y.sim ~ Z.sim + s.exposure.sim))^2)
+
+      ## KS tests
+      # first, use Y0 based on "exposure.obs"
       ks.sims[1] <- baseKSTest(pure.Y0, Z.sim)
+      # second, use Y0 based on the computed version of observed exposure
+      ks.comp.sims  <- baseKSTest(Y0.comp, Z.sim)
     }
     
     pmat.ssr[j,k] <- mean(ssr.obs > ssr.sims)
     pmat.ks[j, k] <- mean(ks.sims >= t.ks.obs)
+
+    pmat.ssr.comp[j,k] <- mean(ssr.comp.sims <= t.ssr.comp)
+    pmat.ks.comp[j,k]  <= mean(ks.comp.sims >= t.ks.comp)
     
   }
 }
@@ -85,6 +110,8 @@ directs.95.2 <- directs[direct_breaks]
 
 save(pmat.ssr,
      pmat.ks,
+     pmat.ssr.comp,
+     pmat.ks.comp,
      directs,
      indirects,
      direct_breaks,
