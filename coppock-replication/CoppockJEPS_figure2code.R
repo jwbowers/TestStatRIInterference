@@ -52,6 +52,7 @@ pmat.ks  <- matrix(NA, length(directs), length(indirects))
 
 pmat.ssr.comp <- matrix(NA, length(directs), length(indirects))
 pmat.ks.comp  <- matrix(NA, length(directs), length(indirects))
+pmat.ssr.comp.y0 <- matrix(NA, length(directs), length(indirects))
 
 set.seed(343)
 for(j in 1:length(directs)){
@@ -64,11 +65,13 @@ for(j in 1:length(directs)){
 
     Y0.comp <- Y.obs - Z.obs * direct.sim - exposure.computed * indirect.sim
     t.ks.comp  <- baseKSTest(Y0.comp, Z.obs)
+    t.ssr.comp.y0 <- sum(residuals(lm(Y0.comp ~ Z.obs + exposure.computed))^2)
 
     ssr.sims <- rep(NA, sims)
     ks.sims  <- rep(NA, sims)
     ssr.comp.sims <- rep(NA, sims)
     ks.comp.sims  <- rep(NA, sims)
+    ssr.comp.y0.sims <- rep(NA, sims)
 
     for(i in 1:sims){
       Z.sim <- Z_block[,sample(1:10000, 1)]
@@ -85,17 +88,21 @@ for(j in 1:length(directs)){
 
       ## KS tests
       # first, use Y0 based on "exposure.obs"
-      ks.sims[1] <- baseKSTest(pure.Y0, Z.sim)
+      ks.sims[i] <- baseKSTest(pure.Y0, Z.sim)
       # second, use Y0 based on the computed version of observed exposure
-      ks.comp.sims  <- baseKSTest(Y0.comp, Z.sim)
+      ks.comp.sims[i]  <- baseKSTest(Y0.comp, Z.sim)
+
+      # finally, compute the SSR using Y0.comp
+      ssr.comp.y0.sims[i] <- sum(residuals(lm(Y0.comp ~ Z.sim + s.exposure.sim))^2)
     }
     
     pmat.ssr[j,k] <- mean(ssr.obs > ssr.sims)
     pmat.ks[j, k] <- mean(ks.sims >= t.ks.obs)
 
     pmat.ssr.comp[j,k] <- mean(ssr.comp.sims <= t.ssr.comp)
-    pmat.ks.comp[j,k]  <= mean(ks.comp.sims >= t.ks.comp)
-    
+    pmat.ks.comp[j,k]  <- mean(ks.comp.sims >= t.ks.comp)
+
+    pmat.ssr.comp.y0[j,k] <- mean(ssr.comp.y0.sims <= t.ssr.comp.y0)
   }
 }
 
@@ -112,6 +119,7 @@ save(pmat.ssr,
      pmat.ks,
      pmat.ssr.comp,
      pmat.ks.comp,
+     pmat.ssr.comp.y0,
      directs,
      indirects,
      direct_breaks,

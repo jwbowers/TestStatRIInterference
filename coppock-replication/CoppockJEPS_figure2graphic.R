@@ -4,17 +4,19 @@ load("fig2.rdata")
 n <- prod(dim(pmat.ssr))
 
 tmp <- expand.grid(x=directs, y=indirects)
-graph.frame <- rbind(tmp, tmp, tmp, tmp)
+graph.frame <- rbind(tmp, tmp, tmp, tmp, tmp)
 
 graph.frame$z <- c(as.vector(pmat.ssr),
                    as.vector(pmat.ks),
                    as.vector(pmat.ssr.comp),
-                   as.vector(pmat.ks.comp))
+                   as.vector(pmat.ks.comp),
+                   as.vector(pmat.ssr.comp.y0))
 
 graph.frame$t <- factor(c(rep("SSR (Coppock)", n),
                           rep("KS (Coppock)", n),
                           rep("SSR (Computed)", n),
-                          rep("KS (Computed)", n)))
+                          rep("KS (Computed)", n),
+                          rep("SSR (Y0, Comp)", n)))
 
 col.l <- colorRampPalette(c('white', 'black'))(1000)
 
@@ -40,10 +42,7 @@ fig2 <- levelplot(z ~ x*y | t, graph.frame, cuts=20, col.regions=col.l,
                                             draw = FALSE))),
 )
   
-pdf("CoppockJEPS_figure2.pdf", width = 8, height = 4)
+pdf("CoppockJEPS_figure2.pdf", width = 8, height = 8)
 print(fig2)
 dev.off()
 
-png("CoppockJEPS_figure2.png", width = 8, height = 4)
-print(fig2)
-dev.off()
