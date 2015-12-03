@@ -1,6 +1,7 @@
 ## A file to do a quick demonstration of the differences in power between SSR and KS  simple experiment with no interference
 
-if(length(grep("TestStatRIInterference$",getwd()))==0){setwd("..")}
+if(length(grep("TestStatRIInterference$",getwd(),ignore.case=TRUE))==0){setwd("..")}
+if(length(grep("TestStatRIInterference",.libPaths(),ignore.case=TRUE))==0){.libPaths(".libraries") }
 
 library(RItools)
 source("simulation/setup.R")
@@ -12,7 +13,7 @@ Zs <- sampler(REPETITIONS)$samples # N x nsims
 ## Make two outcomes in control that both have 0 mean and 1 sd but with different distributions
 set.seed(20151130)
 tmpzif<-rgeom(n,prob=.7)
-y0zif<-scale(tmpzif)
+y0zif<-as.vector(scale(tmpzif))
 y0norm<-rnorm(n)
 
 summary(y0zif)
@@ -22,20 +23,30 @@ summary(y0norm)
 ### One model is like a model of mean shift
 coamodel<-constant.additive.model
 ### One model focuses changes on the shape of the dist
-constant.multiplicative.model <- UniformityModel(function(y, z, tau) { y / ( 1 + z * ( tau-1 ) )  }, 
-                                           function(y_0, z, tau) { y_0 * ( 1 + z * ( tau-1 ) )})
-
-## quantchangemodel <- UniformityModel(function(y, z, tau) { y - z * tau }, 
-##                                            function(y_0, z, tau) { y_0 + z * tau})
-## 
-
-
-
+constant.multiplicative.model <- UniformityModel( function(y, z, tau) {
+													 if(tau==0){
+														 return(rep(0,length(y)))
+													 } else {
+														 y / ( 1 + z * ( tau-1 ) )
+													 }
+}, function(y_0, z, tau) { y_0 * ( 1 + z * ( tau-1 ) )})
 
 ## Simulation settings
 ALTS<-list(tau=sort(unique(c(0,seq(-5,5,length=100)))))
 TRUTH<-list(tau=0)
 simsamples<-1000
+
+## Trying to speed things up but not passing tests
+## library(Rcpp)
+## library(RcppArmadillo)
+## sourceCpp("code/fastTestStatistics.cpp")
+## testK<-apply(Zs,2,function(z){
+## 				 ksTestStatistic(y0zif,z)
+## 										   })
+## testFastK<-apply(Zs,2,function(z){
+## 				 ksFastTestStatistic(y0zif,z)
+## 										   })
+## stopifnot(all.equal(testK,testFastK))
 
 dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 	force(model);force(y0);force(truth);force(TZ);force(thegrid);force(simsamples)
@@ -43,42 +54,66 @@ dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 		y <- invertModel(model, y0, z, truth$tau)
 		rit<-RItest(y,z, TZ, model, thegrid,samples=simsamples)
 		return(cbind(rit@params, p = rit[-1, "p.value"])) ## inefficient but avoids errors later
-		##return(rit[-1, "p.value"]) ## efficient but depends on RItools not changing
 	}
 }
 
 
+## dokstestNorm<-dotestMaker(model=coamodel,
+## 						  y0=y0norm,
+## 						  truth=TRUTH,
+## 						  TZ=ksTestStatistic,
+## 						  thegrid=ALTS,
+## 						  simsamples=simsamples)
+## 
+## ## kstestNormY<-dokstestNorm(Zs[,1])
+## 
+## dokstestZif<-dotestMaker(model=coamodel,
+## 						 y0=y0zif,
+## 						 truth=TRUTH,
+## 						 TZ=ksTestStatistic,
+## 						 thegrid=ALTS,
+## 						 simsamples=simsamples)
+## 
+## kstestZifY<-dokstestZif(Zs[,1])
 
-testStats <- list( "SSR Test" = ssrSimpleTestStatistic, 
-		  "KS Test" = ksTestStatistic  )
+testStats <- list( "SSR" = ssrSimpleTestStatistic,
+				  "KS" = ksTestStatistic  )
 
 outcomes<-list("Norm"=y0norm,"Zif"=y0zif)
 
 themodels<-list("COA"=constant.additive.model,
-		"COM"=constant.multiplicative.model)
+				"COM"=constant.multiplicative.model)
 
-dokstestNorm<-dotestMaker(model=coamodel,
-			    y0=y0norm,
-			    truth=TRUTH,
-			    TZ=ksTestStatistic,
-			    thegrid=ALTS,
-			    simsamples=simsamples)
+source("code/setup-clusters.R")
+clusterEvalQ(cl,.libPaths(".libraries"))
+clusterEvalQ(cl,library(RItools)) ##,lib.loc=".libraries"))
+clusterEvalQ(cl,library(compiler))
+clusterEvalQ(cl,enableJIT(3))
+clusterEvalQ(cl,source("code/teststatistics.R"))
+clusterEvalQ(cl,options("RItools-lapply"=lapply))
+clusterEvalQ(cl,options("RItools-sapply"=sapply))
 
-kstestNormY<-dokstestNorm(Zs[,1])
+##simsamples<-10
+## results<-array(c(length(testStats),length(outcomes),length(themodels),length(ALTS)))
+for(i in 1:length(testStats)){
+	for(j in 1:length(outcomes)){
+		for(k in 1:length(themodels)){
+			message(names(themodels)[k], names(outcomes)[j],names(testStats)[i])
+			dotest<-dotestMaker(model=themodels[[k]],
+								y0=outcomes[[j]],
+								truth=TRUTH,
+								TZ=testStats[[i]],
+								thegrid=ALTS,
+								simsamples=simsamples)
+			clusterExport(cl,"dotest")
+			clusterSetRNGStream(cl,iseed=rep(1,7))
+			assign(paste("results",names(themodels)[k],
+						 names(outcomes)[j],
+						 names(testStats)[i],sep=""),
+				   parCapply(cl,Zs,function(z){dotest(z)}))
+		}
+	}
+}
 
-dokstestZif<-dotestMaker(model=coamodel,
-			    y0=y0zif,
-			    truth=TRUTH,
-			    TZ=ksTestStatistic,
-			    thegrid=ALTS,
-			    simsamples=simsamples)
-
-kstestZifY<-dokstestZif(Zs[,1])
-
-
-
-
-##ksTestStatistic
-##ssrSimpleTestStatistic,
-
-
+save(ls(patt="results"),file="simulation/ksvsssrpowresults.rda")
+stopCluster(cl)
