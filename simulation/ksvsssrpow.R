@@ -115,5 +115,5 @@ for(i in 1:length(testStats)){
 	}
 }
 
-save(ls(patt="results"),file="simulation/ksvsssrpowresults.rda")
+save(list=ls(patt="resultsCO"),file="simulation/ksvsssrpowresults.rda")
 stopCluster(cl)
