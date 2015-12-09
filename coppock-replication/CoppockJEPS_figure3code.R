@@ -17,7 +17,7 @@ find_breaks <- function(x){
   return(which(breaks))
 }
 
-load("Replication Archive/CoppockJEPS.rdata")
+load("CoppockJEPS.rdata")
 
 
 
@@ -45,7 +45,7 @@ exposure.expected.0 <- CoppockJEPS$exposure.expected.0.dw
 directs <-seq(from=-0.9, to=0.2, by=.025)
 indirects <-seq(from=-0.5, to=0.2, by=.025)
 
-sims <- 500
+sims <- 50
 low.pmat.ssr <- matrix(NA, length(directs), length(indirects))
 high.pmat.ssr <- matrix(NA, length(directs), length(indirects))
 set.seed(343)
@@ -140,10 +140,10 @@ fig3b <- levelplot(z.high~x*y, graph.frame, cuts=20, col.regions=col.l,
 
 
 
-pdf("Replication Archive/figures/CoppockJEPS_figure3a.pdf")
+pdf("CoppockJEPS_figure3a.pdf")
 print(fig3a)
 dev.off()
-pdf("Replication Archive/figures/CoppockJEPS_figure3b.pdf")
+pdf("CoppockJEPS_figure3b.pdf")
 print(fig3b)
 dev.off()
 
@@ -164,4 +164,4 @@ high.directs.95 <- directs[high.direct_breaks]
 
 save(low.pmat.ssr, low.indirect.maxpvalue, low.direct.maxpvalue, low.indirects.95, low.directs.95,
      high.pmat.ssr, high.indirect.maxpvalue, high.direct.maxpvalue, high.indirects.95, high.directs.95,
-     file="Replication Archive/modeloutputs/fig3.rdata")
+     file="fig3.rdata")

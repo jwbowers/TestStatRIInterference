@@ -160,3 +160,5 @@ coppock-replication/fig2.rdata: code/teststatistics.R coppock-replication/Coppoc
 coppock-replication/CoppockJEPS_figure2.pdf: coppock-replication/fig2.rdata coppock-replication/CoppockJEPS_figure2graphic.R
 	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_figure2graphic.R
 
+coppock-replication/CoppockJEPS_figure3a.pdf: coppock-replication/CoppockJEPS.rdata coppock-replication/CoppockJEPS_figure3code.R
+	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_figure3code.R
