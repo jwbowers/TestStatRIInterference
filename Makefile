@@ -148,11 +148,11 @@ static: $(ARCHIVENAME)-static.tar.gz
 
 #### Replication of Coppock (2014)
 
-# coppock-replication/CoppockJEPS_10000Randomizations.rdata: coppock-replication/CoppockJEPS_10000Randomizations.R coppock-replication/nm.replication.tab
-# 	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_10000Randomizations.R
-# 
-# coppock-replication/CoppockJEPS.rdata: coppock-replication/CoppockJEPS_10000Randomizations.rdata coppock-replication/CoppockJEPS_datapreparation.R
-# 	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_datapreparation.R
+coppock-replication/CoppockJEPS_10000Randomizations.rdata: coppock-replication/CoppockJEPS_10000Randomizations.R coppock-replication/nm.replication.tab
+	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_10000Randomizations.R
+
+coppock-replication/CoppockJEPS.rdata: coppock-replication/CoppockJEPS_10000Randomizations.rdata coppock-replication/CoppockJEPS_datapreparation.R
+	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_datapreparation.R
 
 coppock-replication/fig2.rdata: code/teststatistics.R coppock-replication/CoppockJEPS_figure2code.R coppock-replication/CoppockJEPS.rdata
 	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_figure2code.R
