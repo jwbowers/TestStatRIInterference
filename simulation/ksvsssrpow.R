@@ -13,15 +13,16 @@ Zs <- sampler(REPETITIONS)$samples # N x nsims
 ## Make two outcomes in control that both have 0 mean and 1 sd but with different distributions
 set.seed(20151130)
 tmpzif<-rgeom(n,prob=.7)
-y0zif<-as.vector(scale(tmpzif))
-y0norm<-rnorm(n)
+y0zif<-as.vector(scale(tmpzif))+10
+y0norm<-rnorm(n,mean=10)
 
 summary(y0zif)
 summary(y0norm)
 
 ## Two models:
 ### One model is like a model of mean shift
-coamodel<-constant.additive.model
+constant.additive.model
+
 ### One model focuses changes on the shape of the dist
 constant.multiplicative.model <- UniformityModel( function(y, z, tau) {
 													 if(tau==0){
@@ -32,8 +33,41 @@ constant.multiplicative.model <- UniformityModel( function(y, z, tau) {
 }, function(y_0, z, tau) { y_0 * ( 1 + z * ( tau-1 ) )})
 
 ## Simulation settings
-ALTS<-list(tau=sort(unique(c(0,seq(-5,5,length=100)))))
-TRUTH<-list(tau=0)
+### Different parameter settings can mean the same thing in the two different models
+TRUTHAdditive<-list(tau=0)
+TRUTHMultiplicative<-list(tau=1)
+all.equal(constant.additive.model(y0norm,Zs[,1],0),constant.multiplicative.model(y0norm,Zs[,1],1))
+all.equal(constant.additive.model(y0zif,Zs[,1],0),constant.multiplicative.model(y0zif,Zs[,1],1))
+
+## Try to make the hypotheses in the multiplicative model similar in magnitude
+## to the hypotheses of the multiplicative model (we cannot make them all
+## exactly the same across all values of y0, but we can make them as close as
+## possible)
+
+ALTSAdditive<-list(tau=sort(unique(c(0,1,seq(-5,5,length=100)))))
+
+addvsmult<-function(x,tau){
+	addres<-invertModel(constant.additive.model,y0norm,Zs[,1],tau=tau)
+	mulres<-invertModel(constant.multiplicative.model,y0norm,Zs[,1],tau=x*tau)
+	median(abs(mulres-addres))
+}
+
+res<-sapply(ALTSAdditive$tau,function(thetau){
+##				message(thetau)
+				optim(par=c(0),fn=addvsmult,tau=thetau,method="BFGS",control=list(maxit=500))$par
+})
+
+## Check the optimization at a known solution
+stopifnot(res[ALTSAdditive$tau==0]==0)
+
+ALTSMultiplicative<-list(tau=ALTSAdditive$tau*res)
+
+TRUTH<-list("COA"=TRUTHAdditive,
+			"COM"=TRUTHMultiplicative)
+
+ALTS<-list("COA"=ALTSAdditive,
+		   "COM"=ALTSMultiplicative)
+
 simsamples<-1000
 
 ## Trying to speed things up but not passing tests
@@ -56,25 +90,6 @@ dotestMaker<-function(model,y0,truth,TZ,thegrid,simsamples){
 		return(cbind(rit@params, p = rit[-1, "p.value"])) ## inefficient but avoids errors later
 	}
 }
-
-
-## dokstestNorm<-dotestMaker(model=coamodel,
-## 						  y0=y0norm,
-## 						  truth=TRUTH,
-## 						  TZ=ksTestStatistic,
-## 						  thegrid=ALTS,
-## 						  simsamples=simsamples)
-## 
-## ## kstestNormY<-dokstestNorm(Zs[,1])
-## 
-## dokstestZif<-dotestMaker(model=coamodel,
-## 						 y0=y0zif,
-## 						 truth=TRUTH,
-## 						 TZ=ksTestStatistic,
-## 						 thegrid=ALTS,
-## 						 simsamples=simsamples)
-## 
-## kstestZifY<-dokstestZif(Zs[,1])
 
 testStats <- list( "SSR" = ssrSimpleTestStatistic,
 				  "KS" = ksTestStatistic  )
@@ -101,9 +116,9 @@ for(i in 1:length(testStats)){
 			message(names(themodels)[k], names(outcomes)[j],names(testStats)[i])
 			dotest<-dotestMaker(model=themodels[[k]],
 								y0=outcomes[[j]],
-								truth=TRUTH,
+								truth=TRUTH[[names(themodels)[k]]],
 								TZ=testStats[[i]],
-								thegrid=ALTS,
+								thegrid=ALTS[[names(themodels)[k]]],
 								simsamples=simsamples)
 			clusterExport(cl,"dotest")
 			clusterSetRNGStream(cl,iseed=rep(1,7))
