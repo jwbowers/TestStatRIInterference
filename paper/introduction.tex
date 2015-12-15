@@ -3,22 +3,28 @@
 \section{Overview: Randomization based statistical inference for causal effects from social network experiments}
 
 In a randomized experiment with $n=4$ subjects connected via a fixed network,
-subject $i=1$ might respond differently to different ways that treatment is
-assigned to the whole network. When the treatment assignment vector provides
-treatment to persons 2 and 3, $\bz=\{0,1,1,0\}$ she might act one way,
+the response of subject $i=1$ might depend on the different ways that
+treatment is assigned to the \emph{whole} network. When the treatment
+assignment vector,$\zb$, provides treatment to persons 2 and 3,
+$\bz=\{0,1,1,0\}$, person $i=1$ might respond one way,
 $y_{i=1,\bz=\{0,1,1,0\}}$ and when treatment is assigned to persons 3 and 4,
-$\bz=\{0,0,1,1\}$ she might act another way, $y_{i=1,\bz=\{0,0,1,1\}}$ That
-is, if the experiment had a causal effect on person $i$, then her outcome
-would differ under different realizations of the experimental treatment
-$y_{i,\bz} \ne y_{i,\bz'}$. The fundamental problem of causal inference
-reminds us that we can never see both states of the world: we only observe the
-outcome from person $i$ under one treatment assignment vector, either $\bz$ or
-some $\bz'$ not both  \citep{holland:1986a,brady2008cae}.
+$\bz=\{0,0,1,1\}$ person $i=1$ might act another way,
+$y_{i=1,\bz=\{0,0,1,1\}}$. More generally, we might say that if the experiment had a causal effect on
+person $i$, then her outcome would differ under different realizations of the
+experimental treatment as a whole $y_{i,\bz} \ne y_{i,\bz'}$. The fundamental problem of
+causal inference reminds us that we can never see both states of the world: we
+only observe the outcome from person $i$ under one treatment assignment
+vector, either $\bz$ or some $\bz'$ not both
+\citep{holland:1986a,brady2008cae}.\footnote{In simpler settings, where
+  treatment given to one individual has no effect on any other individual, we tend to
+  write $y_{i,Z_i=1} \ne y_{i,Z_i=0}$ to say that treatment had a causal
+  effect on person $i$.}
 
 R.A. Fisher's approach to design-based statistical inference  \citep[Chap
 2]{fisher:1935} as developed by Paul Rosenbaum  \citep{rosenbaum2010design}
-begins with the premise of the fundamental problem of causal inference. Given
-the unobservability of potential outcomes, the Fisher and Rosenbaum approach
+begins with the premise of the fundamental problem of causal inference. Since
+we cannot observe all of the ways that a given person would respond to
+different treatments, the Fisher and Rosenbaum approach
 suggests that we focus on learning about how \emph{models} of unobservable
 counterfactual outcomes relate to what we can observe. Although we do not know
 how person $i$ would have acted under all possible experimental scenarios, we
@@ -36,12 +42,12 @@ against the specific hypotheses implied by a given model varies with different
 features of the research design as well as the extent to which the true causal
 process diverged from the model. Since their simulated experiment involved two
 treatments, the only observations available to evaluate the model were
-comparisons of the assigned to treatment group and the assigned to control
+comparisons of the assigned-to-treatment group and the assigned-to-control
 group. Since their model could imply not only shifts in the mean of the
 observed treatment versus control outcome distributions, but changes in shape
 of those distributions, they used the Kolmogorov-Smirnov (KS) test statistic
 so that their tests would be sensitive to differences in the treatment and
-control distributions implied by different hypotheses and not merely sensitive
+control distributions implied by different hypotheses and not only sensitive
 to differences in one aspect of those distributions (such as the differences
 in the mean).\footnote{If the empirical cumulative distribution function
   (ECDF) of the treated units is $F_1$ and the ECDF of the control units is
@@ -49,34 +55,34 @@ in the mean).\footnote{If the empirical cumulative distribution function
     1,\ldots,n}{\text{max}}\left[F_1(y_{i,\bzero}) -
     F_0(y_{i,\bzero})\right]$, where $F(x)=(1/n)\sum_{i=1}^n I(x_i \le x)$
   records the proportion of the distribution of $x$ at or below $x_i$
-  \citep[\S 5.4]{MylesHollander1999a}. \label{fn:kstest}} So, in broad
+  \citep[\S 5.4]{MylesHollander1999a}.\label{fn:kstest}} So, in broad
 outline, the BFP approach involves (1) the articulation of a model for how a
 treatment assignment vector can change outcomes for all subjects in the
-experiment (holding the network fixed) and (2) use a function to comparing
-actually treated and control observations summarize whether such a model is
-implausible (codified as a low $p$-value)  or whether we have too little
+experiment (holding the network fixed) and (2) the use of a function to
+compare actually treated and control observations to summarize whether such a model is
+implausible (codified as a low $p$-value)  or to report that we have too little
 information available from the data and design about the model (codified as a
 high $p$-value). This is classic hypothesis testing applied to an experiment
-on a social network.
+on a social network with sharp null hypotheses.
 
-So, say $Y_i$ is the observed outcome and we hypothesize that units do not
-interfere and also that $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$. We can
-assess which (if any) hypothesized values of $\tau$ appear implausible from
-the perspective of the data by: (1) Mapping the hypothesis about unobserved
-quantities to observed data using the identity $Y_i=Z_i y_{i,Z_i=1} + (1-Z_i) y_{i,Z_i=0}$ ---
-noticing that if $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ then $y_{i,Z_i=0}=Y_i - Z_i
-\tau$ (by substituting from the hypothesized relationship into the observed
-data identity); (2) Using this result to adjust the observed outcome to
-represent what would be implied by the hypothesis for given $\tau_0$ such that
-$\widetilde y_{i,Z_i=0}=Y_i - Z_i \tau_0$; and (3) Under the hypothesis,
+Say $Y_i$ is the observed outcome and we hypothesize that units do not
+interfere and also that $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$. We can assess which
+(if any) hypothesized values of $\tau$ appear implausible from the perspective
+of the data by: (1) Mapping the hypothesis about unobserved quantities to
+observed data using the identity $Y_i=Z_i y_{i,Z_i=1} + (1-Z_i) y_{i,Z_i=0}$
+--- noticing that if $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ then $y_{i,Z_i=0}=Y_i -
+Z_i \tau$ (by substituting from the hypothesized relationship into the
+observed data identity); (2) Using this result to adjust the observed outcome
+to represent what would be implied by the hypothesis for a given $\tau_0$ such
+that $\widetilde y_{i,Z_i=0}=Y_i - Z_i \tau_0$; and (3) Under the hypothesis,
 $\widetilde y_{i,Z_i=0}$ should have no systematic relationship with treatment
 assignment, so we can summarize this relationship with a test statistic,
-$\mathcal T(\widetilde y_{i,Z_i=0},Z_i)$ and the distribution of values for
-this test statistic arising from repetitions of treatment assignment (new
-draws of $\bz$ from all of the ways that such treatment assignment vectors
-could have been produced); and finally (4) a $p$-value arises by comparing the
-observed test statistic, $\mathcal T(Y_i,Z_i)$ against the distribution of that test
-statistic that characterizes the hypothesis.
+$\mathcal T(\widetilde y_{i,Z_i=0},Z_i)$. A distribution of values for this
+test statistic arises from repetitions of the treatment assignment process
+(new draws of $\bz$ from all of the ways that such treatment assignment
+vectors could have been produced); and finally (4) a $p$-value arises by
+comparing the observed test statistic, $\mathcal T(Y_i,Z_i)$ against the
+distribution of that test statistic that characterizes the hypothesis.
 
 Notice that the test statistic choice matters in this process: the engine of
 statistical inference involves summarizing information against the
@@ -101,8 +107,8 @@ non-linear effects in the direction of another parameter, BFP showed that
 sometimes a KS-test will have (1) no power to address the model at all such
 that all hypothesized parameters would receive the same implausibility
 assessment; (2) or might reject all such hypothesized parameters. Thus,
-although in theory one may assess sharp hypotheses about multiparameter
-settings, in practice one may not learn much from such tests. BFP thus recommended simulation studies of the operating
+although in theory one may assess sharp multiparameter hypotheses,
+ in practice one may not learn much from such tests. BFP thus recommended simulation studies of the operating
 characteristics of tests as a piece of their workflow --- because  the theory
 justifying simple one-dimensional effect increasing test statistics clearly
 did not cover multi-parameter situations like those easily arising from social
