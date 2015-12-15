@@ -2,7 +2,7 @@
  
 #SBATCH --job-name=ksvsssrpow
 #SBATCH -n 48
-#SBATCH --time=144:00:00
+#SBATCH --time=8:00:00
 #SBATCH --mem-per-cpu=8048
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-type=END
@@ -14,7 +14,6 @@ set InputDir=/data/keeling/a/jwbowers/Documents/PROJECTS/TestStatRIInterference
 set RunDir=/data/keeling/a/jwbowers/Documents/PROJECTS/TestStatRIInterference
 
 cd /data/keeling/a/jwbowers/Documents/PROJECTS/TestStatRIInterference
-
 
 export CLUSTER="keeling"
 export CORES=48
