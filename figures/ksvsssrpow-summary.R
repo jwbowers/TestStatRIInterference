@@ -4,10 +4,15 @@ if(length(grep("TestStatRIInterference$",getwd(),ignore.case=TRUE))==0){setwd(".
 if(length(grep("TestStatRIInterference",.libPaths(),ignore.case=TRUE))==0){.libPaths(".libraries") }
 source("simulation/setup.R")
 load("simulation/ksvsssrpow-results.rda")
-ALTS<-list(tau=sort(unique(c(0,seq(-5,5,length=100)))))
+load("simulation/simplealts.rda")
+load("simulation/simpletruth.rda")
 
-apply(powComparison,2,summary)
+apply(powCOA,2,summary)
+apply(powCOM,2,summary)
 
-t(powComparison[powComparison[,"resultsCOANormKS"]<1,])
+t(powCOA[powCOA[,"resultsCOANormKS"]<1,])
+t(powCOM[powCOM[,"resultsCOMNormKS"]<1,])
 
-
+## SSR is slightly more power than KS for COA with Normal outcomes
+## KS is more powerful than SSR for COA with Zif outcomes
+## SSR is more powerful that KS for COM with Normal outcomes and less power than KS for Zif outcomes
