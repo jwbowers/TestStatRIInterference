@@ -10,7 +10,8 @@ graph.frame$z <- c(as.vector(pmat.ssr),
                    as.vector(pmat.ks))
 
 graph.frame$t <- factor(c(rep("SSR", n),
-                          rep("KS", n)))
+                          rep("KS", n)),
+                        levels = c("SSR", "KS"))
 
 col.l <- colorRampPalette(c('white', 'black'))(1000)
 
@@ -19,7 +20,7 @@ fig2 <- levelplot(z ~ x*y | t,
                   graph.frame,
                   cuts = 20,
                   col.regions = col.l,
-                  colorkey=FALSE,
+                  colorkey = TRUE,
                   xlab = "Direct Effect",
                   ylab = "Indirect Effect")
   

@@ -5,7 +5,7 @@
 In a randomized experiment with $n=4$ subjects connected via a fixed network,
 the response of subject $i=1$ might depend on the different ways that
 treatment is assigned to the \emph{whole} network. When the treatment
-assignment vector,$\zb$, provides treatment to persons 2 and 3,
+assignment vector,$\bz$, provides treatment to persons 2 and 3,
 $\bz=\{0,1,1,0\}$, person $i=1$ might respond one way,
 $y_{i=1,\bz=\{0,1,1,0\}}$ and when treatment is assigned to persons 3 and 4,
 $\bz=\{0,0,1,1\}$ person $i=1$ might act another way,
@@ -226,19 +226,61 @@ the SSR+Design test statistic and (2) that the KS tests and the SSR tests have
 different patterns of power --- the KS tests appear be less powerful in general
 (more darker areas on the plots).
 
-\section{Application: The Impact of Constituency Opinion on Legislative
-  Preferences}
+\section{Application: Legislative Information Spillovers}
 
-REWRITE. FIX. 
+\citet{coppock2014information} presents an reanalysis of an experiment performed
+by \citet{butlernickerson2011}. Leading up to a key vote on a budget bill, SB24, in the
+New Mexico state senate, legislators were randomly assigned to be given
+constituent survey results, and their votes on SB24 recorded. The original
+analysis found that legislators assigned to receive constituent information were
+more likely to vote consistently with the preferences of their district.
+Given the easy nature of sharing information in
+field experiments \citep{Winters:2012fk}, Coppock reanalyzes the
+experimental results with an eye towards spillover, constructing a social
+network based on the similarity of W-NOMINATE ideology scores. Coppock hypothesized
+that ideologically similar legislators would be more likely to share
+information. If the constituent survey information does induce a change in behavior, this
+effect may be observed not only in those legislators that are directly treated
+in the experiment, but also by those of similar ideology to those that are
+treated.
 
-\citep{coppock2014information} used a version of the SSR+Design test statistic
-to show the effect of constituency opinion on legislators preferences within
-the BFP framework.  We here show how his results would have been different had
-he used the simple KS test.\footnote{In this case we also found that only
-  the SSR+Design test statistic had power in all directions and that the KS
-  statistics (+Design, +Degree, and plain) performed basically as they do in
-  figure~\ref{fig:twoD}.}
+With distance matrix $\Gamma$, Coppock evaluated the model:
 
+$$\yu = \yz - \beta_1 \bz - \beta_2 g(\Gamma \bz)$$
+
+Where $g$ is a function that normalizes the sums of distances to treated
+neighbors to have unit variance. This model has a direct
+effect ($\beta_1$) and an indirect effect ($\beta_2$) that is linear in the distances to
+treated neighbors. Coppock evaluated this spillover model using the SSR+Design statistic as
+presented in this paper. To demonstrate the value of this statistic,
+particularly for models that are linear in the spillover effects, we repeat
+Coppock's analysis using both the SSR+Design statistic and a KS statistic. The
+results in Figure~\ref{fig:coppock-replication} recreate Coppock's Figure
+2.\footnote{During the replication process, we noticed an inconsistency between
+  our results using the SSR+Design statistic and Coppock's published figure. In
+  coordination with the author, we discovered that the published figure suffered
+  from on a programming error. The figure in this document reflects a correction
+  to that error, so it will not precisely match Coppock's original publication.}
+The KS test statistic, while being more discerning in the neighborhood of (0,
+0), fails to bound the region of plausible hypotheses in the manner of the
+SSR+Design statistic. We find this quality of the test statistic to be
+particularly valuable. A powerful test statistic is a useful
+tool, but equally useful is the ability to succinctly describe the region in
+which we would fail to reject a null hypothesis. In this case, the SSR statistic
+provides such a region, making discussing and evaluating the result's
+of Coppock's analysis much more straightforward: it would be very unlikely that
+the data were generated from the model with parameters outside the rectangle
+with corners (-0.6, 0.2) and (0.3, -0.4). 
+
+\begin{figure}[h!] \centering
+  \includegraphics[width=.99\textwidth]{../coppock-replication/CoppockJEPS_figure2.pdf}
+  \caption{Replication of Figure 2 from \citet{coppock2014information}: plotting
+    $p$-values for direct and indirect model parameters. The
+    original analysis used the SSR statistic, which nicely bounds the region of
+    plausible hypotheses. The KS statistic, while eliminating more hypotheses in
+  the neighborhood of (0, 0), fails to provide any such bounds.}
+  \label{fig:coppock-replication}
+\end{figure}
 
 \section{Discussion and Speculations}
 

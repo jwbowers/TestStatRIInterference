@@ -29,7 +29,8 @@ paper.pdf: figures/twoDplots.pdf \
   styles/notation.sty \
   paper/paper.tex \
   paper/introduction.tex \
-  paper/titlepage.tex
+  paper/titlepage.tex \
+	coppock-replication/CoppockJEPS_figure2.pdf
 	cd paper && $(TEX2PDF) paper.tex
 	cp paper/paper.pdf .
 
