@@ -27,3 +27,4 @@ paper/simulation.tex
 paper/simulation-*
 reasoning-about-interference-between-units*
 *.rdata
+*.png
