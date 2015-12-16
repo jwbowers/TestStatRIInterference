@@ -44,7 +44,7 @@ param.steps <- 50
 directs   <-seq(from = -1,  to = 1, length.out = param.steps)
 indirects <-seq(from = -1,  to = 1, length.out = param.steps)
 
-sims <- 50
+sims <- 500
 pmat.ssr <- matrix(NA, length(directs), length(indirects))
 pmat.ks  <- matrix(NA, length(directs), length(indirects))
 
