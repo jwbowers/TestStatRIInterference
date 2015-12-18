@@ -101,7 +101,12 @@ are similar, and large when the distributions diverge.'' \cite[Proposition 4
 and 5, \S 2.9]{rosenbaum:2002} presents results proving that test statistics
 with this property (``effect increasing'' test statistics), produce an
 unbiased test of the hypothesis of no effects or positive effects when the
-positive effects involve one parameter.  Yet, when the models are complex and
+positive effects involve one parameter. Notice that this means that, a test of
+the sharp null of no effects
+based on a known randomization using \emph{any} effect increasing
+test-statistic to be valid test (in that the test should produce $p$-values
+less than $\alpha$ no more than 100$\alpha$ of the time when the null is true) even though different
+test statistics may imply different power against false hypotheses.  Yet, when the models are complex and
 may involve increasing effects in the direction of one parameter and
 non-linear effects in the direction of another parameter, BFP showed that
 sometimes a KS-test will have (1) no power to address the model at all such
@@ -149,6 +154,9 @@ coefficients $\bbeta$ when we could define the test statistic as:
  \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} -
  \bX\hat{\bbeta}) ^2 \label{eq:ssr}
 \end{equation}
+
+
+
 
 As an example of the performance of these new statistics, we re-analyze the
 model and design from BFP. Their model of treatment propagation
@@ -198,7 +206,7 @@ does the plot show high power against all alternatives in the plane.
 
 \begin{figure}[h!] \centering
   \includegraphics[width=.99\textwidth]{twoDplots.pdf} \caption{Proportion of
-    $p$-values less than .05 for tests of joint hypotheses about $\tau$ and
+    $p$-values less than $.05$ for tests of joint hypotheses about $\tau$ and
     $\beta$ for the model in equation~\ref{eq:spillovermodelA}. Darker values
     mean rare rejection. White means rejection always. Truth is shown at the
     intersection of the straight lines  $\tau=.5, \beta=2$. Each panel shows a
@@ -230,7 +238,7 @@ different patterns of power --- the KS tests appear be less powerful in general
 
 \citet{coppock2014information} presents an reanalysis of an experiment performed
 by \citet{butlernickerson2011}. Leading up to a key vote on a budget bill, SB24, in the
-New Mexico state senate, legislators were randomly assigned to be given
+New Mexico state senate, legislators were randomly assigned to see
 constituent survey results, and their votes on SB24 recorded. The original
 analysis found that legislators assigned to receive constituent information were
 more likely to vote consistently with the preferences of their district.
@@ -303,8 +311,7 @@ not always appropriate: for example, when the probability of exposure to
 spillover is heterogeneous across individuals in a way not well captured by the
 $\bz^T \bS$ term or some other analogous term, we may wish to apply inverse
 probability weights so as to ensure representative samples of potential
-outcomes. This suggests a conjecture: that the $SSR$ from an {\it
-  inverse-probability-weighted} least squares regression is more generally a
+outcomes. This suggests a conjecture: that the $SSR$ from an \emph{inverse-probability-weighted} least squares regression is more generally a
 sensible test statistic for models that include
 interference.\footnote{\citet{aronowsamii2012interfere} use such weights for
   unbiased estimation of network-treatment-exposure probability weighted
