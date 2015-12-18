@@ -17,8 +17,8 @@ characteristics). We also note that, given randomization, any test statistic
 ought to produce valid statistical inferences (i.e. tests that would reject
 the truth no more than $100 \alpha \%$ of the time).
 
- Since the point of the paper is to learn about test statistics, so, in this
-paper we do not explore alternative models of causal effects. The original
+Since the point of the paper is to learn about test statistics,
+we do not explore alternative models of causal effects. The original
 paper (BFP) on this method compared the performance of tests when the data did
 and did not arise from the causal model and we point to that paper for those
 who would like to pursue those set of questions. We did add some discussion
