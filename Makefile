@@ -17,20 +17,20 @@ installpkg = mkdir -p .libraries ; R_LIBS=.libraries R --vanilla -e "install.pac
 
 MAKEFIG = cd figures && $(Sweave)
 
-all: paper.pdf 
+all: paper.pdf
 
 ### Paper Targets
 # note: the figures only included at the latex step, so the individual
 # sections do not need to be rebuilt when the figures change, but we notate
 # the logical flow by tabbing in for the figures that used in each section
 paper.pdf: figures/twoDplots.pdf \
-	BIB/big.bib \
+  BIB/big.bib \
   styles/common.sty \
   styles/notation.sty \
   paper/paper.tex \
   paper/introduction.tex \
   paper/titlepage.tex \
-	coppock-replication/CoppockJEPS_figure2.pdf
+  coppock-replication/CoppockJEPS_figure2.pdf
 	cd paper && $(TEX2PDF) paper.tex
 	cp paper/paper.pdf .
 
@@ -83,7 +83,15 @@ pkgs/RItools:
 .libraries/brew/INSTALLED:
 	$(call installpkg,brew)
 
-### Paper components
+.libraries/maptools/INSTALLED:
+	$(call installpkg,maptools)
+
+.libraries/spdep/INSTALLED:
+	$(call installpkg,spdep)
+
+.libraries/wnominate/INSTALLED:
+	$(call installpkg,wnominate)
+	### Paper components
 
 ### Tables and Figures
 
@@ -149,7 +157,8 @@ static: $(ARCHIVENAME)-static.tar.gz
 
 #### Replication of Coppock (2014)
 
-coppock-replication/CoppockJEPS_10000Randomizations.rdata: coppock-replication/CoppockJEPS_10000Randomizations.R coppock-replication/nm.replication.tab
+coppock-replication/CoppockJEPS_10000Randomizations.rdata: coppock-replication/CoppockJEPS_10000Randomizations.R coppock-replication/nm.replication.tab \
+  .libraries/spdep/INSTALLED .libraries/maptools/INSTALLED .libraries/wnominate/INSTALLED
 	cd coppock-replication && R_LIBS=../.libraries $(RCMD) -f CoppockJEPS_10000Randomizations.R
 
 coppock-replication/CoppockJEPS.rdata: coppock-replication/CoppockJEPS_10000Randomizations.rdata coppock-replication/CoppockJEPS_datapreparation.R
