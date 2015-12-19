@@ -89,7 +89,7 @@ statistical inference involves summarizing information against the
 hypothesized claim, yet different ways to summarize information might be more
 or less sensitive to substantively meaningful differences. The statistical
 power of a simple test of the sharp null hypothesis of no effects will vary as
-a function of the design of the study (proportion treated, blocking structure,
+a function of the design of the study (total number of observations, proportion treated, blocking structure,
 etc), characteristics of the outcome (continuous, binary, skewed, extreme
 points, etc), and the way that a test statistic summarizes the outcome (does
 it compare means, standard deviations, medians, qqplots, etc). In general,
@@ -141,7 +141,7 @@ of a model than comparing two marginal distributions. In the case where we know
 the fixed adjacency matrix of the network, $\bS$, and where we imagine that
 network attributes (like degree) of a node play a role in the mechanism by
 which treatment propagates, the idea of assessing model fit rather than
-closeness of distributions leads naturally to the the sum-of-squared-residuals
+closeness of distributions leads naturally to the sum-of-squared-residuals
 (SSR) from a least squares regression of $ \widetilde y_{i,Z_i=0}$ on $Z_{i}$ and
 $\bz^{T} \bS$ (i.e.\ the number of directly connected nodes assigned treatment)
 as well as the $\mathbf{1}^{T} \bS$ (i.e.\ the degree of the node). If we
@@ -151,12 +151,39 @@ coefficients $\bbeta$ when we could define the test statistic as:
 
 
 \begin{equation}
- \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} -
- \bX\hat{\bbeta}) ^2 \label{eq:ssr}
+ \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} - \bX\hat{\bbeta} )^2 \label{eq:ssr}
 \end{equation}
 
+To provide a little intuition about the SSR test statistic as compared to the
+KS test statistic,
 
 
+
+we created a small simulation study of 256 units with half
+assigned to a binary treatment completely at random. We compared two outcomes
+--- a Normal outcome and a skewed outcome, both with mean of 10 and standard
+deviation of 1. And we compared two models of effects --- a constant additive
+effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ and a constant
+multiplicative effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}*\tau$. We set
+the truth to be the sharp null of no effects $\tau=0$ for the additive model
+and $\tau=1$ for the multiplicative model. Our intuition was that the SSR
+would have more power than the KS test when the outcome was Normal and when
+the observational implication of the model of effects would shift means (i.e.
+the additive model). We used direct simulation of the randomization
+distribution to generate $p$-values and repeated that process 1000 times to
+gauge the proportion of rejections of false hypotheses (i.e. the power of the
+tests). The results, not shown here but part of the reproduction archive for
+this paper, bear out this intuition: the SSR has slightly more power than KS
+for Normal outcomes in both the additive and multiplicative effects
+conditions. SSR has slightly less power than KS when the outcome is skewed for
+both models. In general, the SSR ought to be most powerful when the effect of
+the experiment involves a shift in the location of the distributions of the
+treated versus the controls. And it should be less powerful when the effect of
+the experiment is mostly to leave the center of the distribution alone, but,
+instead to stretch or compress the tails, or to concentrate the experimental
+effect on one quantile.
+
+\subsection{The SSR Test Statistic and the BFP Example Model}
 
 As an example of the performance of these new statistics, we re-analyze the
 model and design from BFP. Their model of treatment propagation
@@ -237,15 +264,15 @@ different patterns of power --- the KS tests appear be less powerful in general
 \section{Application: Legislative Information Spillovers}
 
 \citet{coppock2014information} presents an reanalysis of an experiment performed
-by \citet{butlernickerson2011}. Leading up to a key vote on a budget bill, SB24, in the
-New Mexico state senate, legislators were randomly assigned to see
-constituent survey results, and their votes on SB24 recorded. The original
+by \citet{butler2011can}. Leading up to a key vote on a budget bill, SB24, in the
+New Mexico state senate, Butler and Nickerson randomly assigned legislators to see
+constituent survey results. The original
 analysis found that legislators assigned to receive constituent information were
 more likely to vote consistently with the preferences of their district.
 Given the easy nature of sharing information in
-field experiments \citep{Winters:2012fk}, Coppock reanalyzes the
+field experiments \citep{winters2012using},  Coppock reanalyzes the
 experimental results with an eye towards spillover, constructing a social
-network based on the similarity of W-NOMINATE ideology scores. Coppock hypothesized
+network based on similarity on W-NOMINATE ideology scores. Coppock hypothesized
 that ideologically similar legislators would be more likely to share
 information. If the constituent survey information does induce a change in behavior, this
 effect may be observed not only in those legislators that are directly treated
@@ -260,16 +287,27 @@ Where $g$ is a function that normalizes the sums of distances to treated
 neighbors to have unit variance. This model has a direct
 effect ($\beta_1$) and an indirect effect ($\beta_2$) that is linear in the distances to
 treated neighbors. Coppock evaluated this spillover model using the SSR+Design statistic as
-presented in this paper. To demonstrate the value of this statistic,
-particularly for models that are linear in the spillover effects, we repeat
-Coppock's analysis using both the SSR+Design statistic and a KS statistic. The
+presented in this paper. 
+
+\begin{figure}[H] \centering
+  \includegraphics[width=.75\textwidth]{../coppock-replication/CoppockJEPS_figure2.pdf}
+  \caption{Replication of Figure 2 from \citet{coppock2014information}: plotting
+    $p$-values for direct and indirect model parameters. The
+    original analysis used the SSR statistic, which nicely bounds the region of
+    plausible hypotheses. The KS statistic, while eliminating more hypotheses in
+  the neighborhood of (0, 0), fails to provide any such bounds.}\label{fig:coppock-replication}
+\end{figure}
+
+
+To demonstrate the performance of this statistic in
+an applied setting, such as this one in which  the model is linear in the spillover effects, we repeat
+Coppock's analysis using both the SSR+Design statistic and the simple KS statistic. The
 results in Figure~\ref{fig:coppock-replication} recreate Coppock's Figure
-2.\footnote{During the replication process, we noticed an inconsistency between
-  our results using the SSR+Design statistic and Coppock's published figure. In
-  coordination with the author, we discovered that the published figure suffered
-  from on a programming error. The figure in this document reflects a correction
-  to that error, so it will not precisely match Coppock's original publication.}
-The KS test statistic, while being more discerning in the neighborhood of (0,
+2.\footnote{We are grateful to Alex Coppock for his help with both code and
+  data. Figure~\ref{fig:coppock-replication} does not precisely match the
+  figure in the original publication because we corrected a small
+  programming error during replication.}
+ The KS test statistic, while being more powerful in the neighborhood of (0,
 0), fails to bound the region of plausible hypotheses in the manner of the
 SSR+Design statistic. We find this quality of the test statistic to be
 particularly valuable. A powerful test statistic is a useful
@@ -278,24 +316,19 @@ which we would fail to reject a null hypothesis. In this case, the SSR statistic
 provides such a region, making discussing and evaluating the result's
 of Coppock's analysis much more straightforward: it would be very unlikely that
 the data were generated from the model with parameters outside the rectangle
-with corners (-0.6, 0.2) and (0.3, -0.4). 
-
-\begin{figure}[h!] \centering
-  \includegraphics[width=.99\textwidth]{../coppock-replication/CoppockJEPS_figure2.pdf}
-  \caption{Replication of Figure 2 from \citet{coppock2014information}: plotting
-    $p$-values for direct and indirect model parameters. The
-    original analysis used the SSR statistic, which nicely bounds the region of
-    plausible hypotheses. The KS statistic, while eliminating more hypotheses in
-  the neighborhood of (0, 0), fails to provide any such bounds.}
-  \label{fig:coppock-replication}
-\end{figure}
+with corners (-0.6, 0.2) and (0.3, -0.4).
 
 \section{Discussion and Speculations}
 
 We cannot say here whether the SSR+Design test will provide the best power
 against relevant alternatives for all possible models of treatment effect
-propagation, network topologies and designs. However, we hope that this
-research note both improves the application of the BFP approach and raises new
+propagation, network topologies and designs: this paper uses two models of
+effects each of which was applied to a different network topology and
+experimental design.\footnote{The BFP paper itself engages with some questions about
+the performance of this approach when the theoretical model is very different
+from the process generating the data, and we encourage readers to see that
+discussion in their \S~5.2.} However, we hope that the results from the 
+examples presented here improves the application of the BFP approach and raises new
 questions for research.  BFP are correct in the assertion that, regardless of
 the choice of test statistic selection, a set of implausible hypotheses is
 identified by the procedure. But we should not be led to believe that, for any
@@ -305,7 +338,7 @@ used, and not necessarily reflect the plausibility of the model at hand. That
 is, the results of any hypothesis test (or confidence interval creation) tell
 us \emph{both} about the test statistic \emph{and} about the causal model under scrutiny.
 
-In the example above, the SSR+Design test statistic had much better power than
+In the example shown in Figure~\ref{fig:twoD}, the SSR+Design test statistic had much better power than
 any other test statistic. But SSR from an ordinary least squares regression is
 not always appropriate: for example, when the probability of exposure to
 spillover is heterogeneous across individuals in a way not well captured by the
@@ -317,7 +350,7 @@ interference.\footnote{\citet{aronowsamii2012interfere} use such weights for
   unbiased estimation of network-treatment-exposure probability weighted
   average treatment effects.}  Additionally, when nonlinear deviations from
 model predictions are of concern, a weighted variant of the Brownian distance
-covariance \cite{szekely2009brownian} or other {\it E}-statistic may be more
-sensible than SSR.
+covariance \citep{szekely2009brownian} or other $E$-statistic may be more
+sensible than the sum of squared residuals.
 
 

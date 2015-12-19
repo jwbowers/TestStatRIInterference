@@ -19,12 +19,16 @@
 \titleformat{\paragraph}[runin]{\itshape}{\theparagraph}{1ex}{}{\vspace{-.2\baselineskip}}
 
 %\titlespacing*{ ⟨command⟩}{⟨left⟩}{⟨beforesep⟩}{⟨aftersep⟩}[⟨right⟩]
-\titlespacing{\section}{0pc}{1.5ex plus .1ex minus .2ex}{.5ex plus .1ex minus .1ex}
-\titlespacing{\subsection}{0pc}{1.5ex plus .1ex minus .2ex}{.5ex plus .1ex minus .1ex}
-\titlespacing{\subsubsection}{0pc}{1.5ex plus .1ex minus .2ex}{.5ex plus .1ex minus .1ex}
+\titlespacing{\section}{0pc}{1.5ex plus 0.1ex minus 0.2ex}{.5ex plus 0.1ex minus 0.1ex}
+\titlespacing{\subsection}{0pc}{1.5ex plus 0.1ex minus 0.2ex}{.5ex plus 0.1ex minus 0.1ex}
+\titlespacing{\subsubsection}{0pc}{1.5ex plus 0.1ex minus 0.2ex}{.5ex plus 0.1ex minus 0.1ex}
 
-\newif\ifanon
+%%% Links and Table of Contents
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=TRUE,linkcolor=BrickRed,citecolor=MidnightBlue]{hyperref}
 
+
+% \newif\ifanon
 % \ifanon
 % \footnote{We are awesome!}
 % \else

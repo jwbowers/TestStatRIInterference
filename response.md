@@ -30,13 +30,12 @@ the SSR is the difference of means) and ought to be less sensitive to other
 differences.
 
 
-
-
 2) Reviewer 2 asks you to carry forward your toy example with four units
 through the entire analysis.  If this isn't possible, please provide the
 simplest case that illuminate the core intuition of your method.
 
-We have done this.
+When we set about adding the four unit example to the different sections of the
+paper, we realized that we were expanding the length of the research note. 
 
 
 3) Reviewer 2 also asks you to provide intuition about when the KS-test
@@ -56,6 +55,8 @@ variance without moving the means by stretching one tail of the distribution.
 real examples.  Can you demonstrate that a case where the SSR will change
 the inferences we make when applied to a real world example?
 
-We have added a section in which we replicate the analysis in Coppock's 2014 Journal of Experimental Political Science article "Information Spillovers: Another Look at Experimental Estimates of Legislator Responsiveness". 
+We have added a section in which we replicate the analysis in Coppock's 2014
+*Journal of Experimental Political Science* article "Information Spillovers:
+Another Look at Experimental Estimates of Legislator Responsiveness". 
 
 
