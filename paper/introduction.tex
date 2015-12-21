@@ -121,7 +121,7 @@ network experiments.
 
 \section{Hypothesis testing as model fit assessment: The SSR test statistic}
 
-Rosenbaum style randomization inference tends to use test statistics that
+Fisher/Rosenbaum style randomization inference tends to use test statistics that
 compare two distributions. Simple models imply that the distribution of the
 outcome in the control remains fixed. For example, $\widetilde
 y_{i,Z_i=0}=Y_i-Z_i \tau$ only changes the distribution of outcomes for units
@@ -137,32 +137,33 @@ between $\widetilde y_{i,Z_i=0,Z_{-i}=0}$ and $Z_i$ (where $Z_{-i}=0$ means
 
 Yet, one can also think about the process of hypothesis testing as a process
 of assessing model fit, and there are usually better ways to evaluate the fit
-of a model than comparing two marginal distributions. In the case where we know
-the fixed adjacency matrix of the network, $\bS$, and where we imagine that
-network attributes (like degree) of a node play a role in the mechanism by
-which treatment propagates, the idea of assessing model fit rather than
-closeness of distributions leads naturally to the sum-of-squared-residuals
-(SSR) from a least squares regression of $ \widetilde y_{i,Z_i=0}$ on $Z_{i}$ and
-$\bz^{T} \bS$ (i.e.\ the number of directly connected nodes assigned treatment)
-as well as the $\mathbf{1}^{T} \bS$ (i.e.\ the degree of the node). If we
-collected $Z_{i}$,$\bz^{T} \bS$, and $\mathbf{1}^{T} \bS$ into a matrix $\bX$,
-and fit the $\widetilde y_{i,Z_i=0}$ as a linear function of $\bX$ with
-coefficients $\bbeta$ when we could define the test statistic as:
-
+of a model than comparing two marginal distributions: For example, the KS test
+  uses the maximum difference in the empirical cumulative distributions of
+  each treatment group calculated without regard for the relationship between
+the treated and control distributions, thereby ignoring information that could
+increase the precision of the test. The simplest version of the SSR test
+statistic merely sums the difference between the mean of the outcome implied
+by the hypothesis and individual outcomes:
 
 \begin{equation}
- \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} - \bX\hat{\bbeta} )^2 \label{eq:ssr}
+ {\T(\yu,\bz)}_{\text{SSR}} \equiv \sum_{i} {( \widetilde y_{i,Z_i=0} - \bar{\widetilde{y}}_{i,Z_i=0} )}^2 \label{eq:ssr1}
 \end{equation}
 
 To provide a little intuition about the SSR test statistic as compared to the
-KS test statistic,
-
-
-
-we created a small simulation study of 256 units with half
-assigned to a binary treatment completely at random. We compared two outcomes
+KS test statistic, we created a small simulation study of 256 units with half
+assigned to a binary treatment completely at random. We compared the
+performance of the two test statistics on two outcomes with no interference
 --- a Normal outcome and a skewed outcome, both with mean of 10 and standard
-deviation of 1. And we compared two models of effects --- a constant additive
+deviation of 1 as shown in Figure~\ref{fig:simpleoutcomes}.
+
+\begin{figure}[H]\centering
+  \includegraphics[width=.5\textwidth]{figures/ksvsssroutcomes.pdf}
+  \caption{}\label{fig:simpleoutcomes}
+\end{figure}
+
+
+
+And we compared two models of effects --- a constant additive
 effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ and a constant
 multiplicative effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}*\tau$. We set
 the truth to be the sharp null of no effects $\tau=0$ for the additive model
@@ -182,6 +183,23 @@ treated versus the controls. And it should be less powerful when the effect of
 the experiment is mostly to leave the center of the distribution alone, but,
 instead to stretch or compress the tails, or to concentrate the experimental
 effect on one quantile.
+
+In the case where we know
+the fixed adjacency matrix of the network, $\bS$, and where we imagine that
+network attributes (like degree) of a node play a role in the mechanism by
+which treatment propagates, the idea of assessing model fit rather than
+closeness of distributions leads naturally to the sum-of-squared-residuals
+(SSR) from a least squares regression of $ \widetilde y_{i,Z_i=0}$ on $Z_{i}$ and
+$\bz^{T} \bS$ (i.e.\ the number of directly connected nodes assigned treatment)
+as well as the $\mathbf{1}^{T} \bS$ (i.e.\ the degree of the node). If we
+collected $Z_{i}$,$\bz^{T} \bS$, and $\mathbf{1}^{T} \bS$ into a matrix $\bX$,
+and fit the $\widetilde y_{i,Z_i=0}$ as a linear function of $\bX$ with
+coefficients $\bbeta$ when we could define the test statistic as:
+
+\begin{equation}
+ \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} - \bX\hat{\bbeta} )^2 \label{eq:ssr}
+\end{equation}
+
 
 \subsection{The SSR Test Statistic and the BFP Example Model}
 
