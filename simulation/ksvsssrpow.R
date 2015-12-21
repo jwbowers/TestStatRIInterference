@@ -19,6 +19,10 @@ y0norm<-rnorm(n,mean=10)
 summary(y0zif)
 summary(y0norm)
 
+simpledat<-data.frame(y0zif=y0zif,y0norm=y0norm,Z=Zs)
+
+save(simpledat,file="simulation/simpledat.rda")
+
 ## Two models:
 ### One model is like a model of mean shift
 constant.additive.model
