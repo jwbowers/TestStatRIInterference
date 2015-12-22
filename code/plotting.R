@@ -3,95 +3,95 @@
 ################################################################################
 par(oma=rep(0,4))
 
-library(igraph)
-library(colorspace)
-
-plotexperiment <- function(s, z, mode = "undirected",
-                           vertex.shape = ifelse(z, "circle", "square"),
-                           layout = layout.fruchterman.reingold,
-                           vertex.size = 6,
-                           vertex.color = ifelse(z, "#252525", "#A0A0A0"),
-                           vertex.label = NA,
-                           edge.color = "black",
-                           ...) {
-
-  tmp <- graph.adjacency(s, mode = mode)
-
-  plot(tmp,
-       vertex.shape = vertex.shape,
-       layout = layout,
-       vertex.size = vertex.size,
-       vertex.color = vertex.color,
-       vertex.label = vertex.label,
-       edge.color = edge.color,
-       margin=0,
-       ...)
-}
-
-
-make.filled.contour.plot<-function(mat,main,levs=10,col=rev(terrain_hcl(levs)),
-                                   addTruth=TRUE,autolab=TRUE,
-                                   thelevels=NULL,
-                                   true.params, ##names and values of the parameters
-                                   thez="p",
-                                   ...){
-
-  params<-names(true.params)
-
-  mat.p<- matrix(mat[,thez],
-                 nrow=length(unique(mat[,params[1]])),
-                 ncol=length(unique(mat[,params[2]])),
-                 dimnames=list(sort(unique(mat[,params[1]])),
-                               sort(unique(mat[,params[2]]))
-                               )
-                 )
-  theps<-sort(unique(as.numeric(mat.p)))
-  p.line.levels<-quantile(theps,seq(0,1,length=levs) )
-  if(addTruth){
-    p.truth<-mat[simp.eq.test(mat[,params[1]],true.params[[1]])&simp.eq.test(mat[,params[2]],true.params[[2]]),thez]
-    ##main<-paste(main,"(",thealpha,"test level=",round(p.truth,3),")")
-  }
-  ##p.line.levels<-sort(unique(c(p.truth,p.line.levels)))
-  if(!is.null(thelevels)){
-    thelabels<-thelevels
-  }else{
-    if(autolab){
-      thelabels <- NULL
-      thelevels <- pretty(range(mat.p,finite=TRUE),levs)
-    } else {
-      thelabels <- round(sort(unique(c(0,p.line.levels))),3)
-      thelevels <- sort(unique(c(0,p.line.levels)))
-    }
-  }
-
-  parm1.values<-sort(unique(mat[,params[1]]))
-  parm2.values<-sort(unique(mat[,params[2]]))
-
-  if(length(theps)==1){col<-col[length(col)]}
-
-  image(list(x=parm1.values,y=parm2.values,z=mat.p),
-        main=main,
-        ##main=expression ( paste(main, "(Type I Error Rate", == round(p.truth,3), " for ",  alpha==thealpha,")") ),
-        ##main= expression(bquote(paste(.(main), "(Type I Error Rate" ==.(round(p.truth,3)), " for ",  alpha==.(thealpha),")") ) ),
-        #expression(paste(main,"( Type I Error Rate=",round(p.truth,3), " for ", alpha = (1/20))),
-        col=col,...)
-  if(length(theps)>1){
-    contour(list(x=parm1.values,y=parm2.values,z=mat.p),
-            ##nlevels=levs,
-            levels=thelevels,
-            labels=thelabels,
-            col="gray",
-            method="flattest",
-            labcex=.7,
-            vfont=c("sans serif","bold"),
-            add=TRUE)
-  }
-  if(addTruth) {points(true.params[1],true.params[2],pch=19,cex=2)}
-
-  ##clines<-contourLines(x=tau1.values,y=tau2.values,z=mat.p,levels=p.truth)
-  ##lines(clines[[1]],lwd=2)
-}
-
+## library(igraph)
+## library(colorspace)
+## 
+## plotexperiment <- function(s, z, mode = "undirected",
+##                            vertex.shape = ifelse(z, "circle", "square"),
+##                            layout = layout.fruchterman.reingold,
+##                            vertex.size = 6,
+##                            vertex.color = ifelse(z, "#252525", "#A0A0A0"),
+##                            vertex.label = NA,
+##                            edge.color = "black",
+##                            ...) {
+## 
+##   tmp <- graph.adjacency(s, mode = mode)
+## 
+##   plot(tmp,
+##        vertex.shape = vertex.shape,
+##        layout = layout,
+##        vertex.size = vertex.size,
+##        vertex.color = vertex.color,
+##        vertex.label = vertex.label,
+##        edge.color = edge.color,
+##        margin=0,
+##        ...)
+## }
+## 
+## 
+## make.filled.contour.plot<-function(mat,main,levs=10,col=rev(terrain_hcl(levs)),
+##                                    addTruth=TRUE,autolab=TRUE,
+##                                    thelevels=NULL,
+##                                    true.params, ##names and values of the parameters
+##                                    thez="p",
+##                                    ...){
+## 
+##   params<-names(true.params)
+## 
+##   mat.p<- matrix(mat[,thez],
+##                  nrow=length(unique(mat[,params[1]])),
+##                  ncol=length(unique(mat[,params[2]])),
+##                  dimnames=list(sort(unique(mat[,params[1]])),
+##                                sort(unique(mat[,params[2]]))
+##                                )
+##                  )
+##   theps<-sort(unique(as.numeric(mat.p)))
+##   p.line.levels<-quantile(theps,seq(0,1,length=levs) )
+##   if(addTruth){
+##     p.truth<-mat[simp.eq.test(mat[,params[1]],true.params[[1]])&simp.eq.test(mat[,params[2]],true.params[[2]]),thez]
+##     ##main<-paste(main,"(",thealpha,"test level=",round(p.truth,3),")")
+##   }
+##   ##p.line.levels<-sort(unique(c(p.truth,p.line.levels)))
+##   if(!is.null(thelevels)){
+##     thelabels<-thelevels
+##   }else{
+##     if(autolab){
+##       thelabels <- NULL
+##       thelevels <- pretty(range(mat.p,finite=TRUE),levs)
+##     } else {
+##       thelabels <- round(sort(unique(c(0,p.line.levels))),3)
+##       thelevels <- sort(unique(c(0,p.line.levels)))
+##     }
+##   }
+## 
+##   parm1.values<-sort(unique(mat[,params[1]]))
+##   parm2.values<-sort(unique(mat[,params[2]]))
+## 
+##   if(length(theps)==1){col<-col[length(col)]}
+## 
+##   image(list(x=parm1.values,y=parm2.values,z=mat.p),
+##         main=main,
+##         ##main=expression ( paste(main, "(Type I Error Rate", == round(p.truth,3), " for ",  alpha==thealpha,")") ),
+##         ##main= expression(bquote(paste(.(main), "(Type I Error Rate" ==.(round(p.truth,3)), " for ",  alpha==.(thealpha),")") ) ),
+##         #expression(paste(main,"( Type I Error Rate=",round(p.truth,3), " for ", alpha = (1/20))),
+##         col=col,...)
+##   if(length(theps)>1){
+##     contour(list(x=parm1.values,y=parm2.values,z=mat.p),
+##             ##nlevels=levs,
+##             levels=thelevels,
+##             labels=thelabels,
+##             col="gray",
+##             method="flattest",
+##             labcex=.7,
+##             vfont=c("sans serif","bold"),
+##             add=TRUE)
+##   }
+##   if(addTruth) {points(true.params[1],true.params[2],pch=19,cex=2)}
+## 
+##   ##clines<-contourLines(x=tau1.values,y=tau2.values,z=mat.p,levels=p.truth)
+##   ##lines(clines[[1]],lwd=2)
+## }
+## 
 plotmods.fn<-function(i,true.params,themain=NULL,addrarerejects=TRUE,...){
   ##plot lots of sim results matrices
   is.2parm<-regexpr("1parm",i)<0 ##returns -1 if not matched

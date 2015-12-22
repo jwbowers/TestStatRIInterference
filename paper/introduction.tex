@@ -157,7 +157,7 @@ performance of the two test statistics on two outcomes with no interference
 deviation of 1 as shown in Figure~\ref{fig:simpleoutcomes}.
 
 \begin{figure}[H]\centering
-  \includegraphics[width=.5\textwidth]{figures/ksvsssroutcomes.pdf}
+  \includegraphics[width=.5\textwidth]{ksvsssroutcomes.pdf}
   \caption{}\label{fig:simpleoutcomes}
 \end{figure}
 
@@ -167,7 +167,14 @@ And we compared two models of effects --- a constant additive
 effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ and a constant
 multiplicative effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}*\tau$. We set
 the truth to be the sharp null of no effects $\tau=0$ for the additive model
-and $\tau=1$ for the multiplicative model. Our intuition was that the SSR
+and $\tau=1$ for the multiplicative model. 
+
+
+
+
+
+
+Our intuition was that the SSR
 would have more power than the KS test when the outcome was Normal and when
 the observational implication of the model of effects would shift means (i.e.
 the additive model). We used direct simulation of the randomization

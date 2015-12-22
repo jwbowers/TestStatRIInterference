@@ -13,7 +13,7 @@ Zs <- sampler(REPETITIONS)$samples # N x nsims
 ## Make two outcomes in control that both have 0 mean and 1 sd but with different distributions
 set.seed(20151130)
 tmpzif<-rgeom(n,prob=.7)
-y0zif<-as.vector(scale(tmpzif))+10
+y0zif<-jitter(as.vector(scale(tmpzif))+10)
 y0norm<-rnorm(n,mean=10)
 
 summary(y0zif)
