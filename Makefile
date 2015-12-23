@@ -110,7 +110,7 @@ figures/simulation-network-graph.tex: $(LIBRARIES) code/plotting.R simulation/se
 figures/ksvsssr-outcomes.pdf: figures/ksvsssr-outcomes.R simulation/simpledat.rda
 	R_LIBS=".libraries" $(RCMD) --file=figures/ksvsssr-outcomes.R
 
-figures/ksvsssr-boxplot.pdf: figures/ksvsssr-boxplot.R ksvsssrpow-results.rda
+figures/ksvsssr-boxplot.pdf: figures/ksvsssr-boxplot.R simulation/ksvsssrpow-results.rda
 	R_LIBS=".libraries" $(RCMD) --file=figures/ksvsssr-boxplot.R
 
 
@@ -140,8 +140,8 @@ simulation/simplealts.rda: simulation/ksvsssr-setup.txt
 simulation/simpledat.rda: simulation/ksvsssr-setup.txt
 simulation/simpletruth.rda: simulation/ksvsssr-setup.txt
 
-simulation/ksvsssrpow-results.rda: simulation/ksvsssrpow.rda
-	R_LIBS=".libraries" $(RCMD) --file=simulation/ksvsssr-results.R
+simulation/ksvsssrpow-results.rda: simulation/ksvsssrpow-results.R simulation/ksvsssrpow.rda
+	R_LIBS=".libraries" $(RCMD) --file=simulation/ksvsssrpow-results.R
 
 
 ### Two cleaning tasks. The default clean does not remove *.rda files, deepclean does
