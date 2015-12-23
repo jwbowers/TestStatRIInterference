@@ -5,7 +5,7 @@ par(oma=rep(0,4))
 
 ## library(igraph)
 ## library(colorspace)
-## 
+##
 ## plotexperiment <- function(s, z, mode = "undirected",
 ##                            vertex.shape = ifelse(z, "circle", "square"),
 ##                            layout = layout.fruchterman.reingold,
@@ -14,9 +14,9 @@ par(oma=rep(0,4))
 ##                            vertex.label = NA,
 ##                            edge.color = "black",
 ##                            ...) {
-## 
+##
 ##   tmp <- graph.adjacency(s, mode = mode)
-## 
+##
 ##   plot(tmp,
 ##        vertex.shape = vertex.shape,
 ##        layout = layout,
@@ -27,17 +27,17 @@ par(oma=rep(0,4))
 ##        margin=0,
 ##        ...)
 ## }
-## 
-## 
+##
+##
 ## make.filled.contour.plot<-function(mat,main,levs=10,col=rev(terrain_hcl(levs)),
 ##                                    addTruth=TRUE,autolab=TRUE,
 ##                                    thelevels=NULL,
 ##                                    true.params, ##names and values of the parameters
 ##                                    thez="p",
 ##                                    ...){
-## 
+##
 ##   params<-names(true.params)
-## 
+##
 ##   mat.p<- matrix(mat[,thez],
 ##                  nrow=length(unique(mat[,params[1]])),
 ##                  ncol=length(unique(mat[,params[2]])),
@@ -63,12 +63,12 @@ par(oma=rep(0,4))
 ##       thelevels <- sort(unique(c(0,p.line.levels)))
 ##     }
 ##   }
-## 
+##
 ##   parm1.values<-sort(unique(mat[,params[1]]))
 ##   parm2.values<-sort(unique(mat[,params[2]]))
-## 
+##
 ##   if(length(theps)==1){col<-col[length(col)]}
-## 
+##
 ##   image(list(x=parm1.values,y=parm2.values,z=mat.p),
 ##         main=main,
 ##         ##main=expression ( paste(main, "(Type I Error Rate", == round(p.truth,3), " for ",  alpha==thealpha,")") ),
@@ -87,11 +87,11 @@ par(oma=rep(0,4))
 ##             add=TRUE)
 ##   }
 ##   if(addTruth) {points(true.params[1],true.params[2],pch=19,cex=2)}
-## 
+##
 ##   ##clines<-contourLines(x=tau1.values,y=tau2.values,z=mat.p,levels=p.truth)
 ##   ##lines(clines[[1]],lwd=2)
 ## }
-## 
+##
 plotmods.fn<-function(i,true.params,themain=NULL,addrarerejects=TRUE,...){
   ##plot lots of sim results matrices
   is.2parm<-regexpr("1parm",i)<0 ##returns -1 if not matched
@@ -226,7 +226,7 @@ plotCompareModels <- function(uniformity, # a vector of outcomes from unif trial
 
   # this is an ordered factor
   groups <- ordered(c(rep("Uniformity", n), as.vector(sapply(modelNames, function(m) {
-                                                             paste(m, c("-C", "-T")[Z + 1], sep = "")
+						    paste(m, c("-C", "-T")[Z + 1], sep = "")
 }))), c("Uniformity", as.vector(sapply(modelNames, function(m) {
   paste(m, c("-C", "-T"), sep = "")
 }))))
@@ -238,17 +238,18 @@ plotCompareModels <- function(uniformity, # a vector of outcomes from unif trial
   # TODO: In RItools version, the addtion of a strip should be an option
   # outline in the previous plot should be !strip
   stripchart(y ~ grp,
-             data = data.grouped,
-             vertical = T,
-             method = "jitter",
-             col = "#999999",
-             #group.names = c("Unif.", rep(c("0", "1"), k)))
-             group.names = NA,
-             ylab = "Outcome",
-             cex = 1/3, ...)
+	     data = data.grouped,
+	     vertical = T,
+	     method = "jitter",
+	     col = "#999999",
+	     group.names = c("y0", rep(c("0", "1"), k)), ## TODO: make this more flexible.
+	     ## group.names = NA,
+	     ylab = "Outcome",
+             cex = 1/3, cex.axis=.8, ...)
 
   boxplot(y ~ grp, data = data.grouped,
-          names = c("Unif.", rep(c("0", "1"), k)),
+          #names = c("Unif.", rep(c("0", "1"), k)),
+	  pars=list(cex.axis = .8,axes=FALSE),
           ylab = NULL,
           boxwex = 2 * boxwidth,
           lwd = 0.75,
@@ -256,8 +257,8 @@ plotCompareModels <- function(uniformity, # a vector of outcomes from unif trial
           add = T)
 
   # put the model name under the assignment labels
-  mtext(modelNames, at = 0.5 + 2 * 1:k, side = 1, line = 1.75)
-  mtext("Z=", at = 1.5, side = 1, line = 1, adj = 0)
+  mtext(modelNames, at = 0.5 + 2 * 1:k, side = 1, line = 1.5,cex=.8)
+  mtext("Z=", at = 1.5 , side = 1, line = .5, adj = 0,cex=.8)
 
   # split up the plot into sections
   abline(v = c(1.5, 1.5 + 2 * (1:(k - 1))), lty = 2, col = "#cccccc")
