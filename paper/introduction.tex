@@ -157,29 +157,54 @@ performance of the two test statistics on two outcomes with no interference
 deviation of 1 as shown in Figure~\ref{fig:simpleoutcomes}.
 
 \begin{figure}[H]\centering
-  \includegraphics[width=.5\textwidth]{ksvsssroutcomes.pdf}
-  \caption{}\label{fig:simpleoutcomes}
+  \includegraphics[width=.5\textwidth]{ksvsssr-outcomes.pdf}
+  \caption{Two outcomes ($Y_i$) simulated with no interference, $N=256$, half
+    randomized to binary treatment by complete randomization. }\label{fig:simpleoutcomes}
 \end{figure}
 
+And we compared two models of effects --- a constant additive effects model in
+which $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ and a constant multiplicative effects
+model in which $y_{i,Z_i=1}=y_{i,Z_i=0}*\tau$. We set the truth to be the
+sharp null of no effects $\tau=0$ for the additive model and $\tau=1$ for the
+multiplicative model. To further explain the process of hypothesis testing and
+evaluation of the test statistics, we display the results from a power
+analysis of one alternative hypothesis in figure~\ref{fig:boxplot}. A given
+model and hypothesized parameter implies a distribution for observed outcomes
+in the treatment group and control groups. Here, since we have no
+interference, the hypotheses only have different implications for the control
+group distribution. In this case, we chose a two parameters for the additive
+and multiplicative models which produced very similar implications (as show by
+the similarity in the ``Add. Model'' and ``Mult.  Model'' boxplots in both
+panels of the figure). We see that when we tested the hypothesis of
+$\tau_0=.34$ from the additive model using the KS test statistic on Normal
+data, that we produced $p$-values lower than $\alpha=.05$ about 55\% of the
+time across 1000 simulations. That is, the KS test has a power of about .55
+to reject a false hypothesis with this Normal outcome and this constant
+additive effects model. The analogous power for the SSR test statistic was
+.73. For these particular parameters, we see the SSR performing better with
+Normal outcomes but not being very effected by the model of effects (which
+makes some sense here because we are choosing parameters at which both models
+imply more or less the same patterns in outcomes).
 
+\begin{figure}[H]\centering
+  \includegraphics[width=.5\textwidth]{ksvsssr-boxplot.pdf}
+  \caption{Distributions of the simulated data from left to right: $y_0$
+    outcome with no experiment, observed outcome after random assignment,
+    outcomes implied by a constant additive model of effects, outcomes implied by a constant
+    multiplicative model. The hypothesized model parameters $\tau_0$ that
+    produce the patterns shown are printed on the plot. The proportion of
+    simulated tests in which these values of $\tau_0$ with $p$-values less
+    than $\alpha=.05$ by the KS and SSR test statistics are printed on the plot as $\text{pow}_{KS}$ and
+  $\text{pow}_\text{SSR}$. The SSR test statistic has more power for the
+  Normal outcomes and less power for the skewed outcome.}\label{fig:boxplot}
+\end{figure}
 
-And we compared two models of effects --- a constant additive
-effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ and a constant
-multiplicative effects model in which $y_{i,Z_i=1}=y_{i,Z_i=0}*\tau$. We set
-the truth to be the sharp null of no effects $\tau=0$ for the additive model
-and $\tau=1$ for the multiplicative model. 
-
-
-
-
-
-
-Our intuition was that the SSR
+When we assessed power across many alternative hypotheses, our intuition was that the SSR
 would have more power than the KS test when the outcome was Normal and when
-the observational implication of the model of effects would shift means (i.e.
+the observational implication of the model of effects would shift means (i.e.\
 the additive model). We used direct simulation of the randomization
 distribution to generate $p$-values and repeated that process 1000 times to
-gauge the proportion of rejections of false hypotheses (i.e. the power of the
+gauge the proportion of rejections of false hypotheses (i.e.\ the power of the
 tests). The results, not shown here but part of the reproduction archive for
 this paper, bear out this intuition: the SSR has slightly more power than KS
 for Normal outcomes in both the additive and multiplicative effects
@@ -191,17 +216,19 @@ the experiment is mostly to leave the center of the distribution alone, but,
 instead to stretch or compress the tails, or to concentrate the experimental
 effect on one quantile.
 
-In the case where we know
-the fixed adjacency matrix of the network, $\bS$, and where we imagine that
-network attributes (like degree) of a node play a role in the mechanism by
-which treatment propagates, the idea of assessing model fit rather than
-closeness of distributions leads naturally to the sum-of-squared-residuals
-(SSR) from a least squares regression of $ \widetilde y_{i,Z_i=0}$ on $Z_{i}$ and
-$\bz^{T} \bS$ (i.e.\ the number of directly connected nodes assigned treatment)
-as well as the $\mathbf{1}^{T} \bS$ (i.e.\ the degree of the node). If we
-collected $Z_{i}$,$\bz^{T} \bS$, and $\mathbf{1}^{T} \bS$ into a matrix $\bX$,
-and fit the $\widetilde y_{i,Z_i=0}$ as a linear function of $\bX$ with
-coefficients $\bbeta$ when we could define the test statistic as:
+\subsection{The SSR Test Statistic with Network Information}
+
+In the case where we know the fixed adjacency matrix of a social network,
+$\bS$, and where we imagine that network attributes (like degree) of a node
+play a role in the mechanism by which treatment propagates, the idea of
+assessing model fit rather than closeness of distributions leads naturally to
+the sum-of-squared-residuals (SSR) from a least squares regression of $
+\widetilde y_{i,Z_i=0}$ on $Z_{i}$ and $\bz^{T} \bS$ (i.e.\ the number of
+directly connected nodes assigned treatment) as well as the $\mathbf{1}^{T}
+\bS$ (i.e.\ the degree of the node). If we collected $Z_{i}$,$\bz^{T} \bS$,
+and $\mathbf{1}^{T} \bS$ into a matrix $\bX$, and fit the $\widetilde
+y_{i,Z_i=0}$ as a linear function of $\bX$ with coefficients $\bbeta$ when we
+could define the test statistic as:
 
 \begin{equation}
  \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} - \bX\hat{\bbeta} )^2 \label{eq:ssr}
