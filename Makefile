@@ -30,7 +30,9 @@ paper.pdf: figures/twoDplots.pdf \
   paper/paper.tex \
   paper/introduction.tex \
   paper/titlepage.tex \
-  coppock-replication/CoppockJEPS_figure2.pdf
+  coppock-replication/CoppockJEPS_figure2.pdf \
+  figures/ksvsssr-outcomes.pdf \
+  figures/ksvsssr-boxplot.pdf
 	cd paper && $(TEX2PDF) paper.tex
 	cp paper/paper.pdf .
 
@@ -105,12 +107,41 @@ figures/twoDplots.pdf: figures/teststat2dfigs.txt
 figures/simulation-network-graph.tex: $(LIBRARIES) code/plotting.R simulation/setup.R figures/simulation-network-graph.Rnw
 	$(MAKEFIG) simulation-network-graph.Rnw
 
+figures/ksvsssr-outcomes.pdf: figures/ksvsssr-outcomes.R simulation/simpledat.rda
+	R_LIBS=".libraries" $(RCMD) --file=figures/ksvsssr-outcomes.R
+
+figures/ksvsssr-boxplot.pdf: figures/ksvsssr-boxplot.R ksvsssrpow-results.rda
+	R_LIBS=".libraries" $(RCMD) --file=figures/ksvsssr-boxplot.R
+
+
 #### Simulations Galore ####
 simulation/teststat-parallel.rda: $(LIBRARIES) simulation/setup.R simulation/teststat-parallel.R
 	R_LIBS=".libraries" $(RCMD) --file=simulation/teststat-parallel.R
 
 simulation/teststat-parallel-results.rda: simulation/teststat-parallel.rda
 	R_LIBS=".libraries" $(RCMD) --file=simulation/teststat-parallel-results.R
+
+
+simulation/ksvsssrpow.rda: $(LIBRARIES) simulation/ksvsssrpow.R simulation/ksvsssr-setup.txt \
+  code/setup-clusters.R \
+  simulation/setup.R \
+  code/teststatistics.R
+ifeq ($(findstring keeling,$(HOST)),keeling)
+	sbatch ksvsssrpow.q
+else
+  R_LIBS=".libraries" $(RCMD) --file=simulations/ksvsssrpow.R
+endif
+
+
+simulation/ksvsssr-setup.txt: $(LIBRARIES) simulation/ksvsssr-setup.R
+	R_LIBS=".libraries" $(RCMD) --file=simulation/ksvsssr-setup.R
+
+simulation/simplealts.rda: simulation/ksvsssr-setup.txt
+simulation/simpledat.rda: simulation/ksvsssr-setup.txt
+simulation/simpletruth.rda: simulation/ksvsssr-setup.txt
+
+simulation/ksvsssrpow-results.rda: simulation/ksvsssrpow.rda
+	R_LIBS=".libraries" $(RCMD) --file=simulation/ksvsssr-results.R
 
 
 ### Two cleaning tasks. The default clean does not remove *.rda files, deepclean does
