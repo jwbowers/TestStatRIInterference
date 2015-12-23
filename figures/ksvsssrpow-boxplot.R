@@ -30,16 +30,6 @@ matplot(x=ALTS$COM$tau,powCOM,type="l",lty=c(1,2,1,2),col=c(1,1,2,2),
 legend(x="bottomleft",legend=substr(colnames(powCOM),11,50),lty=c(1,2,1,2),col=c(1,1,2,2),bty="n")
 dev.off()
 
-
-pdf(file="figures/ksvsssroutcomes.pdf",width=8,height=4)
-par(mfrow=c(1,2),pty="s",mgp=c(1.5,.5,0),oma=rep(0,4),mar=c(3,3,2,0))
-plot(density(simpledat$y0norm),main="Normal Outcome")
-rug(simpledat$y0norm)
-plot(density(simpledat$y0zif),main="Geometric Outcome")
-rug(simpledat$y0zif)
-dev.off()
-
-
 ## Two models:
 ### One model is like a model of mean shift
 constant.additive.model
@@ -55,22 +45,47 @@ constant.multiplicative.model <- UniformityModel( function(y, z, tau) {
 
 source("code/plotting.R")
 
-par(mfrow=c(1,2))
+pdf(file="figures/ksvsssr-boxplots.pdf",width=8,height=4)
+par(mfrow=c(1,2),pty="s",mgp=c(1.5,.5,0),oma=rep(0,4),mar=c(3,3,2,0))
 plotCompareModels(simpledat$y0norm,
 		  Z=simpledat$Z.1,
 		  make.data=function(y,Z){y},
-		  models=list(COA=givenParams(constant.additive.model,tau=ALTS$COA$tau[60]),
-			      COM=givenParams(constant.multiplicative.model,tau=ALTS$COM$tau[60])
-			      )
+		  models=list("Add. Model"=givenParams(constant.additive.model,tau=ALTS$COA$tau[60]),
+			      "Mult. Model"=givenParams(constant.multiplicative.model,tau=ALTS$COM$tau[60])
+			      ),
+		  main="Normal Outcome"
 		  )
+
+text(4.5,11.8,as.expression(bquote(tau[0]==.(signif(ALTS$COA$tau[60],2)))),cex=.8)
+text(6.5,11.8,as.expression(bquote(tau[0]==.(signif(ALTS$COM$tau[60],4)))),cex=.8)
+
+text(c(4.5,4.5,6.5,6.5),c(7.3,7.8,7.3,7.8),
+     sapply(c(bquote(pow[KS] == .(signif(powCOA[60,"resultsCOANormKS"],2))),
+              bquote(pow[SSR] ==  .(signif(powCOA[60,"resultsCOANormSSR"],2))),
+	      bquote(pow[KS] == .(signif(powCOM[60,"resultsCOMNormKS"],2))),
+              bquote(pow[SSR] ==  .(signif(powCOM[60,"resultsCOMNormSSR"],2)))
+	      ),as.expression),cex=.8)
 
 plotCompareModels(jitter(simpledat$y0zif),
 		  Z=simpledat$Z.1,
 		  make.data=function(y,Z){y},
-		  models=list(COA=givenParams(constant.additive.model,tau=ALTS$COA$tau[60]),
-			      COM=givenParams(constant.multiplicative.model,tau=ALTS$COM$tau[60])
-			      )
+		  models=list("Add. Model"=givenParams(constant.additive.model,tau=ALTS$COA$tau[60]),
+			      "Multi. Model"=givenParams(constant.multiplicative.model,tau=ALTS$COM$tau[60])
+			      ),
+		  main="Jittered Geometric Outcome"
 		  )
 
+text(4.5,12.8,as.expression(bquote(tau[0]==.(signif(ALTS$COA$tau[60],2)))),cex=.8)
+text(6.5,12.8,as.expression(bquote(tau[0]==.(signif(ALTS$COM$tau[60],4)))),cex=.8)
+
+
+text(c(4.5,4.5,6.5,6.5),c(13.5,14,13.5,14),
+     sapply(c(bquote(pow[KS] == .(signif(powCOA[60,"resultsCOAZifKS"],2))),
+              bquote(pow[SSR] ==  .(signif(powCOA[60,"resultsCOAZifSSR"],2))),
+	      bquote(pow[KS] == .(signif(powCOM[60,"resultsCOMZifKS"],2))),
+              bquote(pow[SSR] ==  .(signif(powCOM[60,"resultsCOMZifSSR"],2)))
+	      ),as.expression),cex=.8)
+
+dev.off()
 
 
