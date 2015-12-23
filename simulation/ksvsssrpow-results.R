@@ -7,19 +7,19 @@ library(RItools) ##,lib.loc=".libraries")
 
 source("simulation/setup.R")
 
-load("simulation/ksvsssrpowresults.rda")
+load("simulation/ksvsssrpow.rda")
 load("simulation/simplealts.rda")
 load("simulation/simpletruth.rda")
 
 
 simPow2<-function(lst){
-	m <- sapply(lst,function(l){ l$p})
-	m <- m <= ALPHA
-	rowMeans(m)
+  m <- sapply(lst,function(l){ l$p})
+  m <- m <= ALPHA
+  rowMeans(m)
 }
 
 powComparison<-sapply(ls(patt="resultsCO"),function(nm){
-simPow2(get(nm))
+			simPow2(get(nm))
 })
 
 powCOA<-powComparison[,grep("COA",colnames(powComparison))]
