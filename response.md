@@ -35,7 +35,15 @@ through the entire analysis.  If this isn't possible, please provide the
 simplest case that illuminate the core intuition of your method.
 
 When we set about adding the four unit example to the different sections of the
-paper, we realized that we were expanding the length of the research note. 
+paper, we realized that we were not enhancing intuition: the two test
+statistics applied to an experiment of size 4 mainly reflected the fact that we
+had very little data. Instead, we added a discussion of the SSR and KS test
+statistics applied to a case with no interference and with very simple models
+of effect. We also added a figure and discussion that tries to show a bit more
+about how models of effects work in the context of sharp null hypothesis
+testing. We hope that this helps with the intuition so that the use of the SSR
+test statistic to an experiment on a social network with a complex model of
+treatment propagation is easier to understand.
 
 
 3) Reviewer 2 also asks you to provide intuition about when the KS-test
