@@ -32,7 +32,7 @@ paper.pdf: figures/twoDplots.pdf \
   paper/titlepage.tex \
   coppock-replication/CoppockJEPS_figure2.pdf \
   figures/ksvsssr-outcomes.pdf \
-  figures/ksvsssr-boxplot.pdf
+  figures/ksvsssr-boxplots.pdf
 	cd paper && $(TEX2PDF) paper.tex
 	cp paper/paper.pdf .
 
@@ -110,9 +110,8 @@ figures/simulation-network-graph.tex: $(LIBRARIES) code/plotting.R simulation/se
 figures/ksvsssr-outcomes.pdf: figures/ksvsssr-outcomes.R simulation/simpledat.rda
 	R_LIBS=".libraries" $(RCMD) --file=figures/ksvsssr-outcomes.R
 
-figures/ksvsssr-boxplot.pdf: figures/ksvsssr-boxplot.R simulation/ksvsssrpow-results.rda
-	R_LIBS=".libraries" $(RCMD) --file=figures/ksvsssr-boxplot.R
-
+figures/ksvsssr-boxplots.pdf: figures/ksvsssr-boxplots.R simulation/ksvsssrpow-results.rda
+	R_LIBS=".libraries" $(RCMD) --file=figures/ksvsssr-boxplots.R
 
 #### Simulations Galore ####
 simulation/teststat-parallel.rda: $(LIBRARIES) simulation/setup.R simulation/teststat-parallel.R
