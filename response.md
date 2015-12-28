@@ -67,4 +67,12 @@ We have added a section in which we replicate the analysis in Coppock's 2014
 *Journal of Experimental Political Science* article "Information Spillovers:
 Another Look at Experimental Estimates of Legislator Responsiveness". 
 
+# Response to Reviewer 1
+
+We appreciate the positive review. In response to this review and the comments from the editor and other reviewer, we now valuate the SSR test statistic for three non-interference models (the sharp null model, the constant additive effects model, and the constant multiplicative effects model) and one new interference model (the one used by Coppock in his *Journal of Experimental Political Science* article).  We did not systematically search for other spillover models from political science, but agree that such a survey of models and now, test statistics, would be useful in the future.
+
+# Response to Reviewer 2
+
+We appreciate the positive review. We added a section in an attempt to provide more intuition about test statistics, models of effects, and their interaction. Continuing the 4 unit example did not, in the end, clarify Fisher/Rosenbaum-style hypothesis testing as we would have hoped so we only use that example in the beginning to illustrate the idea that each unit in a study may have many more than two potential outcomes. We did add a section showing a case where the KS test has more power than the SSR test -- in this case we used a skewed outcome with no spillover rather than heterogeneous exposure to spillover in order to keep things as simple as possible.
+
 
