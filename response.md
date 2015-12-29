@@ -8,7 +8,7 @@ about spill overs deviate?  How sensitive are the inferences to the
 particular assumptions you can make?
 
 In the paper we clarified that we are focusing on testing sharp null
-hypotheses arising from one toy model of how an experimental treatment might
+hypotheses arising from one model of how an experimental treatment might
 propagate across a social network. We have added some discussion to the paper
 highlighting the fact that the power of a test of a sharp null hypothesis
 depends on *both* the model of causal effects *and* the test statistic (and
@@ -69,7 +69,7 @@ Another Look at Experimental Estimates of Legislator Responsiveness".
 
 # Response to Reviewer 1
 
-We appreciate the positive review. In response to this review and the comments from the editor and other reviewer, we now valuate the SSR test statistic for three non-interference models (the sharp null model, the constant additive effects model, and the constant multiplicative effects model) and one new interference model (the one used by Coppock in his *Journal of Experimental Political Science* article).  We did not systematically search for other spillover models from political science, but agree that such a survey of models and now, test statistics, would be useful in the future.
+We appreciate the positive review. In response to this review and the comments from the editor and other reviewer, we now evaluate the SSR test statistic for three non-interference models (the sharp null model, the constant additive effects model, and the constant multiplicative effects model) and one new interference model (the one used by Coppock in his *Journal of Experimental Political Science* article).  We did not systematically search for other spillover models from political science, but agree that such a survey of models and now, test statistics, would be useful in the future.
 
 # Response to Reviewer 2
 
