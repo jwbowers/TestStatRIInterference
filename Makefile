@@ -17,6 +17,8 @@ installpkg = mkdir -p .libraries ; R_LIBS=.libraries R --vanilla -e "install.pac
 
 MAKEFIG = cd figures && $(Sweave)
 
+HOST=$(shell hostname)
+
 all: paper.pdf
 
 ### Paper Targets
@@ -43,7 +45,7 @@ draft:
 
 # Libraries
 
-.libraries/allpkgs.txt: .libraries/packages.txt .libraries/RItools/INSTALLED
+.libraries/allpkgs.txt: .libraries/packages.txt .libraries/RItools/INSTALLED .libraries/Rmpi/INSTALLED
 
 .libraries/.d:
 	mkdir -p .libraries
@@ -94,6 +96,16 @@ pkgs/RItools:
 .libraries/wnominate/INSTALLED:
 	$(call installpkg,wnominate)
 	### Paper components
+
+.libraries/Rmpi/INSTALLED:
+	mkdir -p libraries
+ifeq ($(findstring keeling,$(HOST)),keeling)
+	R_COMPILE_PKGS=1 R_LIBS=libraries R --vanilla -e "install.packages('Rmpi', type='source', repos = 'http://cran.rstudio.com/',dependencies=TRUE,configure.args=c('--with-mpi=/sw/openmpi-1.6.4a-intel-14.0.3 --with-Rmpi-type=OPENMPI'))"
+	date > libraries/Rmpi/INSTALLED
+      else
+	R_COMPILE_PKGS=1 R_LIBS=libraries R --vanilla -e "install.packages('Rmpi',type='source',repos = 'http://cran.rstudio.com/',dependencies=TRUE,configure.args=c('--with-Rmpi-include=/usr/local/include --with-Rmpi-libpath=/usr/local/lib --with-Rmpi-type=OPENMPI'))
+	date > libraries/Rmpi/INSTALLED
+endif
 
 ### Tables and Figures
 
