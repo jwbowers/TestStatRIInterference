@@ -5,7 +5,7 @@
 In a randomized experiment with $n=4$ subjects connected via a fixed network,
 the response of subject $i=1$ might depend on the different ways that
 treatment is assigned to the \emph{whole} network. When the treatment
-assignment vector,$\bz$, provides treatment to persons 2 and 3,
+assignment vector, $\bz$, provides treatment to persons 2 and 3,
 $\bz=\{0,1,1,0\}$, person $i=1$ might respond one way,
 $y_{i=1,\bz=\{0,1,1,0\}}$ and when treatment is assigned to persons 3 and 4,
 $\bz=\{0,0,1,1\}$ person $i=1$ might act another way,
@@ -92,7 +92,11 @@ power of a simple test of the sharp null hypothesis of no effects will vary as
 a function of the design of the study (total number of observations, proportion treated, blocking structure,
 etc), characteristics of the outcome (continuous, binary, skewed, extreme
 points, etc), and the way that a test statistic summarizes the outcome (does
-it compare means, standard deviations, medians, qqplots, etc). In general,
+it compare means, standard deviations, medians, qqplots, etc).\footnote{Some
+  use the term `effective sample size' --- which we first saw in
+  \citet{kish65} ---
+  to highlight the fact that statistical power depends on more than the number
+  of rows in a given rectangular dataset. } In general,
 test statistics should be powerful against relevant alternatives. \citet[\S 2.4.4]{rosenbaum:2002} provides more specific
 advice about the large sample performance of certain classes of test statistics
 and BFP repeat his general advice: ``Select a test statistic [$\mathcal{T}$] that will be
@@ -101,11 +105,11 @@ are similar, and large when the distributions diverge.'' \cite[Proposition 4
 and 5, \S 2.9]{rosenbaum:2002} presents results proving that test statistics
 with this property (``effect increasing'' test statistics), produce an
 unbiased test of the hypothesis of no effects or positive effects when the
-positive effects involve one parameter. Notice that this means that, a test of
+positive effects involve one parameter. Such results mean that a test of
 the sharp null of no effects
 based on a known randomization using \emph{any} effect increasing
 test-statistic to be valid test (in that the test should produce $p$-values
-less than $\alpha$ no more than 100$\alpha$ of the time when the null is true) even though different
+less than $\alpha$ no more than 100$\alpha \%$ of the time when the null is true) even though different
 test statistics may imply different power against false hypotheses.  Yet, when the models are complex and
 may involve increasing effects in the direction of one parameter and
 non-linear effects in the direction of another parameter, BFP showed that
@@ -128,7 +132,7 @@ y_{i,Z_i=0}=Y_i-Z_i \tau$ only changes the distribution of outcomes for units
 in the treated condition. Comparing the mean of $\widetilde y_{i,Z_i=1}|Z_i=1$
 to the mean of $\widetilde y_{i,Z_i=0}|Z_i=0$ makes intuitive sense in this
 case, and, if $Y_i$ is Normal or at least unimodal without major outliers,
-then this test might have optimal power. The complex model used as an example
+then this test using means as test statistics might have optimal power. The complex model used as an example
 by BFP involved adjustments to both control and treated outcomes --- some
 hypothesized parameters would cause shifts in variance, others in location.
 So, BFP proposed to use the KS-test statistic to assess the relationship
@@ -143,7 +147,9 @@ of a model than comparing two marginal distributions: For example, the KS test
 the treated and control distributions, thereby ignoring information that could
 increase the precision of the test. The simplest version of the SSR test
 statistic merely sums the difference between the mean of the outcome implied
-by the hypothesis and individual outcomes:
+by the hypothesis and individual outcomes thereby including the correlation
+between treated and control outcomes as a part of the distribution of the
+statistic:
 
 \begin{equation}
  {\T(\yu,\bz)}_{\text{SSR}} \equiv \sum_{i} {( \widetilde y_{i,Z_i=0} - \bar{\widetilde{y}}_{i,Z_i=0} )}^2 \label{eq:ssr1}
@@ -162,36 +168,41 @@ deviation of 1 as shown in Figure~\ref{fig:simpleoutcomes}.
     randomized to binary treatment by complete randomization. }\label{fig:simpleoutcomes}
 \end{figure}
 
-And we compared two models of effects --- a constant additive effects model in
+We compared two models of effects --- a constant additive effects model in
 which $y_{i,Z_i=1}=y_{i,Z_i=0}+\tau$ and a constant multiplicative effects
-model in which $y_{i,Z_i=1}=y_{i,Z_i=0}*\tau$. We set the truth to be the
-sharp null of no effects $\tau=0$ for the additive model and $\tau=1$ for the
-multiplicative model. To further explain the process of hypothesis testing and
-evaluation of the test statistics, we display the results from a power
-analysis of one alternative hypothesis in figure~\ref{fig:boxplot}. A given
-model and hypothesized parameter implies a distribution for observed outcomes
-in the treatment group and control groups. Here, since we have no
-interference, the hypotheses only have different implications for the control
-group distribution. In this case, we chose a two parameters for the additive
-and multiplicative models which produced very similar implications (as show by
-the similarity in the ``Add. Model'' and ``Mult.  Model'' boxplots in both
-panels of the figure). We see that when we tested the hypothesis of
-$\tau_0=.34$ from the additive model using the KS test statistic on Normal
-data, that we produced $p$-values lower than $\alpha=.05$ about 55\% of the
-time across 1000 simulations. That is, the KS test has a power of about .55
-to reject a false hypothesis with this Normal outcome and this constant
-additive effects model. The analogous power for the SSR test statistic was
-.73. For these particular parameters, we see the SSR performing better with
-Normal outcomes but not being very effected by the model of effects (which
-makes some sense here because we are choosing parameters at which both models
-imply more or less the same patterns in outcomes).
+model in which $y_{i,Z_i=1}=y_{i,Z_i=0} \cdot \tau$. We set the truth to be
+the sharp null of no effects such that the true $\tau=0$ for the additive
+model and the true $\tau=1$ for the multiplicative model. To further explain
+the process of hypothesis testing and evaluation of the test statistics, we
+display the results from a power analysis of one alternative hypothesis in
+figure~\ref{fig:boxplot}. A given model and hypothesized parameter implies a
+distribution for observed outcomes in the treatment group and control groups.
+Here, since we have no interference, the hypotheses only have different
+implications for the control group distribution. In this case, we chose a two
+parameters for the additive and multiplicative models which produced very
+similar implications (as show by the similarity in the ``Add. Model'' and
+``Mult.  Model'' boxplots in both panels of the figure). We see that when we
+tested the hypothesis of $\tau_0=0.34$ from the additive model using the KS
+test statistic on Normal data, that we produced $p$-values lower than
+$\alpha=0.05$ about 55\% of the time across 1000 simulations. That is, the KS
+test has a power of about 0.55 to reject a false hypothesis with this Normal
+outcome and this constant additive effects model. The analogous power for the
+SSR test statistic was 0.73. For these particular parameters, we see the SSR
+performing better with Normal outcomes but not being very effected by the
+model of effects (which makes some sense here because we are choosing
+parameters at which both models imply more or less the same patterns in
+outcomes). On non-Normal outcomes (shown in the "Jittered Geometric Outcomes"
+panel), the SSR test statistic had less power. Again, the particular model of
+effect did not matter in this case because we chose the alternative hypothesis
+($\tau_0$ on the plots) to represent the case where both models implied
+similar outcome distributions.
 
 \begin{figure}[H]\centering
   \includegraphics[width=.9\textwidth]{ksvsssr-boxplots.pdf}
   \caption{Distributions of the simulated data from left to right: $y_0$
     outcome with no experiment, observed outcome after random assignment,
-    outcomes implied by a constant additive model of effects, outcomes implied by a constant
-    multiplicative model. The hypothesized model parameters $\tau_0$ that
+    outcomes implied by a constant additive model of effects ("Add. Model"), outcomes implied by a constant
+    multiplicative model ("Mult. Model"). The hypothesized model parameters $\tau_0$ that
     produce the patterns shown are printed on the plot. The proportion of
     simulated tests in which these values of $\tau_0$ with $p$-values less
     than $\alpha=.05$ by the KS and SSR test statistics are printed on the plot as $\text{pow}_{KS}$ and
@@ -199,15 +210,16 @@ imply more or less the same patterns in outcomes).
   Normal outcomes and less power for the skewed outcome.}\label{fig:boxplot}
 \end{figure}
 
-When we assessed power across many alternative hypotheses, our intuition was that the SSR
-would have more power than the KS test when the outcome was Normal and when
-the observational implication of the model of effects would shift means (i.e.\
-the additive model). We used direct simulation of the randomization
-distribution to generate $p$-values and repeated that process 1000 times to
-gauge the proportion of rejections of false hypotheses (i.e.\ the power of the
-tests). The results, not shown here but part of the reproduction archive for
-this paper, bear out this intuition: the SSR has slightly more power than KS
-for Normal outcomes in both the additive and multiplicative effects
+When we assessed power across many alternative hypotheses, our intuition was
+that the SSR would have more power than the KS test when the outcome was
+Normal and when the observational implication of the model of effects would
+shift means (i.e.\ the additive model). We used direct simulation of the
+randomization distribution to generate $p$-values and repeated that process
+1000 times to gauge the proportion of rejections of a range of false
+hypotheses  (i.e.\ the power of the tests at many different values of
+$\tau_0$). The results, not shown here but part of the reproduction archive
+for this paper, bear out this intuition: the SSR has slightly more power than
+KS for Normal outcomes in both the additive and multiplicative effects
 conditions. SSR has slightly less power than KS when the outcome is skewed for
 both models. In general, the SSR ought to be most powerful when the effect of
 the experiment involves a shift in the location of the distributions of the
@@ -238,8 +250,7 @@ could define the test statistic as:
 \subsection{The SSR Test Statistic and the BFP Example Model}
 
 As an example of the performance of these new statistics, we re-analyze the
-model and design from BFP. Their model of treatment propagation
-was:
+model and design from BFP. Their model of treatment propagation was:
 
 \begin{equation}
 \HH(\by_\bz, \bw, \beta, \tau) =
