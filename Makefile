@@ -12,7 +12,7 @@ Sweave = R_LIBS=../.libraries $(RCMD) CMD Sweave
 TEX2PDF = latexmk -pdf
 
 INSTALLLIB = $(RCMD) CMD INSTALL --no-multiarch --no-docs --library=.libraries
-installpkg = mkdir -p .libraries ; R_LIBS=.libraries R --vanilla -e "install.packages('$(1)', repos = 'http://streaming.stat.iastate.edu/CRAN/')" ; date > .libraries/$(1)/INSTALLED
+installpkg = mkdir -p .libraries ; R_LIBS=.libraries R --vanilla -e "install.packages('$(1)', repos = 'http://cran.rstudio.com/')" ; date > .libraries/$(1)/INSTALLED
 	LIBRARIES = .libraries/.d .libraries/RItools/INSTALLED .libraries/packages.txt
 
 MAKEFIG = cd figures && $(Sweave)
