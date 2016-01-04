@@ -38,6 +38,11 @@ paper.pdf: figures/twoDplots.pdf \
 	cd paper && $(TEX2PDF) paper.tex
 	cp paper/paper.pdf .
 
+## this next assumes that the authors names are on line 5.
+paper-anon.pdf: paper.pdf
+	cd paper && cp paper.tex paper-anon.tex && sed -i.bak '5 s/^/%/' paper-anon.tex && $(TEX2PDF) paper-anon.tex
+	cp paper/paper-anon.pdf .
+
 # a faster build than the paper, but less exact for figures
 draft:
 	SEARCH_POINTS=10 REPETITIONS=100 make paper.pdf
