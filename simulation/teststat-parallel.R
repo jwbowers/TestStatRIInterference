@@ -4,7 +4,7 @@ if(length(grep("TestStatRIInterference$",getwd()))==0){setwd("..")}
 require(compiler)
 enableJIT(3)
 
-library(RItools,lib.loc=".libraries")
+library(RItools)
 options("RItools-lapply"=lapply)
 options("RItools-sapply"=sapply)
 
