@@ -105,10 +105,10 @@ pkgs/RItools:
 .libraries/Rmpi/INSTALLED:
 	mkdir -p libraries
 ifeq ($(findstring keeling,$(HOST)),keeling)
-	R_COMPILE_PKGS=1 R_LIBS=libraries R --vanilla -e "install.packages('Rmpi', type='source', repos = 'http://cran.rstudio.com/',dependencies=TRUE,configure.args=c('--with-mpi=/sw/openmpi-1.6.4a-intel-14.0.3 --with-Rmpi-type=OPENMPI'))"
+	R_COMPILE_PKGS=1 R_LIBS=.libraries R --vanilla -e "install.packages('Rmpi', type='source', repos = 'http://cran.rstudio.com/',dependencies=TRUE,configure.args=c('--with-mpi=/sw/openmpi-1.6.4a-intel-14.0.3 --with-Rmpi-type=OPENMPI'))"
 	date > libraries/Rmpi/INSTALLED
       else
-	R_COMPILE_PKGS=1 R_LIBS=libraries R --vanilla -e "install.packages('Rmpi',type='source',repos = 'http://cran.rstudio.com/',dependencies=TRUE,configure.args=c('--with-Rmpi-include=/usr/local/include --with-Rmpi-libpath=/usr/local/lib --with-Rmpi-type=OPENMPI'))
+	R_COMPILE_PKGS=1 R_LIBS=.libraries R --vanilla -e "install.packages('Rmpi',type='source',repos = 'http://cran.rstudio.com/',dependencies=TRUE,configure.args=c('--with-Rmpi-include=/usr/local/include --with-Rmpi-libpath=/usr/local/lib --with-Rmpi-type=OPENMPI'))"
 	date > libraries/Rmpi/INSTALLED
 endif
 
