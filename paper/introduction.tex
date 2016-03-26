@@ -89,10 +89,9 @@ statistical inference involves summarizing information against the
 hypothesized claim, yet different ways to summarize information might be more
 or less sensitive to substantively meaningful differences. The statistical
 power of a simple test of the sharp null hypothesis of no effects will vary as
-a function of the design of the study (total number of observations, proportion treated, blocking structure,
-etc), characteristics of the outcome (continuous, binary, skewed, extreme
-points, etc), and the way that a test statistic summarizes the outcome (does
-it compare means, standard deviations, medians, qqplots, etc).\footnote{Some
+a function of the design of the study (e.g. total number of observations, proportion treated, blocking structure), characteristics of the outcome (e.g. continuous, binary, skewed, extreme
+points), and the way that a test statistic summarizes the outcome (does
+it compare means, standard deviations, medians, qqplots, or something else?).\footnote{Some
   use the term `effective sample size' --- which we first saw in
   \citet{kish65} ---
   to highlight the fact that statistical power depends on more than the number
@@ -101,7 +100,7 @@ test statistics should be powerful against relevant alternatives. \citet[\S 2.4.
 advice about the large sample performance of certain classes of test statistics
 and BFP repeat his general advice: ``Select a test statistic [$\mathcal{T}$] that will be
 small when the treated and control distributions in the adjusted data \ldots
-are similar, and large when the distributions diverge.'' \cite[Proposition 4
+are similar, and large when the distributions diverge.'' \citet[Proposition 4
 and 5, \S 2.9]{rosenbaum:2002} presents results proving that test statistics
 with this property (``effect increasing'' test statistics), produce an
 unbiased test of the hypothesis of no effects or positive effects when the
@@ -114,8 +113,8 @@ test statistics may imply different power against false hypotheses.  Yet, when t
 may involve increasing effects in the direction of one parameter and
 non-linear effects in the direction of another parameter, BFP showed that
 sometimes a KS-test will have (1) no power to address the model at all such
-that all hypothesized parameters would receive the same implausibility
-assessment; (2) or might reject all such hypothesized parameters. Thus,
+that all hypothesized parameters would receive the same high $p$-value; (2) or might describe all such hypothesized parameters as
+implausible. Thus,
 although in theory one may assess sharp multiparameter hypotheses,
  in practice one may not learn much from such tests. BFP thus recommended simulation studies of the operating
 characteristics of tests as a piece of their workflow --- because  the theory
@@ -127,8 +126,9 @@ network experiments.
 
 Fisher/Rosenbaum style randomization inference tends to use test statistics that
 compare two distributions. Simple models imply that the distribution of the
-outcome in the control remains fixed. For example, $\widetilde
-y_{i,Z_i=0}=Y_i-Z_i \tau$ only changes the distribution of outcomes for units
+outcome in the control remains fixed. For example, the implication of the
+constant, additive effects model, $\widetilde
+y_{i,Z_i=0}=Y_i-Z_i \tau$, only changes the distribution of outcomes for units
 in the treated condition. Comparing the mean of $\widetilde y_{i,Z_i=1}|Z_i=1$
 to the mean of $\widetilde y_{i,Z_i=0}|Z_i=0$ makes intuitive sense in this
 case, and, if $Y_i$ is Normal or at least unimodal without major outliers,
@@ -139,12 +139,14 @@ So, BFP proposed to use the KS-test statistic to assess the relationship
 between $\widetilde y_{i,Z_i=0,Z_{-i}=0}$ and $Z_i$ (where $Z_{-i}=0$ means
 ``when all units other than $i$ are also not treated".)
 
-Yet, one can also think about the process of hypothesis testing as a process
+Although thinking about test statistics as comparing distributions is natural
+and simple, one can also think about the process of hypothesis testing as a process
 of assessing model fit, and there are usually better ways to evaluate the fit
 of a model than comparing two marginal distributions: For example, the KS test
   uses the maximum difference in the empirical cumulative distributions of
   each treatment group calculated without regard for the relationship between
-the treated and control distributions, thereby ignoring information that could
+the treated and control distributions, thereby ignoring information about the
+joint distribution that could
 increase the precision of the test. The simplest version of the SSR test
 statistic merely sums the difference between the mean of the outcome implied
 by the hypothesis and individual outcomes thereby including the correlation
@@ -184,14 +186,15 @@ similar implications (as show by the similarity in the ``Add. Model'' and
 ``Mult.  Model'' boxplots in both panels of the figure). We see that when we
 tested the hypothesis of $\tau_0=0.34$ from the additive model using the KS
 test statistic on Normal data, that we produced $p$-values lower than
-$\alpha=0.05$ about 55\% of the time across 1000 simulations. That is, the KS
-test has a power of about 0.55 to reject a false hypothesis with this Normal
+$\alpha=0.05$ about 54\% of the time across 1000 simulations. That is, the KS
+test has a power of about 0.54 to reject a false hypothesis with this Normal
 outcome and this constant additive effects model. The analogous power for the
-SSR test statistic was 0.73. For these particular parameters, we see the SSR
-performing better with Normal outcomes but not being very effected by the
+SSR test statistic was 0.70. For these particular parameters, we see the
+performance of the SSR test statistic as better than the KS test statistic
+with Normal outcomes, but not very effected by the
 model of effects (which makes some sense here because we are choosing
 parameters at which both models imply more or less the same patterns in
-outcomes). On non-Normal outcomes (shown in the "Jittered Geometric Outcomes"
+outcomes). On non-Normal outcomes (shown in the ``Jittered Geometric Outcomes"
 panel), the SSR test statistic had less power. Again, the particular model of
 effect did not matter in this case because we chose the alternative hypothesis
 ($\tau_0$ on the plots) to represent the case where both models implied
@@ -208,15 +211,16 @@ similar outcome distributions.
     statistics, are printed below the models.}\label{fig:boxplot}
 \end{figure}
 
-When we assessed power across many alternative hypotheses, our intuition was
+When we assessed power across many alternative hypotheses in results not shown
+here but part of the reproduction archive
+for this paper, our intuition was
 that the SSR would have more power than the KS test when the outcome was
 Normal and when the observational implication of the model of effects would
 shift means (i.e.\ the additive model). We used direct simulation of the
 randomization distribution to generate $p$-values and repeated that process
 1000 times to gauge the proportion of rejections of a range of false
 hypotheses  (i.e.\ the power of the tests at many different values of
-$\tau_0$). The results, not shown here but part of the reproduction archive
-for this paper, bear out this intuition: the SSR has slightly more power than
+$\tau_0$). The results bear out this intuition: the SSR has slightly more power than
 KS for Normal outcomes in both the additive and multiplicative effects
 conditions. SSR has slightly less power than KS when the outcome is skewed for
 both models. In general, the SSR ought to be most powerful when the effect of
@@ -228,17 +232,18 @@ effect on one quantile.
 
 \subsection{The SSR Test Statistic with Network Information}
 
-In the case where we know the fixed adjacency matrix of a social network,
-$\bS$, and where we imagine that network attributes (like degree) of a node
-play a role in the mechanism by which treatment propagates, the idea of
-assessing model fit rather than closeness of distributions leads naturally to
-the sum-of-squared-residuals (SSR) from a least squares regression of $
-\widetilde y_{i,Z_i=0}$ on $Z_{i}$ and $\bz^{T} \bS$ (i.e.\ the number of
-directly connected nodes assigned treatment) as well as the $\mathbf{1}^{T}
-\bS$ (i.e.\ the degree of the node). If we collected $Z_{i}$,$\bz^{T} \bS$,
-and $\mathbf{1}^{T} \bS$ into a matrix $\bX$, and fit the $\widetilde
-y_{i,Z_i=0}$ as a linear function of $\bX$ with coefficients $\bbeta$ when we
-could define the test statistic as:
+In the case where we know the fixed binary adjacency matrix of a social
+network, $\bS$, where a given entry in the $n \times n$ matrix is 1 if two
+units are adjacent and 0 if two units are not adjacent, and where we imagine
+that network attributes (like degree) of a node play a role in the mechanism
+by which treatment propagates, the idea of assessing model fit rather than
+closeness of distributions leads naturally to the sum-of-squared-residuals
+(SSR) from a least squares regression of $ \widetilde y_{i,Z_i=0}$ on $Z_{i}$
+and $\bz^{T} \bS$ (i.e.\ the number of directly connected nodes assigned
+treatment) as well as the $\mathbf{1}^{T} \bS$ (i.e.\ the degree of the node).
+If we collected $Z_{i}$,$\bz^{T} \bS$, and $\mathbf{1}^{T} \bS$ into a matrix
+$\bX$, and fit the $\widetilde y_{i,Z_i=0}$ as a linear function of $\bX$ with
+coefficients $\bbeta$ when we could define the test statistic as:
 
 \begin{equation}
  \T(\yu,\bz)_{\text{SSR}} \equiv \sum_{i} ( \widetilde y_{i,Z_i=0} - \bX\hat{\bbeta} )^2 \label{eq:ssr}
@@ -263,8 +268,8 @@ increasing (but flattening) function of the number of directly connected
 treated neighbors ($\bz^{T} \bS$) and is governed by $\tau$. So, we have a
 model with two parameters. The network used by BFP involves 256 nodes
 connected in an undirected, random graph with node degree ranging from 0 to 10
-(mean degree 4, 95\% of nodes with degree between 1 and 8, five nodes with
-degree 0 [i.e.\ unconnected]).  Treatment is assigned to 50\% of the nodes 
+(mean degree 4, 95\% of nodes with degree between 1 and 8, five unconnected nodes with
+degree 0).  Treatment is assigned to 50\% of the nodes
 completely at random in the BFP example.
 
 We assess three versions of the SSR test statistic versus three versions of
@@ -348,7 +353,7 @@ Where $g$ is a function that normalizes the sums of distances to treated
 neighbors to have unit variance. This model has a direct
 effect ($\beta_1$) and an indirect effect ($\beta_2$) that is linear in the distances to
 treated neighbors. Coppock evaluated this spillover model using the SSR+Design statistic as
-presented in this paper. 
+presented in this paper.
 
 \begin{figure}[H] \centering
   \includegraphics[width=.75\textwidth]{../coppock-replication/CoppockJEPS_figure2.pdf}
@@ -388,15 +393,15 @@ effects each of which was applied to a different network topology and
 experimental design.\footnote{The BFP paper itself engages with some questions about
 the performance of this approach when the theoretical model is very different
 from the process generating the data, and we encourage readers to see that
-discussion in their \S~5.2.} However, we hope that the results from the 
-examples presented here improves the application of the BFP approach and raises new
+discussion in their \S~5.2.} However, we hope that the results from the
+examples presented here improve the application of the BFP approach and raise new
 questions for research.  BFP are correct in the assertion that, regardless of
 the choice of test statistic selection, a set of implausible hypotheses is
 identified by the procedure. But we should not be led to believe that, for any
 given test statistic, that some hypotheses are universally more plausible than others.
 Such inferences --- comparing hypotheses --- may depend on the test statistic
 used, and not necessarily reflect the plausibility of the model at hand. That
-is, the results of any hypothesis test (or confidence interval creation) tell
+is, the results of any hypothesis test (or confidence interval) tell
 us \emph{both} about the test statistic \emph{and} about the causal model under scrutiny.
 
 In the example shown in Figure~\ref{fig:twoD}, the SSR+Design test statistic had much better power than
@@ -405,7 +410,8 @@ not always appropriate: for example, when the probability of exposure to
 spillover is heterogeneous across individuals in a way not well captured by the
 $\bz^T \bS$ term or some other analogous term, we may wish to apply inverse
 probability weights so as to ensure representative samples of potential
-outcomes. This suggests a conjecture: that the $SSR$ from an \emph{inverse-probability-weighted} least squares regression is more generally a
+outcomes. This suggests a conjecture: that the $SSR$ from an
+\emph{inverse-probability-weighted} least squares regression is a more generally
 sensible test statistic for models that include
 interference.\footnote{\citet{aronowsamii2012interfere} use such weights for
   unbiased estimation of network-treatment-exposure probability weighted
