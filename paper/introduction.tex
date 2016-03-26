@@ -198,16 +198,14 @@ effect did not matter in this case because we chose the alternative hypothesis
 similar outcome distributions.
 
 \begin{figure}[H]\centering
-  \includegraphics[width=.9\textwidth]{ksvsssr-boxplots.pdf}
-  \caption{Distributions of the simulated data from left to right: $y_0$
-    outcome with no experiment, observed outcome after random assignment,
-    outcomes implied by a constant additive model of effects ("Add. Model"), outcomes implied by a constant
-    multiplicative model ("Mult. Model"). The hypothesized model parameters $\tau_0$ that
-    produce the patterns shown are printed on the plot. The proportion of
-    simulated tests in which these values of $\tau_0$ with $p$-values less
-    than $\alpha=.05$ by the KS and SSR test statistics are printed on the plot as $\text{pow}_{KS}$ and
-  $\text{pow}_\text{SSR}$. The SSR test statistic has more power for the
-  Normal outcomes and less power for the skewed outcome.}\label{fig:boxplot}
+  \includegraphics[width=.99\textwidth]{ksvsssr-boxplots.pdf}
+  \caption{The SSR test statistic has more power than the KS test statistic for the Normal outcome and
+    less power for the skewed outcome. Each panel shows distributions of simulated data from left to right:
+    outcome with no experiment ($y_0$), observed outcome after random assignment,
+    outcomes implied by a constant additive model of effects (``Add. Model''),
+    and outcomes implied by a constant multiplicative model (``Mult. Model''). The hypothesized model parameters $\tau_0$ that
+    produce the patterns, and the power of the tests using the KS and SSR test
+    statistics, are printed below the models.}\label{fig:boxplot}
 \end{figure}
 
 When we assessed power across many alternative hypotheses, our intuition was
