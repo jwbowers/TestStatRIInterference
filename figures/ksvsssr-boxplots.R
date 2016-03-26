@@ -13,7 +13,7 @@ load("simulation/simpledat.rda")
 apply(powCOA,2,summary)
 apply(powCOM,2,summary)
 
-t(powCOA[powCOA[,"resultsCOANormKS"]<1,])
+t(powCOA[powCOA[,"resultsCOANormKS"]<2,])
 t(powCOM[powCOM[,"resultsCOMNormKS"]<1,])
 
 ## SSR is slightly more power than KS for COA with Normal outcomes
@@ -45,8 +45,8 @@ constant.multiplicative.model <- UniformityModel( function(y, z, tau) {
 
 source("code/plotting.R")
 
-pdf(file="figures/ksvsssr-boxplots.pdf",width=8,height=4)
-par(mfrow=c(1,2),pty="s",mgp=c(1.5,.5,0),oma=rep(0,4),mar=c(3,3,2,0))
+pdf(file="figures/ksvsssr-boxplots.pdf",width=10,height=4)
+par(mfrow=c(1,2),pty="m",mgp=c(1.5,.5,0),oma=rep(0,4),mar=c(6,3,2,.5))##,xpd=NA)
 plotCompareModels(simpledat$y0norm,
 		  Z=simpledat$Z.1,
 		  make.data=function(y,Z){y},
@@ -55,17 +55,14 @@ plotCompareModels(simpledat$y0norm,
 			      ),
 		  main="Normal Outcome"
 		  )
-
-text(4.5,11.8,as.expression(bquote(tau[0]==.(signif(ALTS$COA$tau[60],2)))),cex=.8)
-text(6.5,11.8,as.expression(bquote(tau[0]==.(signif(ALTS$COM$tau[60],4)))),cex=.8)
-
-text(c(4.5,4.5,6.5,6.5),c(7.3,7.8,7.3,7.8),
+text(4.5,5.5,as.expression(bquote(tau[0]==.(signif(ALTS$COA$tau[60],2)))),cex=.8,xpd=NA)
+text(6.5,5.5,as.expression(bquote(tau[0]==.(signif(ALTS$COM$tau[60],4)))),cex=.8,xpd=NA)
+text(c(4.5,4.5,6.5,6.5),c(4.5,5,4.5,5),
      sapply(c(bquote(pow[KS] == .(signif(powCOA[60,"resultsCOANormKS"],2))),
               bquote(pow[SSR] ==  .(signif(powCOA[60,"resultsCOANormSSR"],2))),
 	      bquote(pow[KS] == .(signif(powCOM[60,"resultsCOMNormKS"],2))),
               bquote(pow[SSR] ==  .(signif(powCOM[60,"resultsCOMNormSSR"],2)))
-	      ),as.expression),cex=.8)
-
+	      ),as.expression),cex=.8,xpd=NA)
 plotCompareModels(jitter(simpledat$y0zif),
 		  Z=simpledat$Z.1,
 		  make.data=function(y,Z){y},
@@ -74,18 +71,14 @@ plotCompareModels(jitter(simpledat$y0zif),
 			      ),
 		  main="Jittered Geometric Outcome"
 		  )
-
-text(4.5,12.8,as.expression(bquote(tau[0]==.(signif(ALTS$COA$tau[60],2)))),cex=.8)
-text(6.5,12.8,as.expression(bquote(tau[0]==.(signif(ALTS$COM$tau[60],4)))),cex=.8)
-
-
-text(c(4.5,4.5,6.5,6.5),c(13.5,14,13.5,14),
+text(4.5,7,as.expression(bquote(tau[0]==.(signif(ALTS$COA$tau[60],2)))),cex=.8,xpd=NA)
+text(6.5,7,as.expression(bquote(tau[0]==.(signif(ALTS$COM$tau[60],4)))),cex=.8,xpd=NA)
+text(c(4.5,4.5,6.5,6.5),c(6,6.5,6,6.5),
      sapply(c(bquote(pow[KS] == .(signif(powCOA[60,"resultsCOAZifKS"],2))),
               bquote(pow[SSR] ==  .(signif(powCOA[60,"resultsCOAZifSSR"],2))),
 	      bquote(pow[KS] == .(signif(powCOM[60,"resultsCOMZifKS"],2))),
               bquote(pow[SSR] ==  .(signif(powCOM[60,"resultsCOMZifSSR"],2)))
-	      ),as.expression),cex=.8)
-
+	      ),as.expression),cex=.8,xpd=NA)
 dev.off()
 
 
