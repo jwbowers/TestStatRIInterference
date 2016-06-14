@@ -213,14 +213,15 @@ similar outcome distributions.
 
 When we assessed power across many alternative hypotheses in results not shown
 here but part of the reproduction archive
-for this paper, our intuition was
+for this paper \citep{bowers2016dataverse}, our intuition was
 that the SSR would have more power than the KS test when the outcome was
 Normal and when the observational implication of the model of effects would
 shift means (i.e.\ the additive model). We used direct simulation of the
 randomization distribution to generate $p$-values and repeated that process
 1000 times to gauge the proportion of rejections of a range of false
 hypotheses  (i.e.\ the power of the tests at many different values of
-$\tau_0$). The results bear out this intuition: the SSR has slightly more power than
+$\tau_0$).\footnote{Those interested in the code for this document can find it
+at \url{https://github.com/jwbowers/TestStatRIInterference}. } The results bear out this intuition: the SSR has slightly more power than
 KS for Normal outcomes in both the additive and multiplicative effects
 conditions. SSR has slightly less power than KS when the outcome is skewed for
 both models. In general, the SSR ought to be most powerful when the effect of
